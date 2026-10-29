@@ -2,99 +2,379 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <title>Estetik Ginekolog vrach | Doktor Surayyo Vahobjonovna - Toshkentda Ginekolog</title>
-  <meta name="description" content="Doctor, laser, ginecolog, ginekolog vrach Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer yordamida vagina plastika, eroziya davolash va boshqa muolajalar.">
+  <title>Ginekolog vrach Estetik Ginekolog | Doktor Surayyo Vahobjonovna - Toshkentda Ginekolog</title>
+  <meta name="description" content="Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer yordamida vagina plastika, eroziya davolash va boshqa muolajalar.">
   <base href="/">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   
+  <!-- Google Font: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
-    /* Asosiy va forma uslublari */
-    .appointment-card {
-      background: #ffffff;
+    :root {
+      --primary: #9333ea;
+      --primary-light: #c084fc;
+      --accent: #f43f5e;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --glass-card: rgba(255, 255, 255, 0.05);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #0b0f19;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(147, 51, 234, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .site-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 40px 20px 60px 20px;
+    }
+
+    /* GLASSMOPRHISM HERO CARD */
+    .hero-section {
+      margin-bottom: 50px;
+      position: relative;
+    }
+
+    .hero-creative-card {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 36px;
+      padding: 60px 40px 40px 40px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glow-orb-1 {
+      width: 300px;
+      height: 300px;
+      background: rgba(147, 51, 234, 0.3);
+      top: -100px;
+      left: -100px;
+    }
+    .glow-orb-2 {
+      width: 300px;
+      height: 300px;
+      background: rgba(244, 63, 94, 0.25);
+      bottom: -100px;
+      right: -100px;
+    }
+
+    .hero-content-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .magazine-tag {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      color: #f43f5e;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      padding: 8px 22px;
+      border-radius: 50px;
+      margin-bottom: 25px;
+      text-transform: uppercase;
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.2);
+    }
+
+    .main-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 15px 0;
+      line-height: 1.15;
+    }
+
+    .doctor-name {
+      font-size: 1.6rem;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin: 0 0 30px 0;
+    }
+
+    .quote {
+      position: relative;
+      font-style: italic;
+      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 25px 35px;
+      border-radius: 20px;
+      font-size: 1.2rem;
+      line-height: 1.7;
+      margin: 0 auto 35px auto;
+      max-width: 800px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .quote span {
+      color: var(--primary-light);
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* FOOTER BAR INSIDE HERO */
+    .card-footer-bar {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card-footer-text {
+      text-align: left;
+    }
+    .sub-text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      display: block;
+    }
+    .copy-text {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* SOCIAL BUTTONS */
+    .icon-buttons-row {
+      display: flex;
+      gap: 12px;
+    }
+    .icon-btn {
+      width: 48px;
+      height: 48px;
       border-radius: 16px;
-      padding: 24px;
-      margin: 40px auto;
-      max-width: 600px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      border: 1px solid #f0e4ec;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .icon-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+    .icon-btn:hover {
+      transform: translateY(-4px) scale(1.05);
+      background: var(--primary);
+      box-shadow: 0 12px 24px rgba(147, 51, 234, 0.4);
+    }
+    .icon-btn.call:hover { background: #10b981; box-shadow: 0 12px 24px rgba(16, 185, 129, 0.4); }
+    .icon-btn.sms:hover { background: #3b82f6; box-shadow: 0 12px 24px rgba(59, 130, 246, 0.4); }
+    .icon-btn.telegram:hover { background: #0088cc; box-shadow: 0 12px 24px rgba(0, 136, 204, 0.4); }
+    .icon-btn.youtube:hover { background: #ff0000; box-shadow: 0 12px 24px rgba(255, 0, 0, 0.4); }
+
+    /* SERVICES SECTION */
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 45px;
+      background: linear-gradient(135deg, #fff 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .sections-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .procedure-section {
+      background: var(--glass-card);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 28px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .procedure-section:hover {
+      border-color: rgba(192, 132, 252, 0.4);
+      box-shadow: 0 25px 50px rgba(147, 51, 234, 0.15);
+      transform: translateY(-4px);
+    }
+
+    .procedure-video {
+      width: 100%;
+      height: 300px;
+      background: #000;
+    }
+    .procedure-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .procedure-content {
+      padding: 35px;
+      flex: 1;
+    }
+    .procedure-content h3 {
+      margin: 0 0 18px 0;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .procedure-content p {
+      margin: 0 0 12px 0;
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    /* APPOINTMENT FORM */
+    .appointment-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 32px;
+      padding: 45px;
+      margin: 60px auto 40px auto;
+      max-width: 650px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
     }
     .appointment-card h2 {
-      color: #8a2be2;
       text-align: center;
-      margin-bottom: 20px;
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 30px;
     }
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 22px;
     }
     .form-group label {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       font-weight: 600;
+      color: #e2e8f0;
     }
     .form-group input, .form-group select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #dddddd;
-      border-radius: 8px;
-      box-sizing: border-box;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
+    }
+    .form-group select option {
+      background: #1e1b4b;
+      color: #fff;
     }
     .btn-submit {
       width: 100%;
-      background: linear-gradient(135deg, #8a2be2, #d87093);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
       color: #ffffff;
-      padding: 14px;
+      padding: 18px;
       border: none;
-      border-radius: 8px;
-      font-weight: bold;
+      border-radius: 14px;
+      font-weight: 800;
       cursor: pointer;
-      font-size: 16px;
+      font-size: 1.1rem;
+      box-shadow: 0 10px 25px rgba(147, 51, 234, 0.4);
+    }
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 30px rgba(244, 63, 94, 0.5);
     }
 
-    /* FLOATING CHAT WIDGET (O'ng pastdagi chat ikonka va oyna) */
+    /* FLOATING CHAT WIDGET */
     .chat-widget-btn {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #8a2be2, #d87093);
+      bottom: 30px;
+      right: 30px;
+      width: 65px;
+      height: 65px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+      box-shadow: 0 10px 30px rgba(147, 51, 234, 0.5);
       cursor: pointer;
       z-index: 1000;
-      transition: transform 0.3s ease;
     }
     .chat-widget-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.1) rotate(5deg);
     }
     .chat-widget-btn svg {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       fill: #ffffff;
     }
 
     .chat-popup {
       position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 320px;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-      border: 1px solid #f0e4ec;
+      bottom: 110px;
+      right: 30px;
+      width: 350px;
+      background: #1e1b4b;
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
       z-index: 1000;
       display: none;
       flex-direction: column;
       overflow: hidden;
     }
     .chat-header {
-      background: linear-gradient(135deg, #8a2be2, #d87093);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
       color: white;
-      padding: 15px;
+      padding: 18px;
       font-weight: bold;
       display: flex;
       justify-content: space-between;
@@ -104,38 +384,63 @@
       background: none;
       border: none;
       color: white;
-      font-size: 18px;
+      font-size: 22px;
       cursor: pointer;
     }
     .chat-body {
-      padding: 15px;
+      padding: 20px;
     }
     .chat-body textarea {
       width: 100%;
-      height: 90px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-sizing: border-box;
+      height: 110px;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: #fff;
       resize: none;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      font-family: inherit;
     }
     .chat-submit {
       width: 100%;
-      background: #8a2be2;
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 10px;
-      border-radius: 8px;
+      padding: 14px;
+      border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--glass-border);
+      margin-top: 60px;
+    }
+
+    @media (min-width: 768px) {
+      .procedure-section {
+        flex-direction: row;
+        align-items: center;
+      }
+      .procedure-video {
+        width: 45%;
+        height: 350px;
+      }
+      .procedure-content {
+        width: 55%;
+      }
     }
   </style>
 </head>
 <body>
   <div class="site-container">
 
-  <!-- BOSH SAHIFA / HEADER -->
+  <!-- BOSH SAHIFA / HERO -->
   <header class="hero-section">
     <div class="hero-creative-card">
       <div class="glow-orb glow-orb-1"></div>
@@ -159,13 +464,222 @@
           <a href="tel:+998952775354" class="icon-btn call" title="Qo'ng'iroq qilish">
             <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
           </a>
+          <a href="sms:+998952775354" class="icon-btn sms" title="SMS yozish">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+          </a>
           <a href="https://t.me/ginekologplastikx" target="_blank" rel="noopener" class="icon-btn telegram" title="Telegram kanal">
             <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+          </a>
+          <a href="https://youtube.com/@ginekologestetst?si=FMBdc_W1IxYVsmBr" target="_blank" rel="noopener" class="icon-btn youtube" title="YouTube kanal">
+            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           </a>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- ASOSIY XIZMATLAR -->
+  <main class="services-container">
+    <h1 class="section-title">ESTETIK GINEKALOGIYA VA TIBBIY MUOLAJALAR</h1>
+    
+    <div class="sections-stack">
+      
+      <!-- 0. ESTETIK GINEKALOGIYA NIMA? -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?mute=1&loop=1&playlist=u9aQ_MEy0nU" title="Estetik ginekologiya nima" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>Estetik ginekologiya nima?</h3>
+          <p><strong>To'liq ma'lumot:</strong> Estetik ginekologiya — ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazersiz usullar yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
+          <p><strong>Afzalliklari:</strong> Ayollarda o'ziga bo'lgan ishonchni qaytarish, jinsiy hayot sifatini yaxshilash va intim hudud salomatligini mustahkamlashda muhim rol o'ynaydi.</p>
+        </div>
+      </section>
+
+      <!-- 1. Labioplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/ttLHgzEgK-A?mute=1&loop=1&playlist=ttLHgzEgK-A" title="Labioplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>1. Labioplastika (Kichik jinsiy lablar plastikasi)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ma gipertrofiya, assimetriya yoki tug'ruqdan keyingi o'zgarishlarni bartaraf etish uchun kichik jinsiy lablar hajmi va shakli korreksiya qilinadi.</p>
+          <p><strong>Muolaja vaqti:</strong> 30 – 45 daqiqa (mahalliy og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq bitish vaqti 3–4 hafta.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Antiseptik eritmalar bilan ishlov beriladi, shifokor tavsiya etgan Levomekol yoki Bepanten Plus malhamlari surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar qat'iy taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 2. Vaginoplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/MdFuG-MtDF0?mute=1&loop=1&playlist=MdFuG-MtDF0" title="Vaginoplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>2. Vaginoplastika (Vagina devorlarini toraytirish)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruqdan keyingi jinsiy yo'llar kengayishini bartaraf etish, mushaklar tonusini va intim sezgirlikni to'liq tiklash.</p>
+          <p><strong>Muolaja vaqti:</strong> 1 – 1.5 soat (umumiy yoki spinal og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq tiklanish 6–8 hafta.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Yallig'lanishga qarshi va bitiruvchi maxsus shamchalar hamda malhamlar qo'llaniladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 2 oy (8 hafta) davomida jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 3. Klitoroplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/lQeJWYOKXEc?mute=1&loop=1&playlist=lQeJWYOKXEc" title="Klitoroplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>3. Klitoroplastika (Kilitra plastika)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Klitor atrofidagi ortiqcha to'qimalarni olib tashlash, sezgirlikni oshirish va estetik ko'rinishni yaxshilash.</p>
+          <p><strong>Muolaja vaqti:</strong> 30 – 40 daqiqa (mahalliy og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> 3 hafta ichida to'liq tuzaladi.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Sovuq kompresslar qo'yiladi, antiseptik ishlov berilib, shifokor buyurgan tiklovchi malhamlar surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–4 hafta jinsiy aloqadan saqlanish zarur.</p>
+        </div>
+      </section>
+
+      <!-- 4. Intim oqartirish -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/09W0507Oj9o?mute=1&loop=1&playlist=09W0507Oj9o" title="Intim oqartirish" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>4. Intim zona pigmentatsiyasini yo'qotish (Oqartirish)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Intim hududdagi terining qorayishini bartaraf etish va bir xil oq, silliq rangga keltirish.</p>
+          <p><strong>Muolaja vaqti:</strong> 20 – 30 daqiqa (kursi 3–4 ta muolajadan iborat).</p>
+          <p><strong>Tiklanish vaqti:</strong> Terining yangilanishi 5–7 kun davom etadi.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Shifokor buyurgan maxsus namlantiruvchi va oqartiruvchi kremlar surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–5 kun jinsiy aloqadan saqlanish tavsiya etiladi.</p>
+        </div>
+      </section>
+
+      <!-- 5. Intim yoshartirish (PRP) -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/DFWFOZXZAz8?mute=1&loop=1&playlist=DFWFOZXZAz8" title="Intim yoshartirish" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>5. Intim yoshartirish va Plazmoterapiya (PRP)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> To'qimalarni yoshartirish, qurish va qichishishni yo'qotish, sezgirlikni kuchaytirish hamda namlikni qaytarish.</p>
+          <p><strong>Muolaja vaqti:</strong> 30 daqiqa (bemorning o'z qonidan plazma tayyorlab kiritiladi).</p>
+          <p><strong>Tiklanish vaqti:</strong> Reabilitatsiya deyarli talab etilmaydi (1–2 kunda tiklanadi).</p>
+          <p><strong>Parvarish va malhamlar:</strong> Maxsus parvarish talab qilinmaydi, shifokor tavsiyalariga amal qilinadi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 2–3 kun jinsiy aloqadan saqlanish kifoya.</p>
+        </div>
+      </section>
+
+      <!-- 6. Bachadon eroziyasini davolash -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/Dg19VoPOni8?mute=1&loop=1&playlist=Dg19VoPOni8" title="Bachadon eroziyasini davolash" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>6. Bachadon bo'yni eroziyasini davolash</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Bachadon bo'yni shilliq qavatidagi yaralanish va shikastlanishlarni lazer yoki radioto'lqin usulida davolash.</p>
+          <p><strong>Muolaja vaqti:</strong> 15 – 20 daqiqa.</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq bitish vaqti 3–4 hafta.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Shifokor buyurgan shamchalar va bitiruvchi malhamlar qo'llaniladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> To'liq bitguncha (3–4 hafta) jinsiy aloqa taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 7. Poliplarni olib tashlash -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/8Vw8HiHjRRM?mute=1&loop=1&playlist=8Vw8HiHjRRM" title="Polipni olish" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>7. Bachadon bo'yni va devori poliplarini olish</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Shilliq qavatdagi ortiqcha o'smalar (poliplar) sababli yuzaga keladigan qonash va og'riqlarni bartaraf etish.</p>
+          <p><strong>Muolaja vaqti:</strong> 15 – 30 daqiqa.</p>
+          <p><strong>Tiklanish vaqti:</strong> 2 hafta ichida tiklanadi.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Antibiotik va yallig'lanishga qarshi muolajalar belgilanadi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 2–3 hafta jinsiy aloqada bo'lmaslik tavsiya etiladi.</p>
+        </div>
+      </section>
+
+      <!-- 8. Implantsperal (Spiral) haqida -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/47YY7pv9il4?mute=1&loop=1&playlist=47YY7pv9il4" title="Spiral (Implantsperal)" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>8. Spiral (Implantsperal - Bachadon ichi kontratseptiv vositasi)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Homiladorlikning oldini olish maqsadida bachadon bo'shlig'iga malakali shifokor tomonidan maxsus spiral o'rnatiladi.</p>
+          <p><strong>Muolaja vaqti:</strong> 5 – 10 daqiqa.</p>
+          <p><strong>Tiklanish vaqti:</strong> 1-2 kun ichida organizm moslashadi.</p>
+          <p><strong>Parvarish va tavsiyalar:</strong> 7-10 kun davomida og'ir jismoniy yuk ko'tarish va issiq vannaga tushish taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 9. Sistit haqida -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?mute=1&loop=1&playlist=u9aQ_MEy0nU" title="Sistitni davolash" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>9. Sistit (Siydik pufagining yallig'lanishi)</h3>
+          <p><strong>Nima uchun kelib chiqadi:</strong> Sovqotish, shaxsiy gigiyena qoidalariga rioya qilmaslik yoki infeksiyalar tushishi natijasida yuzaga keladi.</p>
+          <p><strong>Davolash usuli:</strong> Bakterial infeksiyaga qarshi zamonaviy antibiotikoterapiya va maxsus preparatlar buyuriladi.</p>
+          <p><strong>Tiklanish vaqti:</strong> 5–7 kun ichida to'liq bartaraf etiladi.</p>
+        </div>
+      </section>
+
+      <!-- 10. Miyoma haqida -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/qfK9CE3Sdpg?mute=1&loop=1&playlist=qfK9CE3Sdpg" title="Miyoma va uni davolash" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>10. Bachadon miyomasi va uni davolash</h3>
+          <p><strong>Miyoma nima:</strong> Bachadon mushak qavatida hosil bo'ladigan xavfsiz o'sma bo'lib, gormonal o'zgarishlar sabab yuzaga keladi.</p>
+          <p><strong>Qanday davolanadi:</strong> Zamonaviy dori-darmonlar yoki kichik invaziv jarrohlik yo'li bilan olib tashlanadi.</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq tiklanish davri 3–4 haftani tashkil qiladi.</p>
+        </div>
+      </section>
+
+      <!-- 11. Videlina haqida -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/uXHblDt7xDQ?mute=1&loop=1&playlist=uXHblDt7xDQ" title="Videlina haqida" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>11. Videlina (Intim parvarish va sog'lomlashtirish)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Ayollarning intim salomatligini saqlash, mikroflorani normallashtirish va noqulayliklarni bartaraf etishga qaratilgan.</p>
+          <p><strong>Ta'siri:</strong> Intim hududdagi tabiiy muvozanatni tiklaydi hamda yallig'lanishlarning oldini oladi.</p>
+        </div>
+      </section>
+
+      <!-- 12. QON RANGLARI NIMANI ANGLATADI? -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/B5QA3XlrNYU?mute=1&loop=1&playlist=B5QA3XlrNYU" title="Qon ranglari nimani anglatadi" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>12. Qon ranglari nimani anglatadi?</h3>
+          <p><strong>Muhim tibbiy ma'lumot:</strong> Hayz yoki ajralmalar rangining o'zgarishi ayol organizmidagi gormonal holat yoki reproduktiv tizim salomatligi haqida muhim signal beradi.</p>
+          <p><strong>Nima qilish kerak:</strong> Keskin o'zgarishlar sezilsa, o'z vaqtida shifokor-ginekolog ko'rigidan o'tish tavsiya etiladi.</p>
+        </div>
+      </section>
+
+      <!-- 13. Yirtilishlarni tiklash (Razriv) -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/lQeJWYOKXEc?mute=1&loop=1&playlist=lQeJWYOKXEc" title="Razrivni tiklash" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>13. Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
+          <p><strong>Muolaja vaqti:</strong> 45 – 60 daqiqa.</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq bitish 4–6 hafta.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
 
   <!-- ONLAYN QABULGA YOZILISH FORMASI -->
   <section class="appointment-card">
@@ -194,7 +708,7 @@
     </form>
   </section>
 
-  <!-- FLOATING CHAT WIDGET ELEMENTLARI -->
+  <!-- FLOATING CHAT WIDGET -->
   <div class="chat-widget-btn" onclick="toggleChat()" title="Shifokorga savol berish">
     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
   </div>
@@ -212,32 +726,23 @@
     </div>
   </div>
 
-  <!-- ENG PASTKI QISM (Footer) -->
+  <!-- FOOTER -->
   <footer class="site-footer">
-    <div class="footer-creative-card">
-      <div class="card-footer-bar">
-        <div class="card-footer-text">
-          <span class="sub-text">Sifatli tibbiyot – kelajak garovi ❤️</span>
-          <span class="copy-text">© 2026 Surayyo Vahobjonovna | Barcha huquqlar himoyalangan.</span>
-        </div>
-      </div>
-    </div>
+    <p>© 2026 Surayyo Vahobjonovna | Barcha huquqlar himoyalangan.</p>
   </footer>
 
   </div>
 
-  <!-- JS: BOT INTEGRATSIYASI VA CHAT SKRIPTI -->
+  <!-- JS LOGIKA -->
   <script>
     const BOT_TOKEN = '8609538485:AAFeTCr4Mel-5m88Nuc_wwXIEFusqLDLnTk';
     const ADMIN_IDS = [6258110646, 7645769320];
 
-    // Chat oynasini ochish/yopish
     function toggleChat() {
       const popup = document.getElementById('chatPopup');
       popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    // Qabulga yozilish formasi orqali ariza yuborish
     document.getElementById('tgAppointmentForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('userName').value;
@@ -258,7 +763,6 @@
       this.reset();
     });
 
-    // Chat orqali to'g'ridan-to'g'ri savol yuborish
     document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const question = document.getElementById('chatQuestionText').value;
