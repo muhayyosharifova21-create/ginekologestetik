@@ -877,7 +877,7 @@
       localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
       renderChat();
 
-      const message = `❓ **SAYTDAN SHAXSIY SAVOL (Matn)!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Xabar:** ${question}`;
+      const message = `❓ **SAYTDAN SHAXSIY SAVOL (Matn)!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Xabar:** ${question}\n\n👇 **Javob berish uchun shu xabarga Reply (Javob berish) qilib yozing:**`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -890,7 +890,7 @@
       document.getElementById('chatQuestionText').value = '';
     });
 
-    // 🎤 Ovozli xabar yozib yuborish funksiyasi
+    // 🎤 Bemor tomonidan ovozli xabar yozib yuborish
     let mediaRecorder;
     let audioChunks = [];
     const voiceBtn = document.getElementById('voiceRecordBtn');
@@ -910,16 +910,14 @@
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
             const audioUrl = URL.createObjectURL(audioBlob);
 
-            // Chat tarixiga qo'shish
             chatHistory.push({ sender: 'user', type: 'audio', text: audioUrl });
             localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
             renderChat();
 
-            // Telegramga ovozli xabar (voice) sifatida yuborish
             const formData = new FormData();
             formData.append('chat_id', ADMIN_IDS[0]);
             formData.append('voice', audioBlob, 'voice_message.webm');
-            formData.append('caption', `🎤 **SAYTDAN OVOZLI XABAR!**\n🆔 **Bemor ID:** \`${patientId}\``);
+            formData.append('caption', `🎤 **SAYTDAN OVOZLI XABAR!**\n🆔 **Bemor ID:** \`${patientId}\`\n\n👇 **Javob berish uchun shu xabarga Reply (Javob berish) qilib yozing yoki ovoz yuboring:**`);
             formData.append('parse_mode', 'Markdown');
 
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVoice`, {
@@ -941,7 +939,7 @@
       }
     });
 
-    // 🔄 Vrach javoblarini avtomatik o'qib kelish
+    // 🔄 Vrach yozgan matn yoki OVOZLI javoblarni avtomatik o'qib kelish
     let lastUpdateId = localStorage.getItem('ginekolog_last_update_' + patientId) || 0;
 
     function checkForDoctorReply() {
@@ -957,33 +955,43 @@
                 const msg = update.message;
                 const reply = msg.reply_to_message;
                 
-                // Vrach matn yozgan bo'lsa
-                if (msg.text && ((reply && reply.text && reply.text.includes(patientId)) || msg.text.includes(patientId))) {
-                  let replyText = msg.text.replace(patientId, '').trim();
-                  const lastMsg = chatHistory[chatHistory.length - 1];
-                  if (!lastMsg || lastMsg.text !== replyText) {
-                    chatHistory.push({ sender: 'doctor', type: 'text', text: replyText });
-                    localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
-                    renderChat();
-                  }
-                }
+                // Tekshiramiz: bu xabar aynan shu bemorga tegishli ekanligini (Reply qilingan yoki ID yozilgan)
+                const isTarget = (reply && reply.caption && reply.caption.includes(patientId)) || 
+                                 (reply && reply.text && reply.text.includes(patientId)) ||
+                                 (msg.text && msg.text.includes(patientId));
 
-                // Vrach ovozli xabar (voice) yuborgan bo'lsa
-                if (msg.voice && reply && reply.caption && reply.caption.includes(patientId)) {
-                  const fileId = msg.voice.file_id;
-                  // Telegram fayl manzilini olamiz
-                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
-                    .then(res => res.json())
-                    .then(fileData => {
-                      if (fileData.ok) {
-                        const filePath = fileData.result.file_path;
-                        const audioUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
-                        
-                        chatHistory.push({ sender: 'doctor', type: 'audio', text: audioUrl });
-                        localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
-                        renderChat();
-                      }
-                    });
+                if (isTarget) {
+                  // 1. Agar shifokor matn yozgan bo'lsa
+                  if (msg.text) {
+                    let replyText = msg.text.replace(patientId, '').trim();
+                    const lastMsg = chatHistory[chatHistory.length - 1];
+                    if (!lastMsg || lastMsg.text !== replyText) {
+                      chatHistory.push({ sender: 'doctor', type: 'text', text: replyText });
+                      localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+                      renderChat();
+                    }
+                  }
+
+                  // 2. Agar shifokor OVOZLI XABAR (voice) yuborgan bo'lsa
+                  if (msg.voice) {
+                    const fileId = msg.voice.file_id;
+                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
+                      .then(res => res.json())
+                      .then(fileData => {
+                        if (fileData.ok) {
+                          const filePath = fileData.result.file_path;
+                          const audioUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
+                          
+                          // Takrorlanmasligi uchun tekshiramiz
+                          const lastMsg = chatHistory[chatHistory.length - 1];
+                          if (!lastMsg || lastMsg.text !== audioUrl) {
+                            chatHistory.push({ sender: 'doctor', type: 'audio', text: audioUrl });
+                            localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+                            renderChat();
+                          }
+                        }
+                      });
+                  }
                 }
               }
             });
