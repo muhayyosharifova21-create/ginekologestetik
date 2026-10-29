@@ -299,7 +299,7 @@
       border: 2px solid #0b0f19;
     }
 
-    /* TELEFONGA MOS MAMLAKAT CHAT OYNASI (IXCHAM) */
+    /* TELEFONGA MOS CHAT OYNASI */
     .chat-popup {
       position: fixed;
       bottom: 85px;
@@ -307,7 +307,7 @@
       left: 15px;
       max-width: 400px;
       margin: 0 auto;
-      height: 420px;
+      height: 400px;
       background: #1e1b4b;
       border: 1px solid var(--glass-border);
       border-radius: 20px;
@@ -352,7 +352,7 @@
     }
     .chat-footer textarea {
       width: 100%;
-      height: 45px;
+      height: 50px;
       padding: 8px 10px;
       background: rgba(0,0,0,0.3);
       border: 1px solid var(--glass-border);
@@ -362,43 +362,16 @@
       font-family: inherit;
       font-size: 0.9rem;
     }
-    .chat-actions {
-      display: flex;
-      gap: 8px;
-    }
     .chat-submit {
-      flex: 1;
+      width: 100%;
       background: var(--primary);
       color: white;
       border: none;
-      padding: 8px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 10px;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       cursor: pointer;
-    }
-    .voice-btn {
-      background: #f43f5e;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-    }
-    .voice-btn.recording {
-      background: #ef4444;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
     }
 
     .msg-bubble {
@@ -421,11 +394,6 @@
       border-bottom-left-radius: 2px;
       border: 1px solid var(--glass-border);
     }
-    audio {
-      width: 100%;
-      height: 32px;
-      margin-top: 4px;
-    }
 
     /* FOOTER */
     .site-footer {
@@ -444,7 +412,7 @@
       .procedure-section { flex-direction: row; align-items: center; }
       .procedure-video { width: 45%; height: 350px; }
       .procedure-content { width: 55%; padding: 35px; }
-      .chat-popup { width: 380px; left: auto; right: 30px; bottom: 110px; height: 450px; }
+      .chat-popup { width: 380px; left: auto; right: 30px; bottom: 110px; height: 430px; }
     }
   </style>
 </head>
@@ -704,15 +672,12 @@
       <button class="chat-close" onclick="toggleChat()">&times;</button>
     </div>
     <div class="chat-body" id="chatBody">
-      <div class="msg-bubble msg-doctor">Assalomu alaykum! Matnli yoki ovozli xabar yozib qoldirishingiz mumkin.</div>
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldirishingiz mumkin.</div>
     </div>
     <div class="chat-footer">
       <form id="chatQuestionForm">
         <textarea id="chatQuestionText" placeholder="Savolingizni yozing..."></textarea>
-        <div class="chat-actions">
-          <button type="button" id="voiceRecordBtn" class="voice-btn" title="Ovozli xabar yozish">🎤 Ovoz</button>
-          <button type="submit" class="chat-submit">Yuborish</button>
-        </div>
+        <button type="submit" class="chat-submit">Yuborish</button>
       </form>
     </div>
   </div>
@@ -751,16 +716,11 @@
 
     function renderChat() {
       const chatBody = document.getElementById('chatBody');
-      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Matnli yoki ovozli xabar yozib qoldirishingiz mumkin.</div>';
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldirishingiz mumkin.</div>';
       chatHistory.forEach(msg => {
         const div = document.createElement('div');
         div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : 'msg-doctor'}`;
-        
-        if (msg.type === 'audio') {
-          div.innerHTML = `<audio controls src="${msg.text}"></audio>`;
-        } else {
-          div.textContent = msg.text;
-        }
+        div.textContent = msg.text;
         chatBody.appendChild(div);
       });
       chatBody.scrollTop = chatBody.scrollHeight;
@@ -785,11 +745,11 @@
       const question = document.getElementById('chatQuestionText').value.trim();
       if (!question) return;
 
-      chatHistory.push({ sender: 'user', type: 'text', text: question });
+      chatHistory.push({ sender: 'user', text: question });
       localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
       renderChat();
 
-      const message = `❓ **SAYTDAN SHAXSIY SAVOL (Matn)!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Xabar:** ${question}\n\n👇 **Javob uchun Reply qiling yoki ovoz yuboring.**`;
+      const message = `❓ **SAYTDAN SHAXSIY SAVOL!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Xabar:** ${question}\n\n👇 **Javob uchun Reply qiling.**`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -813,56 +773,7 @@
       document.getElementById('chatQuestionText').value = '';
     });
 
-    // 🎤 Bemor tomonidan ovozli xabar yuborish
-    let mediaRecorder;
-    let audioChunks = [];
-    const voiceBtn = document.getElementById('voiceRecordBtn');
-
-    voiceBtn.addEventListener('click', async function() {
-      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          mediaRecorder = new MediaRecorder(stream);
-          audioChunks = [];
-
-          mediaRecorder.ondataavailable = event => {
-            audioChunks.push(event.data);
-          };
-
-          mediaRecorder.onstop = async () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            const audioUrl = URL.createObjectURL(audioBlob);
-
-            chatHistory.push({ sender: 'user', type: 'audio', text: audioUrl });
-            localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
-            renderChat();
-
-            const formData = new FormData();
-            formData.append('chat_id', ADMIN_IDS[0]);
-            formData.append('voice', audioBlob, 'voice_message.webm');
-            formData.append('caption', `🎤 **SAYTDAN OVOZLI XABAR!**\n🆔 **Bemor ID:** \`${patientId}\`\n\n👇 **Javob uchun Reply qiling yoki ovoz yuboring.**`);
-            formData.append('parse_mode', 'Markdown');
-
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVoice`, {
-              method: 'POST',
-              body: formData
-            });
-          };
-
-          mediaRecorder.start();
-          voiceBtn.textContent = '⏹ To‘xtatish';
-          voiceBtn.classList.add('recording');
-        } catch (err) {
-          alert('Mikrofondan foydalanishga ruxsat berilmadi yoki xatolik yuz berdi!');
-        }
-      } else {
-        mediaRecorder.stop();
-        voiceBtn.textContent = '🎤 Ovoz';
-        voiceBtn.classList.remove('recording');
-      }
-    });
-
-    // 🔄 Vrach yozgan matn, ovozli javob, tozalash va broadcast xabarlarini tekshirib turish
+    // 🔄 Vrach yozgan javoblarni tekshirib turish
     let lastUpdateId = localStorage.getItem('ginekolog_last_update_' + patientId) || 0;
 
     function checkForDoctorReply() {
@@ -920,7 +831,7 @@
 
                 if (text.startsWith('/broadcast')) {
                   const broadcastText = text.replace('/broadcast', '').trim();
-                  chatHistory.push({ sender: 'doctor', type: 'text', text: "📢 " + broadcastText });
+                  chatHistory.push({ sender: 'doctor', text: "📢 " + broadcastText });
                   localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
                   
                   const popup = document.getElementById('chatPopup');
@@ -941,16 +852,14 @@
                   return;
                 }
 
-                const isTarget = (reply && reply.caption && reply.caption.includes(patientId)) || 
-                                 (reply && reply.text && reply.text.includes(patientId)) ||
-                                 (text.includes(patientId));
+                const isTarget = (reply && reply.text && reply.text.includes(patientId)) || (text.includes(patientId));
 
                 if (isTarget) {
                   if (msg.text && !msg.text.startsWith('/clear') && !msg.text.startsWith('/broadcast')) {
                     let replyText = msg.text.replace(patientId, '').trim();
                     const lastMsg = chatHistory[chatHistory.length - 1];
                     if (!lastMsg || lastMsg.text !== replyText) {
-                      chatHistory.push({ sender: 'doctor', type: 'text', text: replyText });
+                      chatHistory.push({ sender: 'doctor', text: replyText });
                       localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
                       
                       const popup = document.getElementById('chatPopup');
@@ -962,33 +871,6 @@
                         renderChat();
                       }
                     }
-                  }
-
-                  if (msg.voice) {
-                    const fileId = msg.voice.file_id;
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`)
-                      .then(res => res.json())
-                      .then(fileData => {
-                        if (fileData.ok) {
-                          const filePath = fileData.result.file_path;
-                          const audioUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${filePath}`;
-                          
-                          const lastMsg = chatHistory[chatHistory.length - 1];
-                          if (!lastMsg || lastMsg.text !== audioUrl) {
-                            chatHistory.push({ sender: 'doctor', type: 'audio', text: audioUrl });
-                            localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
-                            
-                            const popup = document.getElementById('chatPopup');
-                            if (popup.style.display !== 'flex') {
-                              unreadCount++;
-                              localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
-                              updateBadge();
-                            } else {
-                              renderChat();
-                            }
-                          }
-                        }
-                      });
                   }
                 }
               }
