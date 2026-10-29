@@ -647,7 +647,7 @@
           <iframe src="https://www.youtube.com/embed/uXHblDt7xDQ?mute=1&loop=1&playlist=uXHblDt7xDQ" title="Videlina haqida" allowfullscreen></iframe>
         </div>
         <div class="procedure-content">
-          <h3>11.Ajralmalar (Intim parvarish va sog'lomlashtirish)</h3>
+          <h3>11. Ajralmalar (Intim parvarish va sog'lomlashtirish)</h3>
           <p><strong>Nima uchun qilinadi:</strong> Ayollarning intim salomatligini saqlash, mikroflorani normallashtirish va noqulayliklarni bartaraf etishga qaratilgan.</p>
           <p><strong>Ta'siri:</strong> Intim hududdagi tabiiy muvozanatni tiklaydi hamda yallig'lanishlarning oldini oladi.</p>
         </div>
@@ -681,7 +681,7 @@
     </div>
   </main>
 
-  <!-- ONLAYN QABULGA YOZILISH FORMASI -->
+  <!-- ONLAYN QABULGA YOZILISH FORMASI (SHAHAR BILAN BIRGA) -->
   <section class="appointment-card">
     <h2>📅 Onlayn qabulga yozilish</h2>
     <form id="tgAppointmentForm">
@@ -703,6 +703,10 @@
           <option value="❄️ Intim oqartirish">❄️ Intim oqartirish</option>
           <option value="🔬 Eroziya davolash">🔬 Eroziya davolash</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label>Shahar / Viloyat:</label>
+        <input type="text" id="userRegion" placeholder="Masalan: Toshkent shahar" required>
       </div>
       <button type="submit" class="btn-submit">Arizani yuborish</button>
     </form>
@@ -748,8 +752,9 @@
       const name = document.getElementById('userName').value;
       const phone = document.getElementById('userPhone').value;
       const service = document.getElementById('userService').value;
+      const region = document.getElementById('userRegion').value;
 
-      const message = `🔔 **SAYTDAN YANGI ARIZA!**\n\n👤 **Bemor:** ${name}\n📞 **Tel:** ${phone}\n💉 **Muolaja:** ${service}`;
+      const message = `🔔 **SAYTDAN YANGI ARIZA!**\n\n👩‍⚕️ **Ism:** ${name}\n📞 **Tel:** ${phone}\n🩺 **Muolaja:** ${service}\n📍 **Shahar:** ${region}`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
