@@ -361,7 +361,7 @@
       position: fixed;
       bottom: 110px;
       right: 30px;
-      width: 350px;
+      width: 370px;
       background: #1e1b4b;
       border: 1px solid var(--glass-border);
       border-radius: 24px;
@@ -389,17 +389,27 @@
     }
     .chat-body {
       padding: 20px;
+      max-height: 320px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .chat-body textarea {
+    .chat-footer {
+      padding: 15px;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid var(--glass-border);
+    }
+    .chat-footer textarea {
       width: 100%;
-      height: 110px;
-      padding: 12px;
+      height: 70px;
+      padding: 10px;
       background: rgba(0,0,0,0.3);
       border: 1px solid var(--glass-border);
       border-radius: 12px;
       color: #fff;
       resize: none;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       font-family: inherit;
     }
     .chat-submit {
@@ -407,10 +417,30 @@
       background: var(--primary);
       color: white;
       border: none;
-      padding: 14px;
+      padding: 12px;
       border-radius: 12px;
       font-weight: bold;
       cursor: pointer;
+    }
+    .msg-bubble {
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+    .msg-user {
+      background: var(--primary);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+    .msg-doctor {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+      border: 1px solid var(--glass-border);
     }
 
     /* FOOTER */
@@ -672,7 +702,7 @@
         </div>
         <div class="procedure-content">
           <h3>13. Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv)</h3>
-          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirtilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
           <p><strong>Muolaja vaqti:</strong> 45 – 60 daqiqa.</p>
           <p><strong>Tiklanish vaqti:</strong> To'liq bitish 4–6 hafta.</p>
         </div>
@@ -681,7 +711,7 @@
     </div>
   </main>
 
-  <!-- ONLAYN QABULGA YOZILISH FORMASI (SHAHAR BILAN BIRGA) -->
+  <!-- ONLAYN QABULGA YOZILISH FORMASI -->
   <section class="appointment-card">
     <h2>📅 Onlayn qabulga yozilish</h2>
     <form id="tgAppointmentForm">
@@ -719,10 +749,13 @@
 
   <div class="chat-popup" id="chatPopup">
     <div class="chat-header">
-      <span>💬 Shifokorga savol berish</span>
+      <span>💬 Shifokor bilan shaxsiy chat</span>
       <button class="chat-close" onclick="toggleChat()">&times;</button>
     </div>
-    <div class="chat-body">
+    <div class="chat-body" id="chatBody">
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldiring, shifokorimiz tez orada shaxsan javob yozadi.</div>
+    </div>
+    <div class="chat-footer">
       <form id="chatQuestionForm">
         <textarea id="chatQuestionText" placeholder="Savolingizni shu yerga yozing..." required></textarea>
         <button type="submit" class="chat-submit">Yuborish</button>
@@ -742,11 +775,37 @@
     const BOT_TOKEN = '8609538485:AAFeTCr4Mel-5m88Nuc_wwXIEFusqLDLnTk';
     const ADMIN_IDS = [6258110646, 7645769320];
 
+    // Har bir bemor uchun brauzerda noyob ID yaratamiz (shaxsiy maxfiylik uchun)
+    let patientId = localStorage.getItem('ginekolog_patient_id');
+    if (!patientId) {
+      patientId = 'ID-' + Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('ginekolog_patient_id', patientId);
+    }
+
+    // Saqlangan chat tarixini yuklash
+    let chatHistory = JSON.parse(localStorage.getItem('ginekolog_chat_' + patientId)) || [];
+    
+    function renderChat() {
+      const chatBody = document.getElementById('chatBody');
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldiring, shifokorimiz tez orada shaxsan javob yozadi.</div>';
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : 'msg-doctor'}`;
+        div.textContent = msg.text;
+        chatBody.appendChild(div);
+      });
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
     function toggleChat() {
       const popup = document.getElementById('chatPopup');
       popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+      if (popup.style.display === 'flex') {
+        renderChat();
+      }
     }
 
+    // Qabulga yozilish formasi
     document.getElementById('tgAppointmentForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const name = document.getElementById('userName').value;
@@ -754,7 +813,7 @@
       const service = document.getElementById('userService').value;
       const region = document.getElementById('userRegion').value;
 
-      const message = `🔔 **SAYTDAN YANGI ARIZA!**\n\n👩‍⚕️ **Ism:** ${name}\n📞 **Tel:** ${phone}\n🩺 **Muolaja:** ${service}\n📍 **Shahar:** ${region}`;
+      const message = `🔔 **SAYTDAN YANGI ARIZA!**\n\n🆔 **Bemor ID:** ${patientId}\n👩‍⚕️ **Ism:** ${name}\n📞 **Tel:** ${phone}\n🩺 **Muolaja:** ${service}\n📍 **Shahar:** ${region}`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -768,11 +827,18 @@
       this.reset();
     });
 
+    // Savol yuborish
     document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const question = document.getElementById('chatQuestionText').value;
 
-      const message = `❓ **SAYTDAN YANGI SAVOL!**\n\n💬 **Savol:** ${question}`;
+      // Xabarni tarixga qo'shish
+      chatHistory.push({ sender: 'user', text: question });
+      localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+      renderChat();
+
+      // Telegramga yuborish (Vrach uchun maxsus javob berish buyrug'i bilan)
+      const message = `❓ **SAYTDAN SHAXSIY SAVOL!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Savol:** ${question}\n\n👇 **Javob berish uchun shu xabarga Reply (Javob berish) qilib yozing:**\n\`/answer ${patientId} Sizning javobingiz...\``;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -782,9 +848,7 @@
         });
       });
 
-      alert("✅ Savolingiz shifokorga yuborildi!");
       document.getElementById('chatQuestionText').value = '';
-      toggleChat();
     });
   </script>
 </body>
