@@ -2,11 +2,13 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <title>Ginekolog vrach Estetik Ginekolog | Doktor Surayyo Vahobjonovna</title>
-  <meta name="description" content="Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer vagina plastika, eroziya davolash.">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Ginekolog vrach Estetik Ginekolog | Doktor Surayyo Vahobjonovna - Toshkentda Ginekolog</title>
+  <meta name="description" content="Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer yordamida vagina plastika, eroziya davolash, Storylar va Jonli efirlar.">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   
+  <!-- Google Font: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,17 +24,21 @@
       --glass-card: rgba(255, 255, 255, 0.05);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
+      --story-ring: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
     }
 
-    * { box-sizing: border-box; transition: all 0.3s ease; }
+    * {
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
     body {
       margin: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: #0b0f19;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(147, 51, 234, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(147, 51, 234, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.18) 0px, transparent 50%);
       background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
@@ -45,39 +51,49 @@
       padding: 15px 12px 40px 12px;
     }
 
-    /* STORIES SECTION (INSTAGRAM STYLE) */
-    .stories-bar {
+    /* ======================================================== */
+    /* STORIES BAR (INSTAGRAM STYLE)                            */
+    /* ======================================================== */
+    .stories-container {
       display: flex;
       gap: 15px;
       overflow-x: auto;
       padding: 10px 5px 20px 5px;
-      scrollbar-width: none;
+      margin-bottom: 20px;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE 10+ */
     }
-    .stories-bar::-webkit-scrollbar { display: none; }
+    .stories-container::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
 
     .story-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
       cursor: pointer;
       flex-shrink: 0;
+      width: 76px;
+      text-align: center;
     }
 
-    .story-ring {
-      width: 68px;
-      height: 68px;
+    .story-avatar-wrapper {
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       padding: 3px;
-      background: linear-gradient(45deg, #f43f5e, #9333ea, #c084fc);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: var(--story-ring);
+      position: relative;
+      animation: pulseGlow 2s infinite ease-in-out;
     }
 
-    .story-ring.add-admin {
+    .story-avatar-wrapper.viewed {
       background: rgba(255, 255, 255, 0.2);
-      border: 2px dashed var(--primary-light);
+      animation: none;
+    }
+
+    .story-avatar-wrapper.add-story-wrapper {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
     }
 
     .story-avatar {
@@ -85,269 +101,1401 @@
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #0b0f19;
+      border: 3px solid #0b0f19;
       background: #1e1b4b;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: bold;
       color: #fff;
+      font-weight: 800;
+      font-size: 1.2rem;
     }
 
     .story-title {
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--text-muted);
-      max-width: 70px;
-      text-align: center;
+      margin-top: 6px;
+      color: #e2e8f0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      max-width: 100%;
     }
 
-    /* HERO CARD */
-    .hero-creative-card {
+    .add-story-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #f43f5e;
+      color: #fff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid #0b0f19;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+      50% { transform: scale(1.03); box-shadow: 0 0 18px rgba(147, 51, 234, 0.8); }
+    }
+
+    /* FULLSCREEN STORY MODAL */
+    .story-viewer-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 5000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .story-card {
       position: relative;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 25px 18px 20px 18px;
+      width: 100%;
+      max-width: 420px;
+      height: 100vh;
+      max-height: 820px;
+      background: #111827;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+    }
+
+    @media (max-width: 500px) {
+      .story-card {
+        max-width: 100%;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+      }
+    }
+
+    /* Story Progress Bar */
+    .story-progress-bar-container {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      gap: 6px;
+      z-index: 20;
+    }
+
+    .story-progress-segment {
+      height: 3px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .story-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #fff;
+    }
+
+    /* Story Header */
+    .story-header {
+      position: absolute;
+      top: 24px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 20;
+    }
+
+    .story-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .story-author-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid var(--primary-light);
+      object-fit: cover;
+    }
+
+    .story-author-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .story-author-time {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .story-close-btn {
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Story Main Body Media/Text */
+    .story-content-body {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .story-text-overlay {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      margin-bottom: 25px;
+      color: #fff;
+      max-width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .magazine-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      color: #f43f5e;
-      background: rgba(244, 63, 94, 0.12);
-      border: 1px solid rgba(244, 63, 94, 0.3);
-      padding: 5px 14px;
-      border-radius: 50px;
-      margin-bottom: 12px;
-    }
-
-    .main-title {
-      font-size: 2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #f43f5e 100%);
+    .story-text-overlay h2 {
+      margin: 0 0 10px 0;
+      font-size: 1.4rem;
+      background: linear-gradient(135deg, #fff 0%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0 0 10px 0;
     }
 
-    /* ACTION BUTTONS GRID */
-    .action-grid {
+    .story-text-overlay p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+      color: #e2e8f0;
+    }
+
+    /* Tap zones for Story navigation */
+    .story-tap-left, .story-tap-right {
+      position: absolute;
+      top: 60px;
+      bottom: 80px;
+      width: 35%;
+      z-index: 10;
+    }
+    .story-tap-left { left: 0; }
+    .story-tap-right { right: 0; }
+
+    /* Story Footer & Reply Box */
+    .story-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 15px;
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .story-reply-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 30px;
+      padding: 12px 18px;
+      color: #fff;
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .story-reply-input::placeholder { color: #cbd5e1; }
+
+    .story-action-icon {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .story-views-count {
+      position: absolute;
+      bottom: 75px;
+      left: 15px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      background: rgba(0,0,0,0.5);
+      padding: 4px 10px;
+      border-radius: 20px;
+      z-index: 20;
+    }
+
+    /* FLOATING HEARTS ANIMATION */
+    .floating-heart {
+      position: absolute;
+      bottom: 80px;
+      right: 25px;
+      font-size: 28px;
+      pointer-events: none;
+      animation: floatUp 1.2s ease-out forwards;
+      z-index: 30;
+    }
+
+    @keyframes floatUp {
+      0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+      50% { opacity: 0.8; transform: translateY(-80px) scale(1.3) rotate(-15deg); }
+      100% { opacity: 0; transform: translateY(-160px) scale(0.8) rotate(15deg); }
+    }
+
+    /* ======================================================== */
+    /* INTERACTIVE PLATFORMA TUGMALARI                          */
+    /* ======================================================== */
+    .platform-buttons-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-bottom: 30px;
+      margin: 15px 0 25px 0;
     }
 
-    .action-card {
+    .platform-btn {
+      position: relative;
       background: var(--glass-card);
+      backdrop-filter: blur(15px);
       border: 1px solid var(--glass-border);
       border-radius: 18px;
-      padding: 16px;
+      padding: 16px 12px;
+      color: #fff;
+      text-decoration: none;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
       cursor: pointer;
-      text-align: center;
-      color: #fff;
+      overflow: hidden;
     }
-    .action-card:hover {
-      background: rgba(147, 51, 234, 0.2);
+
+    .platform-btn:hover {
+      background: rgba(147, 51, 234, 0.25);
       border-color: var(--primary-light);
-      transform: translateY(-2px);
+      transform: translateY(-3px);
     }
-    .action-card.live {
-      background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(147, 51, 234, 0.25));
-      border-color: rgba(244, 63, 94, 0.5);
-    }
-    .action-card svg {
+
+    .platform-btn svg {
       width: 26px;
       height: 26px;
       fill: var(--primary-light);
     }
-    .action-card.live svg { fill: #f43f5e; }
-    .action-card span { font-weight: 700; font-size: 0.85rem; }
 
-    /* ADMIN MODAL LOGIN */
-    .modal-overlay {
+    .platform-btn span {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .platform-btn.live {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(147, 51, 234, 0.25));
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+    .platform-btn.live svg {
+      fill: #f43f5e;
+    }
+    
+    .live-indicator {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #f43f5e;
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 20px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @media (min-width: 768px) {
+      .platform-buttons-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* ======================================================== */
+    /* JONLI EFIR DEMO BO'LIMI                                  */
+    /* ======================================================== */
+    .live-stream-section {
+      display: none;
+      background: var(--glass-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 20px;
+      margin-bottom: 30px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .live-stream-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .live-badge-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-badge {
+      background: #f43f5e;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .live-video-container {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .live-video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Live Stream Chat Overlay */
+    .live-chat-overlay {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      width: 280px;
+      max-height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      pointer-events: none;
+      scrollbar-width: none;
+    }
+    .live-chat-overlay::-webkit-scrollbar { display: none; }
+
+    .live-chat-msg {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #fff;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .live-chat-msg span {
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+
+    .live-stream-controls {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .live-comment-input {
+      flex: 1;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .live-like-btn {
+      background: linear-gradient(135deg, #f43f5e, #9333ea);
+      border: none;
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
+    }
+
+    /* GLASSMOPRHISM HERO CARD */
+    .hero-section {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .hero-creative-card {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 30px 18px 20px 18px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .glow-orb-1 { width: 200px; height: 200px; background: rgba(147, 51, 234, 0.3); top: -80px; left: -80px; }
+    .glow-orb-2 { width: 200px; height: 200px; background: rgba(244, 63, 94, 0.25); bottom: -80px; right: -80px; }
+
+    .hero-content-inner { position: relative; z-index: 1; }
+
+    .magazine-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #f43f5e;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    .main-title {
+      font-size: 2.1rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+
+    .doctor-name {
+      font-size: 1.2rem;
+      color: #e2e8f0;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+    }
+
+    .quote {
+      position: relative;
+      font-style: italic;
+      color: #cbd5e1;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px 20px;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0 auto 20px auto;
+      max-width: 100%;
+    }
+    .quote span { color: var(--primary-light); font-size: 1.2rem; font-weight: bold; }
+
+    /* FOOTER BAR INSIDE HERO */
+    .card-footer-bar {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .card-footer-text { text-align: left; }
+    .sub-text { font-size: 0.85rem; font-weight: 700; color: var(--primary-light); display: block; }
+    .copy-text { font-size: 0.75rem; color: var(--text-muted); }
+
+    /* SOCIAL BUTTONS */
+    .icon-buttons-row { display: flex; gap: 10px; }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-decoration: none;
+    }
+    .icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .icon-btn:hover { background: var(--primary); }
+    .icon-btn.call:hover { background: #10b981; }
+    .icon-btn.sms:hover { background: #3b82f6; }
+    .icon-btn.telegram:hover { background: #0088cc; }
+    .icon-btn.youtube:hover { background: #ff0000; }
+
+    /* SERVICES SECTION */
+    .section-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin: 30px 0 25px 0;
+      background: linear-gradient(135deg, #fff 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.3;
+    }
+
+    .sections-stack { display: flex; flex-direction: column; gap: 20px; }
+
+    .procedure-section {
+      background: var(--glass-card);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .procedure-video { width: 100%; height: 220px; background: #000; }
+    .procedure-video iframe { width: 100%; height: 100%; border: none; }
+
+    .procedure-content { padding: 20px; flex: 1; }
+    .procedure-content h3 { margin: 0 0 12px 0; font-size: 1.25rem; font-weight: 700; color: #fff; }
+    .procedure-content p { margin: 0 0 10px 0; color: #cbd5e1; font-size: 0.93rem; line-height: 1.5; }
+
+    /* FLOATING CHAT WIDGET */
+    .chat-widget-btn {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
+      bottom: 20px;
+      right: 20px;
+      width: 55px;
+      height: 55px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(147, 51, 234, 0.5);
+      cursor: pointer;
+      z-index: 1000;
+    }
+    .chat-widget-btn svg { width: 26px; height: 26px; fill: #ffffff; }
+
+    .chat-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #f43f5e;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: bold;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #0b0f19;
+    }
+
+    /* TELEFONGA MOS CHAT OYNASI */
+    .chat-popup {
+      position: fixed;
+      bottom: 85px;
+      right: 15px;
+      left: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      height: 400px;
+      background: #1e1b4b;
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .chat-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+      color: white;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .chat-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .chat-body { padding: 15px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .chat-footer {
+      padding: 12px;
+      background: rgba(0,0,0,0.25);
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-footer textarea {
+      width: 100%;
+      height: 50px;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: #fff;
+      resize: none;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    .chat-submit {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .msg-bubble { padding: 8px 12px; border-radius: 12px; font-size: 0.9rem; max-width: 85%; line-height: 1.4; }
+    .msg-user { background: var(--primary); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+    .msg-doctor { background: rgba(255,255,255,0.1); color: #fff; align-self: flex-start; border-bottom-left-radius: 2px; border: 1px solid var(--glass-border); }
+
+    /* MODAL FOR ADDING STORY */
+    .add-story-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(10px);
-      z-index: 2000;
+      z-index: 6000;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-
-    .admin-modal {
+    .add-story-card {
       background: #1e1b4b;
       border: 1px solid var(--glass-border);
       border-radius: 20px;
+      padding: 25px;
       width: 100%;
       max-width: 400px;
-      padding: 25px;
-      color: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
-
-    .admin-modal h3 { margin-top: 0; font-size: 1.3rem; text-align: center; }
-    .admin-modal input, .admin-modal textarea {
+    .add-story-card h3 { margin: 0; color: #fff; text-align: center; }
+    .add-story-card input, .add-story-card textarea {
       width: 100%;
-      padding: 12px;
+      padding: 10px 12px;
       background: rgba(0,0,0,0.3);
       border: 1px solid var(--glass-border);
       border-radius: 10px;
       color: #fff;
-      margin-bottom: 12px;
-      font-family: inherit;
+      outline: none;
     }
-    .admin-modal button {
-      width: 100%;
-      padding: 12px;
-      background: var(--primary);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
+
+    /* FOOTER */
+    .site-footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--glass-border);
+      margin-top: 40px;
+      font-size: 0.85rem;
     }
 
     @media (min-width: 768px) {
-      .action-grid { grid-template-columns: repeat(4, 1fr); }
-      .main-title { font-size: 3.2rem; }
+      .site-container { padding: 40px 20px 60px 20px; }
+      .hero-creative-card { padding: 50px 40px 35px 40px; border-radius: 36px; }
+      .main-title { font-size: 3.5rem; }
+      .procedure-section { flex-direction: row; align-items: center; }
+      .procedure-video { width: 45%; height: 350px; }
+      .procedure-content { width: 55%; padding: 35px; }
+      .chat-popup { width: 380px; left: auto; right: 30px; bottom: 110px; height: 430px; }
     }
   </style>
 </head>
 <body>
-
   <div class="site-container">
 
-    <!-- TOP STORY'LAR BO'LIMI -->
-    <div class="stories-bar">
-      <!-- Vrach Admin Tugmasi -->
-      <div class="story-item" onclick="openAdminModal()">
-        <div class="story-ring add-admin">
-          <div class="story-avatar">+</div>
-        </div>
-        <span class="story-title" style="color:var(--primary-light);">Admin (Vrach)</span>
+  <!-- ======================================================== -->
+  <!-- STORIES BAR (INSTAGRAM/TELEGRAM STYLE)                   -->
+  <!-- ======================================================== -->
+  <div class="stories-container" id="storiesBar">
+    <!-- Story Add Button (Doctor Admin) -->
+    <div class="story-item" onclick="openAddStoryModal()">
+      <div class="story-avatar-wrapper add-story-wrapper">
+        <div class="story-avatar">👩‍⚕️</div>
+        <div class="add-story-badge">+</div>
+      </div>
+      <span class="story-title">Story qo'shish</span>
+    </div>
+
+    <!-- Dynamic Stories injected via JS -->
+  </div>
+
+  <!-- BOSH SAHIFA / HERO -->
+  <header class="hero-section">
+    <div class="hero-creative-card">
+      <div class="glow-orb glow-orb-1"></div>
+      <div class="glow-orb glow-orb-2"></div>
+      
+      <div class="hero-content-inner">
+        <div class="magazine-tag">MEDICAL TODAY • № 12 | 2026</div>
+        <h1 class="main-title">Estetik Ginekologiya</h1>
+        <h6 class="doctor-name">Estetist ginekolog vrach Surayyo Vahobjonovna</h6>
+        <blockquote class="quote">
+          <span>“</span>Shifokor — bu kasb emas, bu chaqiriq. Insonlarga yaxshilik qilish – eng katta baxt.<span>”</span>
+        </blockquote>
       </div>
 
-      <!-- Storylar ro'yxati -->
-      <div class="story-item" onclick="viewStory('Labioplastika Aksiya', 'Bugun labioplastika muolajasiga 20% chegirma e\'lon qilindi!')">
-        <div class="story-ring">
-          <div class="story-avatar">🔥</div>
+      <div class="card-footer-bar">
+        <div class="card-footer-text">
+          <span class="sub-text">Sifatli tibbiyot – kelajak garovi ❤️</span>
+          <span class="copy-text">© 2026 Surayyo Vahobjonovna</span>
         </div>
-        <span class="story-title">Aksiya</span>
+        <div class="icon-buttons-row">
+          <a href="tel:+998952775354" class="icon-btn call" title="Qo'ng'iroq qilish">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </a>
+          <a href="sms:+998952775354" class="icon-btn sms" title="SMS yozish">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+          </a>
+          <a href="https://t.me/ginekologplastikx" target="_blank" rel="noopener" class="icon-btn telegram" title="Telegram kanal">
+            <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+          </a>
+          <a href="https://youtube.com/@ginekologestetst?si=FMBdc_W1IxYVsmBr" target="_blank" rel="noopener" class="icon-btn youtube" title="YouTube kanal">
+            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          </a>
+        </div>
       </div>
+    </div>
+  </header>
 
-      <div class="story-item" onclick="viewStory('Jonli Efir', 'Bugun soat 20:00 da sistit va uni davolash haqida jonli efir bo\'ladi!')">
-        <div class="story-ring">
-          <div class="story-avatar">🔴</div>
-        </div>
-        <span class="story-title">Efir Bugun</span>
+  <!-- ======================================================== -->
+  <!-- INTERAKTIV PLATFORMA TUGMALARI (ACTION BUTTONS)           -->
+  <!-- ======================================================== -->
+  <div class="platform-buttons-grid">
+    <!-- 1. JONLI EFIR -->
+    <button class="platform-btn live" onclick="toggleLiveStreamSection()">
+      <span class="live-indicator">LIVE</span>
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      <span>Jonli Efir</span>
+    </button>
+
+    <!-- 2. JONLI CHAT -->
+    <button class="platform-btn" onclick="toggleChat()">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+      <span>Shaxsiy Chat</span>
+    </button>
+
+    <!-- 3. STORYLAR -->
+    <button class="platform-btn" onclick="openStoryViewer(0)">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+      <span>Storylarni ko'rish</span>
+    </button>
+
+    <!-- 4. AKSIYA VA YANGILIKLAR -->
+    <a href="#services-list" class="platform-btn">
+      <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      <span>Xizmatlar & Narxlar</span>
+    </a>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JONLI EFIR DEMO BO'LIMI                                  -->
+  <!-- ======================================================== -->
+  <section class="live-stream-section" id="liveStreamSection">
+    <div class="live-stream-header">
+      <div class="live-badge-title">
+        <span class="live-badge">🔴 LIVE</span>
+        <h3 style="margin:0; color:#fff; font-size: 1.1rem;">Jonli Efir: Estetik Ginekologiya Savol-Javob</h3>
+      </div>
+      <button onclick="toggleLiveStreamSection()" style="background:none; border:none; color:#fff; font-size:22px; cursor:pointer;">&times;</button>
+    </div>
+
+    <div class="live-video-container" id="liveVideoContainer">
+      <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?autoplay=1&mute=1&loop=1&playlist=u9aQ_MEy0nU" title="Dr. Surayyo Live Stream" allow="autoplay" allowfullscreen></iframe>
+      
+      <!-- Overlay Chat -->
+      <div class="live-chat-overlay" id="liveChatOverlay">
+        <div class="live-chat-msg"><span>Nilufar:</span> Assalomu alaykum opa, labioplastika og'riqlimi?</div>
+        <div class="live-chat-msg"><span>Dr. Surayyo:</span> Vaalaykum assalom! Yo'q, anesteziya bilan og'riqsiz o'tadi 😊</div>
       </div>
     </div>
 
-    <!-- HERO HEADER -->
-    <header class="hero-creative-card">
-      <div class="magazine-tag">DOCTOR PLATFORM • 2026</div>
-      <h1 class="main-title">Estetik Ginekologiya</h1>
-      <p style="color:#e2e8f0; margin-bottom:15px;">Doktor Surayyo Vahobjonovna</p>
-    </header>
+    <div class="live-stream-controls">
+      <input type="text" id="liveCommentInput" class="live-comment-input" placeholder="Jonli efirga izoh yoki savol yozing..." onkeypress="handleLiveComment(event)">
+      <button class="live-like-btn" onclick="triggerLiveHeart()">❤️</button>
+    </div>
+  </section>
 
-    <!-- TEZKOR ACTION TUGMALARI -->
-    <div class="action-grid">
-      <div class="action-card live" onclick="alert('Jonli efir tez orada boshlanadi!')">
-        <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-        <span>Jonli Efir</span>
+  <!-- ASOSIY XIZMATLAR -->
+  <main class="services-container" id="services-list">
+    <h1 class="section-title">ESTETIK GINEKALOGIYA VA TIBBIY MUOLAJALAR</h1>
+    
+    <div class="sections-stack">
+      
+      <!-- 0. ESTETIK GINEKALOGIYA NIMA? -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?mute=1&loop=1&playlist=u9aQ_MEy0nU" title="Estetik ginekologiya nima" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>Estetik ginekologiya nima?</h3>
+          <p><strong>Estetik ginekalogiya bu:</strong>-Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
+          <p><strong>Afzalliklari:</strong> Ayollarda o'ziga bo'lgan ishonchni qaytarish, jinsiy hayot sifatini yaxshilash va intim hudud salomatligini mustahkamlashda muhim rol o'ynaydi.</p>
+        </div>
+      </section>
+
+      <!-- 1. Labioplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/ttLHgzEgK-A?mute=1&loop=1&playlist=ttLHgzEgK-A" title="Labioplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>1. Labioplastika (Kichik jinsiy lablar plastikasi)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ma gipertrofiya, assimetriya yoki tug'ruqdan keyingi o'zgarishlarni bartaraf etish uchun kichik jinsiy lablar hajmi va shakli korreksiya qilinadi.</p>
+          <p><strong>Muolaja vaqti:</strong> 30 – 45 daqiqa (mahalliy og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq bitish vaqti 3–4 hafta.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Antiseptik eritmalar bilan ishlov beriladi, shifokor tavsiya etgan Levomekol yoki Bepanten Plus malhamlari surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar qat'iy taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 2. Vaginoplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/MdFuG-MtDF0?mute=1&loop=1&playlist=MdFuG-MtDF0" title="Vaginoplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>2. Vaginoplastika (Vagina devorlarini toraytirish)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruqdan keyingi jinsiy yo'llar kengayishini bartaraf etish, mushaklar tonusini va intim sezgirlikni to'liq tiklash.</p>
+          <p><strong>Muolaja vaqti:</strong> 1 – 1.5 soat (umumiy yoki spinal og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> To'liq tiklanish 6–8 hafta.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Yallig'lanishga qarshi va bitiruvchi maxsus shamchalar hamda malhamlar qo'llaniladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 2 oy (8 hafta) davomida jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi.</p>
+        </div>
+      </section>
+
+      <!-- 3. Klitoroplastika -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/lQeJWYOKXEc?mute=1&loop=1&playlist=lQeJWYOKXEc" title="Klitoroplastika" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>3. Klitoroplastika (Kilitra plastika)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Klitor atrofidagi ortiqcha to'qimalarni olib tashlash, sezgirlikni oshirish va estetik ko'rinishni yaxshilash.</p>
+          <p><strong>Muolaja vaqti:</strong> 30 – 40 daqiqa (mahalliy og'riqsizlantirish ostida).</p>
+          <p><strong>Tiklanish vaqti:</strong> 3 hafta ichida to'liq tuzaladi.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Sovuq kompresslar qo'yiladi, antiseptik ishlov berilib, shifokor buyurgan tiklovchi malhamlar surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–4 hafta jinsiy aloqadan saqlanish zarur.</p>
+        </div>
+      </section>
+
+      <!-- 4. Intim oqartirish -->
+      <section class="procedure-section">
+        <div class="procedure-video">
+          <iframe src="https://www.youtube.com/embed/09W0507Oj9o?mute=1&loop=1&playlist=09W0507Oj9o" title="Intim oqartirish" allowfullscreen></iframe>
+        </div>
+        <div class="procedure-content">
+          <h3>4. Intim zona pigmentatsiyasini yo'qotish (Oqartirish)</h3>
+          <p><strong>Nima uchun qilinadi:</strong> Intim hududdagi terining qorayishini bartaraf etish va bir xil oq, silliq rangga keltirish.</p>
+          <p><strong>Muolaja vaqti:</strong> 20 – 30 daqiqa (kursi 3–4 ta muolajadan iborat).</p>
+          <p><strong>Tiklanish vaqti:</strong> Terining yangilanishi 5–7 kun davom etadi.</p>
+          <p><strong>Parvarish va malhamlar:</strong> Shifokor buyurgan maxsus namlantiruvchi va oqartiruvchi kremlar surtiladi.</p>
+          <p><strong>Jinsiy aloqa cheklovi:</strong> 3–5 kun jinsiy aloqadan saqlanish tavsiya etiladi.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FLOATING CHAT WIDGET -->
+  <div class="chat-widget-btn" onclick="toggleChat()" title="Shifokorga savol berish">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+    <div class="chat-badge" id="chatBadge">0</div>
+  </div>
+
+  <div class="chat-popup" id="chatPopup">
+    <div class="chat-header">
+      <span>💬 Shifokor bilan shaxsiy chat</span>
+      <button class="chat-close" onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldirishingiz mumkin.</div>
+    </div>
+    <div class="chat-footer">
+      <form id="chatQuestionForm">
+        <textarea id="chatQuestionText" placeholder="Savolingizni yozing..."></textarea>
+        <button type="submit" class="chat-submit">Yuborish</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FULLSCREEN STORY VIEWER MODAL -->
+  <div class="story-viewer-modal" id="storyModal">
+    <div class="story-card" id="storyCard">
+      <!-- Progress Bar -->
+      <div class="story-progress-bar-container" id="storyProgressContainer"></div>
+
+      <!-- Header -->
+      <div class="story-header">
+        <div class="story-author">
+          <div class="story-avatar" style="width:36px; height:36px; font-size:14px;">👩‍⚕️</div>
+          <div>
+            <div class="story-author-name">Dr. Surayyo Vahobjonovna</div>
+            <div class="story-author-time" id="storyTimeText">Bugun, 14:30</div>
+          </div>
+        </div>
+        <button class="story-close-btn" onclick="closeStoryViewer()">&times;</button>
       </div>
 
-      <div class="action-card" onclick="alert('Rasm va videolar bo\'limi')">
-        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-        <span>Storylar</span>
+      <!-- Navigation Tap Zones -->
+      <div class="story-tap-left" onclick="prevStory()"></div>
+      <div class="story-tap-right" onclick="nextStory()"></div>
+
+      <!-- Story Body -->
+      <div class="story-content-body" id="storyBody">
+        <div class="story-text-overlay" id="storyTextOverlay">
+          <h2 id="storyOverlayTitle">Yangi muolaja!</h2>
+          <p id="storyOverlayDesc">Lazerli CO2 yordamida vaginal yoshartirish muolajasi haqida batafsil ma'lumot.</p>
+        </div>
       </div>
 
-      <div class="action-card" onclick="alert('Like va Izohlar ochiq!')">
-        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-        <span>Reaksiyalar</span>
-      </div>
+      <div class="story-views-count" id="storyViewsText">👁️ 1,240 kishi ko'rdi</div>
 
-      <div class="action-card" onclick="toggleChat()">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-        <span>Shaxsiy Chat</span>
+      <!-- Footer / Reply Box -->
+      <div class="story-footer">
+        <input type="text" id="storyReplyInput" class="story-reply-input" placeholder="Doktorga javob yozish..." onkeypress="sendStoryReply(event)">
+        <button class="story-action-icon" onclick="triggerStoryHeart()">❤️</button>
       </div>
     </div>
+  </div>
+
+  <!-- MODAL FOR ADDING NEW STORY (ADMIN DEMO) -->
+  <div class="add-story-modal" id="addStoryModal">
+    <div class="add-story-card">
+      <h3>Yangi Story joylash (Vrach uchun)</h3>
+      <input type="text" id="newStoryTitle" placeholder="Story sarlavhasi (Masalan: Yangi Aksiya)">
+      <textarea id="newStoryDesc" rows="3" placeholder="Story matni va tavsifi..."></textarea>
+      <input type="text" id="newStoryBg" placeholder="Rasm URL (ixtiyoriy color/gradient)">
+      <button class="chat-submit" onclick="addNewStory()">Story chop etish 🚀</button>
+      <button class="chat-submit" style="background:rgba(255,255,255,0.1);" onclick="closeAddStoryModal()">Bekor qilish</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>© 2026 Surayyo Vahobjonovna | Barcha huquqlar himoyalangan.</p>
+  </footer>
 
   </div>
 
-  <!-- ADMIN LOGIN VA KABINET MODALI -->
-  <div class="modal-overlay" id="adminModal">
-    <div class="admin-modal">
-      <h3 id="modalTitle">👩‍⚕️ Shifokor Kabineti</h3>
-      <div id="loginForm">
-        <input type="password" id="adminPassword" placeholder="Admin parolini kiriting...">
-        <button onclick="checkAdminPassword()">Kirish</button>
-      </div>
-      <div id="adminPanel" style="display:none;">
-        <p style="color:#10b981; font-weight:bold;">✅ Xush kelibsiz, Doktor!</p>
-        <hr style="border-color:var(--glass-border); margin-bottom:15px;">
-        <p style="font-size:0.85rem;">📸 <b>Yangi Story / E'lon berish:</b></p>
-        <input type="text" id="storyTitleInput" placeholder="Story sarlavhasi...">
-        <textarea id="storyContentInput" placeholder="Matin yoki e'lon matni..."></textarea>
-        <button onclick="addNewStory()">Story Nashr Qilish</button>
-        <button onclick="closeAdminModal()" style="background:#64748b; margin-top:8px;">Yopish</button>
-      </div>
-    </div>
-  </div>
-
+  <!-- JS LOGIKA -->
   <script>
-    // ADMIN TIZIMI LOGIKASI
-    function openAdminModal() {
-      document.getElementById('adminModal').style.display = 'flex';
+    /* ======================================================== */
+    /* STORIES DATA & ENGINE                                    */
+    /* ======================================================== */
+    let stories = [
+      {
+        id: 1,
+        title: "Aksiya 🌸",
+        time: "Bugun, 10:15",
+        heading: "Bahorgi Chegirmalar!",
+        desc: "Labioplastika va Lazerli vaginoplastika muolajalariga 20% chegirma e'lon qilindi!",
+        bg: "linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)",
+        views: 1420
+      },
+      {
+        id: 2,
+        title: "Maslahat 💡",
+        time: "Bugun, 12:40",
+        heading: "Intim Parvarish",
+        desc: "Tug'ruqdan keyingi tiklanish davrida qanday sovun va spreylardan foydalanish kerak?",
+        bg: "linear-gradient(135deg, #11998e, #38ef7d)",
+        views: 980
+      },
+      {
+        id: 3,
+        title: "Lazer SO2 ✨",
+        time: "Kecha, 18:20",
+        heading: "Sistit va Eroziya",
+        desc: "Og'riqsiz va qonsiz lazer muolajasi orqali 1 seansda sistitdan xalos bo'ling.",
+        bg: "linear-gradient(135deg, #fc466b, #3f5efb)",
+        views: 2150
+      }
+    ];
+
+    let currentStoryIndex = 0;
+    let storyTimer = null;
+    let storyProgress = 0;
+
+    function renderStoriesBar() {
+      const bar = document.getElementById('storiesBar');
+      // Keep first static item (+ Story) and append stories
+      bar.innerHTML = `
+        <div class="story-item" onclick="openAddStoryModal()">
+          <div class="story-avatar-wrapper add-story-wrapper">
+            <div class="story-avatar">👩‍⚕️</div>
+            <div class="add-story-badge">+</div>
+          </div>
+          <span class="story-title">Story qo'shish</span>
+        </div>
+      `;
+
+      stories.forEach((st, idx) => {
+        const item = document.createElement('div');
+        item.className = 'story-item';
+        item.onclick = () => openStoryViewer(idx);
+
+        item.innerHTML = `
+          <div class="story-avatar-wrapper ${st.viewed ? 'viewed' : ''}">
+            <div class="story-avatar" style="background:${st.bg}">✨</div>
+          </div>
+          <span class="story-title">${st.title}</span>
+        `;
+        bar.appendChild(item);
+      });
     }
 
-    function closeAdminModal() {
-      document.getElementById('adminModal').style.display = 'none';
+    function openStoryViewer(index) {
+      currentStoryIndex = index;
+      const modal = document.getElementById('storyModal');
+      modal.style.display = 'flex';
+      stories[currentStoryIndex].viewed = true;
+      renderStoriesBar();
+      loadStory(currentStoryIndex);
     }
 
-    function checkAdminPassword() {
-      const pass = document.getElementById('adminPassword').value;
-      if (pass === 'doctor2026' || pass === 'surayyo') { // Parol: doctor2026
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
+    function closeStoryViewer() {
+      document.getElementById('storyModal').style.display = 'none';
+      clearInterval(storyTimer);
+    }
+
+    function loadStory(index) {
+      clearInterval(storyTimer);
+      const st = stories[index];
+
+      // Update text/bg
+      document.getElementById('storyTimeText').textContent = st.time;
+      document.getElementById('storyOverlayTitle').textContent = st.heading;
+      document.getElementById('storyOverlayDesc').textContent = st.desc;
+      document.getElementById('storyViewsText').textContent = `👁️ ${st.views + 1} kishi ko'rdi`;
+      
+      const body = document.getElementById('storyBody');
+      if (st.bg.startsWith('http')) {
+        body.style.backgroundImage = `url(${st.bg})`;
+        body.style.backgroundSize = 'cover';
       } else {
-        alert('❌ Noto\'g'ri parol!');
+        body.style.background = st.bg;
+      }
+
+      // Build Progress Bars
+      const progContainer = document.getElementById('storyProgressContainer');
+      progContainer.innerHTML = '';
+      stories.forEach((_, i) => {
+        const seg = document.createElement('div');
+        seg.className = 'story-progress-segment';
+        seg.innerHTML = `<div class="story-progress-fill" id="progFill_${i}"></div>`;
+        progContainer.appendChild(seg);
+      });
+
+      // Fill previous segments
+      for (let i = 0; i < index; i++) {
+        document.getElementById(`progFill_${i}`).style.width = '100%';
+      }
+
+      // Start current animation
+      storyProgress = 0;
+      const currentFill = document.getElementById(`progFill_${index}`);
+      storyTimer = setInterval(() => {
+        storyProgress += 2;
+        if (currentFill) currentFill.style.width = storyProgress + '%';
+
+        if (storyProgress >= 100) {
+          clearInterval(storyTimer);
+          nextStory();
+        }
+      }, 100);
+    }
+
+    function nextStory() {
+      if (currentStoryIndex < stories.length - 1) {
+        openStoryViewer(currentStoryIndex + 1);
+      } else {
+        closeStoryViewer();
       }
     }
 
+    function prevStory() {
+      if (currentStoryIndex > 0) {
+        openStoryViewer(currentStoryIndex - 1);
+      } else {
+        loadStory(0);
+      }
+    }
+
+    function triggerStoryHeart() {
+      const card = document.getElementById('storyCard');
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.textContent = '❤️';
+      heart.style.left = (Math.random() * 60 + 20) + '%';
+      card.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
+    }
+
+    function sendStoryReply(e) {
+      if (e.key === 'Enter') {
+        const val = e.target.value.trim();
+        if (val) {
+          alert("Shifokorga javobingiz yuborildi: " + val);
+          e.target.value = '';
+          triggerStoryHeart();
+        }
+      }
+    }
+
+    /* Admin Add Story Modal */
+    function openAddStoryModal() {
+      document.getElementById('addStoryModal').style.display = 'flex';
+    }
+    function closeAddStoryModal() {
+      document.getElementById('addStoryModal').style.display = 'none';
+    }
     function addNewStory() {
-      const title = document.getElementById('storyTitleInput').value;
-      const content = document.getElementById('storyContentInput').value;
+      const title = document.getElementById('newStoryTitle').value.trim() || "Yangi Xabar";
+      const desc = document.getElementById('newStoryDesc').value.trim() || "Batafsil ma'lumot uchun vrach bilan bog'laning.";
+      let bg = document.getElementById('newStoryBg').value.trim();
+      if (!bg) bg = "linear-gradient(135deg, #9333ea, #f43f5e)";
 
-      if (!title || !content) {
-        alert('Iltimos, barcha maydonlarni to\'ldiring!');
-        return;
+      stories.unshift({
+        id: Date.now(),
+        title: title,
+        time: "Hozirgina",
+        heading: title,
+        desc: desc,
+        bg: bg,
+        views: 1
+      });
+
+      renderStoriesBar();
+      closeAddStoryModal();
+      openStoryViewer(0);
+    }
+
+    /* ======================================================== */
+    /* JONLI EFIR LOGIKA                                        */
+    /* ======================================================== */
+    function toggleLiveStreamSection() {
+      const sec = document.getElementById('liveStreamSection');
+      if (sec.style.display === 'block') {
+        sec.style.display = 'none';
+      } else {
+        sec.style.display = 'block';
+        sec.scrollIntoView({ behavior: 'smooth' });
       }
-
-      alert('✅ Story muvaffaqiyatli joylandi!');
-      closeAdminModal();
     }
 
-    function viewStory(title, text) {
-      alert(`📸 STORY: ${title}\n\n${text}`);
+    function triggerLiveHeart() {
+      const container = document.getElementById('liveVideoContainer');
+      const heart = document.createElement('div');
+      heart.className = 'floating-heart';
+      heart.textContent = '💖';
+      heart.style.left = (80 + Math.random() * 15) + '%';
+      container.appendChild(heart);
+      setTimeout(() => heart.remove(), 1200);
     }
+
+    function handleLiveComment(e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('liveCommentInput');
+        const text = input.value.trim();
+        if (text) {
+          const overlay = document.getElementById('liveChatOverlay');
+          const msg = document.createElement('div');
+          msg.className = 'live-chat-msg';
+          msg.innerHTML = `<span>Siz:</span> ${text}`;
+          overlay.appendChild(msg);
+          overlay.scrollTop = overlay.scrollHeight;
+          input.value = '';
+          triggerLiveHeart();
+        }
+      }
+    }
+
+    /* ======================================================== */
+    /* TELEGRAM BOT & CHAT LOGIKA                               */
+    /* ======================================================== */
+    const BOT_TOKEN = '8609538485:AAFeTCr4Mel-5m88Nuc_wwXIEFusqLDLnTk';
+    const ADMIN_IDS = [6258110646, 7645769320];
+
+    let patientId = localStorage.getItem('ginekolog_patient_id');
+    if (!patientId) {
+      patientId = 'ID-' + Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('ginekolog_patient_id', patientId);
+    }
+
+    let chatHistory = JSON.parse(localStorage.getItem('ginekolog_chat_' + patientId)) || [];
+    let unreadCount = parseInt(localStorage.getItem('ginekolog_unread_' + patientId)) || 0;
+
+    function updateBadge() {
+      const badge = document.getElementById('chatBadge');
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    function renderChat() {
+      const chatBody = document.getElementById('chatBody');
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Savolingizni yozib qoldirishingiz mumkin.</div>';
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : 'msg-doctor'}`;
+        div.textContent = msg.text;
+        chatBody.appendChild(div);
+      });
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function toggleChat() {
+      const popup = document.getElementById('chatPopup');
+      if (popup.style.display === 'flex') {
+        popup.style.display = 'none';
+      } else {
+        popup.style.display = 'flex';
+        unreadCount = 0;
+        localStorage.setItem('ginekolog_unread_' + patientId, 0);
+        updateBadge();
+        renderChat();
+      }
+    }
+
+    document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const question = document.getElementById('chatQuestionText').value.trim();
+      if (!question) return;
+
+      chatHistory.push({ sender: 'user', text: question });
+      localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+      renderChat();
+
+      const message = `❓ **SAYTDAN SHAXSIY SAVOL!**\n\n🆔 **Bemor ID:** \`${patientId}\`\n💬 **Xabar:** ${question}\n\n👇 **Javob uchun Reply qiling.**`;
+
+      ADMIN_IDS.forEach(chatId => {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'Markdown'
+          })
+        });
+      });
+
+      document.getElementById('chatQuestionText').value = '';
+    });
+
+    let lastUpdateId = parseInt(localStorage.getItem('ginekolog_last_update_' + patientId)) || 0;
+
+    function checkForDoctorReply() {
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.ok && data.result.length > 0) {
+            data.result.forEach(update => {
+              lastUpdateId = update.update_id + 1;
+              localStorage.setItem('ginekolog_last_update_' + patientId, lastUpdateId);
+
+              if (update.message && update.message.reply_to_message) {
+                const replyText = update.message.reply_to_message.text;
+                if (replyText && replyText.includes(patientId)) {
+                  const doctorAnswer = update.message.text;
+                  if (doctorAnswer) {
+                    chatHistory.push({ sender: 'doctor', text: doctorAnswer });
+                    localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+
+                    const popup = document.getElementById('chatPopup');
+                    if (popup.style.display !== 'flex') {
+                      unreadCount++;
+                      localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
+                      updateBadge();
+                    } else {
+                      renderChat();
+                    }
+                  }
+                }
+              }
+            });
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    // Initialize
+    window.onload = function() {
+      renderStoriesBar();
+      updateBadge();
+      setInterval(checkForDoctorReply, 4000);
+    };
   </script>
 </body>
 </html>
