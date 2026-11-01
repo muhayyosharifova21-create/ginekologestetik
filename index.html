@@ -2,645 +2,352 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <title>Uzconnect - All-in-One Platforma</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Ginekolog vrach Estetik Ginekolog | Doktor Surayyo Vahobjonovna</title>
+  <meta name="description" content="Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer vagina plastika, eroziya davolash.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 
   <style>
     :root {
-      --primary: #8b5cf6;
-      --primary-gradient: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+      --primary: #9333ea;
+      --primary-light: #c084fc;
       --accent: #f43f5e;
-      --bg-dark: #090d16;
-      --panel-bg: rgba(22, 27, 46, 0.92);
-      --glass-border: rgba(255, 255, 255, 0.12);
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      --glass-bg: rgba(255, 255, 255, 0.07);
+      --glass-border: rgba(255, 255, 255, 0.15);
       --glass-card: rgba(255, 255, 255, 0.05);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
-      --chat-user-bg: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-      --chat-peer-bg: rgba(255, 255, 255, 0.08);
     }
 
-    * { box-sizing: border-box; outline: none; transition: all 0.2s ease; }
+    * { box-sizing: border-box; transition: all 0.3s ease; }
 
     body {
       margin: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--bg-dark);
+      background: #0b0f19;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.18) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(147, 51, 234, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(244, 63, 94, 0.15) 0px, transparent 50%);
       background-attachment: fixed;
       color: var(--text-main);
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .app-container { display: flex; width: 100vw; height: 100vh; }
+    .site-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 15px 12px 40px 12px;
+    }
 
-    /* SIDEBAR NAVIGATION */
-    .sidebar-nav {
-      width: 75px;
-      background: rgba(13, 17, 30, 0.95);
-      border-right: 1px solid var(--glass-border);
+    /* STORIES SECTION (INSTAGRAM STYLE) */
+    .stories-bar {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding: 10px 5px 20px 5px;
+      scrollbar-width: none;
+    }
+    .stories-bar::-webkit-scrollbar { display: none; }
+
+    .story-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px 0;
-      gap: 16px;
-      z-index: 30;
+      gap: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .brand-logo {
-      width: 48px; height: 48px; border-radius: 14px; background: var(--primary-gradient);
-      display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 800; color: #fff;
-      box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+    .story-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(45deg, #f43f5e, #9333ea, #c084fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .nav-items { display: flex; flex-direction: column; gap: 8px; width: 100%; align-items: center; }
-
-    .nav-btn {
-      width: 48px; height: 48px; border-radius: 14px; background: transparent; border: none;
-      color: var(--text-muted); font-size: 1.3rem; cursor: pointer; display: flex; align-items: center; justify-content: center; position: relative;
+    .story-ring.add-admin {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px dashed var(--primary-light);
     }
-    .nav-btn:hover, .nav-btn.active { background: rgba(255, 255, 255, 0.1); color: #c084fc; }
-    .nav-btn.active::before { content: ''; position: absolute; left: 0; width: 4px; height: 22px; background: var(--primary); border-radius: 0 4px 4px 0; }
-    .nav-btn-add { background: var(--primary-gradient) !important; color: #fff !important; }
 
-    /* LEFT LIST PANEL */
-    .list-panel { width: 350px; background: var(--panel-bg); border-right: 1px solid var(--glass-border); display: flex; flex-direction: column; z-index: 10; }
-    .panel-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
-    .panel-title { font-size: 1.3rem; font-weight: 800; margin: 0; background: linear-gradient(135deg, #fff 0%, #c084fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-    .filter-tabs { display: flex; gap: 6px; padding: 8px 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--glass-border); }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--glass-border); color: var(--text-muted); padding: 6px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
-    .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-
-    /* STORIES BAR */
-    .stories-bar { display: flex; gap: 12px; overflow-x: auto; padding: 10px 12px; scrollbar-width: none; border-bottom: 1px solid var(--glass-border); }
-    .stories-bar::-webkit-scrollbar { display: none; }
-    .story-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
-    .story-ring { width: 54px; height: 54px; border-radius: 50%; padding: 2px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; }
-    .story-ring.add-story { background: rgba(255, 255, 255, 0.15); border: 2px dashed var(--primary); }
-    .story-avatar { width: 100%; height: 100%; border-radius: 50%; background: #111827; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: bold; color: #fff; }
-    .story-title { font-size: 0.7rem; color: var(--text-muted); max-width: 56px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-    /* LIST ITEMS */
-    .items-scroll-list { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
-    .list-item-card { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; cursor: pointer; }
-    .list-item-card:hover, .list-item-card.active { background: rgba(255, 255, 255, 0.08); }
-    .item-avatar { width: 44px; height: 44px; border-radius: 14px; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; }
-    .unread-badge { background: var(--accent); color: #fff; font-size: 0.7rem; font-weight: 800; padding: 2px 6px; border-radius: 10px; }
-    .item-info { flex: 1; overflow: hidden; }
-    .item-name-row { display: flex; justify-content: space-between; margin-bottom: 2px; }
-    .item-name { font-size: 0.9rem; font-weight: 700; color: #fff; }
-    .item-time { font-size: 0.7rem; color: var(--text-muted); }
-    .item-subtext { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin: 0; }
-
-    /* MAIN VIEWPORT */
-    .main-viewport { flex: 1; display: flex; flex-direction: column; background: rgba(11, 15, 25, 0.75); position: relative; }
-    .viewport-header { padding: 12px 20px; background: rgba(22, 27, 46, 0.95); border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: space-between; }
-    .header-user-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .header-title { font-size: 1rem; font-weight: 700; margin: 0; }
-    .header-sub { font-size: 0.75rem; color: #10b981; margin: 0; }
-    .header-actions { display: flex; gap: 8px; }
-
-    .action-icon-btn {
-      width: 38px; height: 38px; border-radius: 10px; background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--glass-border); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; cursor: pointer;
+    .story-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #0b0f19;
+      background: #1e1b4b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #fff;
     }
-    .action-icon-btn:hover { background: var(--primary); border-color: var(--primary); }
 
-    /* MEDIA / VIDEO VIEWPORT */
-    .media-container {
-      flex: 1; height: 100%; overflow-y: scroll; snap-type: y mandatory; scroll-behavior: smooth; display: none;
+    .story-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      max-width: 70px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .media-card {
-      width: 100%; height: 100%; snap-align: start; position: relative; background: #000;
-      display: flex; justify-content: center; align-items: center;
+
+    /* HERO CARD */
+    .hero-creative-card {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 25px 18px 20px 18px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      margin-bottom: 25px;
     }
-    .media-video-wrapper { width: 100%; max-width: 460px; height: 100%; position: relative; }
-    .media-video-wrapper iframe { width: 100%; height: 100%; border: none; }
-    .media-overlay { position: absolute; bottom: 20px; left: 15px; right: 70px; z-index: 10; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.8); }
-    .media-author { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .media-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-weight: bold; }
-    .media-actions { position: absolute; right: 15px; bottom: 30px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 10; }
-    .media-action-btn { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); width: 46px; height: 46px; border-radius: 50%; color: #fff; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 
-    /* CHAT MESSAGES CONTAINER */
-    .messages-container { flex: 1; padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .msg-bubble { max-width: 65%; padding: 10px 14px; border-radius: 14px; font-size: 0.9rem; line-height: 1.4; word-wrap: break-word; }
-    .msg-peer { align-self: flex-start; background: var(--chat-peer-bg); border: 1px solid var(--glass-border); border-bottom-left-radius: 2px; }
-    .msg-user { align-self: flex-end; background: var(--chat-user-bg); border-bottom-right-radius: 2px; color: #fff; }
-    .msg-time { font-size: 0.65rem; opacity: 0.7; margin-top: 4px; text-align: right; }
-
-    /* EMOJI & GIF PICKER */
-    .picker-box { display: none; gap: 8px; padding: 8px; background: rgba(13, 17, 30, 0.95); border: 1px solid var(--glass-border); border-radius: 12px; position: absolute; bottom: 60px; left: 20px; z-index: 50; }
-    .picker-btn { background: none; border: none; font-size: 1.3rem; cursor: pointer; padding: 4px; }
-    .gif-chip { font-size: 0.75rem; background: var(--primary); padding: 4px 8px; border-radius: 6px; color: #fff; cursor: pointer; font-weight: bold; }
-
-    .chat-input-bar { padding: 12px 20px; background: rgba(22, 27, 46, 0.95); border-top: 1px solid var(--glass-border); display: flex; align-items: center; gap: 10px; position: relative; }
-    .chat-input-bar input { flex: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); padding: 12px 16px; border-radius: 10px; color: #fff; font-family: inherit; }
-    .send-btn { width: 44px; height: 44px; border-radius: 10px; background: var(--primary-gradient); border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-    /* OVERLAYS (LIVE / CALLS) */
-    .live-overlay, .call-overlay {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(9, 13, 22, 0.95); backdrop-filter: blur(20px);
-      z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px;
+    .magazine-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #f43f5e;
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid rgba(244, 63, 94, 0.3);
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin-bottom: 12px;
     }
-    .call-avatar { width: 100px; height: 100px; border-radius: 50%; background: var(--primary-gradient); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: bold; }
-    .call-controls { display: flex; gap: 20px; }
-    .call-btn { width: 56px; height: 56px; border-radius: 50%; border: none; font-size: 1.4rem; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .call-btn.end { background: var(--accent); }
-    .call-btn.accept { background: #10b981; }
 
-    /* MODAL WINDOWS */
-    .modal-backdrop {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
-      z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px;
+    .main-title {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #c084fc 50%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0 0 10px 0;
     }
-    .modal-box { background: #161b2e; border: 1px solid var(--glass-border); border-radius: 20px; width: 100%; max-width: 440px; padding: 24px; color: #fff; max-height: 90vh; overflow-y: auto; }
-    .modal-box h3 { margin: 0 0 16px 0; text-align: center; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; color: #fff; font-family: inherit; }
-    .btn-submit { width: 100%; padding: 12px; background: var(--primary-gradient); border: none; border-radius: 10px; color: #fff; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+    /* ACTION BUTTONS GRID */
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .action-card {
+      background: var(--glass-card);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      text-align: center;
+      color: #fff;
+    }
+    .action-card:hover {
+      background: rgba(147, 51, 234, 0.2);
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+    }
+    .action-card.live {
+      background: linear-gradient(135deg, rgba(244, 63, 94, 0.25), rgba(147, 51, 234, 0.25));
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+    .action-card svg {
+      width: 26px;
+      height: 26px;
+      fill: var(--primary-light);
+    }
+    .action-card.live svg { fill: #f43f5e; }
+    .action-card span { font-weight: 700; font-size: 0.85rem; }
+
+    /* ADMIN MODAL LOGIN */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .admin-modal {
+      background: #1e1b4b;
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      padding: 25px;
+      color: #fff;
+    }
+
+    .admin-modal h3 { margin-top: 0; font-size: 1.3rem; text-align: center; }
+    .admin-modal input, .admin-modal textarea {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: #fff;
+      margin-bottom: 12px;
+      font-family: inherit;
+    }
+    .admin-modal button {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (min-width: 768px) {
+      .action-grid { grid-template-columns: repeat(4, 1fr); }
+      .main-title { font-size: 3.2rem; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
+  <div class="site-container">
 
-    <!-- NAVIGATION SIDEBAR -->
-    <nav class="sidebar-nav">
-      <div class="brand-logo" title="Uzconnect">UZ</div>
-
-      <div class="nav-items">
-        <button class="nav-btn active" id="navChatsBtn" title="Suhbatlar" onclick="switchNav('chats')"><ion-icon name="chatbubbles-outline"></ion-icon></button>
-        <button class="nav-btn" id="navMediaBtn" title="Video Lenta" onclick="switchNav('media')"><ion-icon name="film-outline"></ion-icon></button>
-        <button class="nav-btn nav-btn-add" title="Video / Post Yaratish (+)" onclick="openModal('addContentModal')"><ion-icon name="add-outline"></ion-icon></button>
-        <button class="nav-btn" id="navContactsBtn" title="Kontaktlar" onclick="switchNav('contacts')"><ion-icon name="people-outline"></ion-icon></button>
-        <button class="nav-btn" id="navProfileBtn" title="Profil" onclick="switchNav('profile')"><ion-icon name="person-outline"></ion-icon></button>
-        <button class="nav-btn" id="navSettingsBtn" title="Sozlamalar" onclick="switchNav('settings')"><ion-icon name="settings-outline"></ion-icon></button>
-      </div>
-    </nav>
-
-    <!-- LEFT LIST PANEL -->
-    <aside class="list-panel" id="listPanel">
-      <div class="panel-header">
-        <h2 class="panel-title" id="panelTitle">Uzconnect Suhbatlar</h2>
-        <button class="action-icon-btn" title="Yangi Jamiyat" onclick="openModal('createModal')"><ion-icon name="add-circle-outline"></ion-icon></button>
-      </div>
-
-      <div class="filter-tabs" id="filterTabs">
-        <button class="tab-btn active" onclick="filterChats('all')">Barchasi</button>
-        <button class="tab-btn" onclick="filterChats('private')">Shaxsiy</button>
-        <button class="tab-btn" onclick="filterChats('group')">Jamiyatlar</button>
-        <button class="tab-btn" onclick="filterChats('channel')">Tarmoqlar</button>
-        <button class="tab-btn" onclick="filterChats('unread')">O'qilmagan</button>
-      </div>
-
-      <!-- STORIES BAR -->
-      <div class="stories-bar" id="storiesBar">
-        <div class="story-item" onclick="openModal('addContentModal')">
-          <div class="story-ring add-story"><div class="story-avatar">+</div></div>
-          <span class="story-title">Lavha</span>
+    <!-- TOP STORY'LAR BO'LIMI -->
+    <div class="stories-bar">
+      <!-- Vrach Admin Tugmasi -->
+      <div class="story-item" onclick="openAdminModal()">
+        <div class="story-ring add-admin">
+          <div class="story-avatar">+</div>
         </div>
+        <span class="story-title" style="color:var(--primary-light);">Admin (Vrach)</span>
       </div>
 
-      <div class="items-scroll-list" id="itemsScrollList"></div>
-    </aside>
-
-    <!-- MAIN VIEWPORT PANEL -->
-    <main class="main-viewport" id="mainViewport">
-      
-      <!-- HEADER -->
-      <header class="viewport-header">
-        <div class="header-user-info" onclick="openGroupInfoModal()">
-          <div class="item-avatar" id="activeAvatar">UZ</div>
-          <div>
-            <h4 class="header-title" id="activeTitle">Uzconnect Rasmiy Tarmog'i</h4>
-            <p class="header-sub" id="activeSub">1,250 a'zo • Boshqaruv</p>
-          </div>
+      <!-- Storylar ro'yxati -->
+      <div class="story-item" onclick="viewStory('Labioplastika Aksiya', 'Bugun labioplastika muolajasiga 20% chegirma e\'lon qilindi!')">
+        <div class="story-ring">
+          <div class="story-avatar">🔥</div>
         </div>
-
-        <div class="header-actions">
-          <button class="action-icon-btn" title="Ishtirokchi qo'shish" onclick="openAddMemberModal()"><ion-icon name="person-add-outline"></ion-icon></button>
-          <button class="action-icon-btn" title="Boshqaruvchilar" onclick="openManageAdminsModal()"><ion-icon name="shield-checkmark-outline"></ion-icon></button>
-          <button class="action-icon-btn" title="Ovozli Aloqa" onclick="startCall('audio')"><ion-icon name="call-outline"></ion-icon></button>
-          <button class="action-icon-btn" title="Video Aloqa" onclick="startCall('video')"><ion-icon name="videocam-outline"></ion-icon></button>
-          <button class="action-icon-btn" title="Jonli Efir" onclick="startLiveStream()"><ion-icon name="radio-outline"></ion-icon></button>
-        </div>
-      </header>
-
-      <!-- MESSAGES / CHAT CONTAINER -->
-      <div class="messages-container" id="messagesContainer">
-        <div class="msg-bubble msg-peer">
-          Assalomu alaykum! Uzconnect platformasining barcha suhbat, jamiyat, tarmoq va video imkoniyatlari tayyor.
-          <div class="msg-time">14:00</div>
-        </div>
+        <span class="story-title">Aksiya</span>
       </div>
 
-      <!-- MEDIA FEED VIEWPORT -->
-      <div class="media-container" id="mediaContainer">
-        <div class="media-card">
-          <div class="media-video-wrapper">
-            <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?autoplay=1&mute=1&loop=1&playlist=u9aQ_MEy0nU&controls=0" allow="autoplay" allowfullscreen></iframe>
-            <div class="media-overlay">
-              <div class="media-author">
-                <div class="media-avatar">🔥</div>
-                <span style="font-weight:bold;">@uzconnect_trend</span>
-              </div>
-              <div>Uzconnect yangi video lavhalar bo'limi! 🚀</div>
-            </div>
-            <div class="media-actions">
-              <button class="media-action-btn" onclick="this.style.color='#f43f5e'"><ion-icon name="heart"></ion-icon></button>
-              <button class="media-action-btn" onclick="alert('Fikrlar bo\'limi')"><ion-icon name="chatbubble"></ion-icon></button>
-            </div>
-          </div>
+      <div class="story-item" onclick="viewStory('Jonli Efir', 'Bugun soat 20:00 da sistit va uni davolash haqida jonli efir bo\'ladi!')">
+        <div class="story-ring">
+          <div class="story-avatar">🔴</div>
         </div>
+        <span class="story-title">Efir Bugun</span>
+      </div>
+    </div>
+
+    <!-- HERO HEADER -->
+    <header class="hero-creative-card">
+      <div class="magazine-tag">DOCTOR PLATFORM • 2026</div>
+      <h1 class="main-title">Estetik Ginekologiya</h1>
+      <p style="color:#e2e8f0; margin-bottom:15px;">Doktor Surayyo Vahobjonovna</p>
+    </header>
+
+    <!-- TEZKOR ACTION TUGMALARI -->
+    <div class="action-grid">
+      <div class="action-card live" onclick="alert('Jonli efir tez orada boshlanadi!')">
+        <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+        <span>Jonli Efir</span>
       </div>
 
-      <!-- CHAT INPUT BAR WITH EMOJI & GIF -->
-      <div class="chat-input-bar" id="chatInputBar">
-        <div class="picker-box" id="pickerBox">
-          <button class="picker-btn" onclick="insertEmoji('😊')">😊</button>
-          <button class="picker-btn" onclick="insertEmoji('❤️')">❤️</button>
-          <button class="picker-btn" onclick="insertEmoji('🔥')">🔥</button>
-          <button class="picker-btn" onclick="insertEmoji('👍')">👍</button>
-          <span class="gif-chip" onclick="insertGif('[GIF: Uzconnect Dance]')">GIF</span>
-        </div>
-
-        <button class="action-icon-btn" title="Belgilar va GIF" onclick="togglePicker()"><ion-icon name="happy-outline"></ion-icon></button>
-        <button class="action-icon-btn" title="Fayl biriktirish"><ion-icon name="attach-outline"></ion-icon></button>
-        <input type="text" id="chatInput" placeholder="Xabar, GIF yoki belgi yozing..." onkeypress="handleKeyPress(event)">
-        <button class="send-btn" onclick="sendMessage()"><ion-icon name="send-outline"></ion-icon></button>
+      <div class="action-card" onclick="alert('Rasm va videolar bo\'limi')">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+        <span>Storylar</span>
       </div>
 
-      <!-- CALL OVERLAY -->
-      <div class="call-overlay" id="callOverlay">
-        <div class="call-avatar" id="callAvatar">U</div>
-        <h3 id="callName" style="margin:0;">Uzconnect Foydalanuvchisi</h3>
-        <p id="callStatus" style="color:var(--text-muted); margin:0;">Bog'lanilmoqda...</p>
-        <div class="call-controls">
-          <button class="call-btn accept" onclick="acceptCall()"><ion-icon name="call-outline"></ion-icon></button>
-          <button class="call-btn end" onclick="endCall()"><ion-icon name="close-outline"></ion-icon></button>
-        </div>
+      <div class="action-card" onclick="alert('Like va Izohlar ochiq!')">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Reaksiyalar</span>
       </div>
 
-      <!-- LIVE OVERLAY -->
-      <div class="live-overlay" id="liveOverlay">
-        <p style="color:#fff;">🎥 Uzconnect Jonli Efir Faol...</p>
-        <button class="action-icon-btn" onclick="stopLiveStream()"><ion-icon name="close-outline"></ion-icon></button>
+      <div class="action-card" onclick="toggleChat()">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+        <span>Shaxsiy Chat</span>
       </div>
-
-    </main>
+    </div>
 
   </div>
 
-  <!-- MODALS -->
-  <div class="modal-backdrop" id="addContentModal">
-    <div class="modal-box">
-      <h3>➕ Video yoki Lavha Qo'shish</h3>
-      <div class="form-group">
-        <label>Format</label>
-        <select id="contentTypeSelect">
-          <option value="media">Video Lavha</option>
-          <option value="story">Kunlik Lavha</option>
-        </select>
+  <!-- ADMIN LOGIN VA KABINET MODALI -->
+  <div class="modal-overlay" id="adminModal">
+    <div class="admin-modal">
+      <h3 id="modalTitle">👩‍⚕️ Shifokor Kabineti</h3>
+      <div id="loginForm">
+        <input type="password" id="adminPassword" placeholder="Admin parolini kiriting...">
+        <button onclick="checkAdminPassword()">Kirish</button>
       </div>
-      <div class="form-group"><label>Sarlavha</label><input type="text" id="contentTitleInput" placeholder="Nomi..."></div>
-      <div class="form-group"><label>YouTube Havolasi (URL)</label><input type="url" id="contentUrlInput" placeholder="https://www.youtube.com/shorts/..."></div>
-      <button class="btn-submit" onclick="submitAddContent()">E'lon qilish</button>
-      <button class="btn-submit" style="background:transparent; border:1px solid var(--glass-border);" onclick="closeModal('addContentModal')">Bekor qilish</button>
+      <div id="adminPanel" style="display:none;">
+        <p style="color:#10b981; font-weight:bold;">✅ Xush kelibsiz, Doktor!</p>
+        <hr style="border-color:var(--glass-border); margin-bottom:15px;">
+        <p style="font-size:0.85rem;">📸 <b>Yangi Story / E'lon berish:</b></p>
+        <input type="text" id="storyTitleInput" placeholder="Story sarlavhasi...">
+        <textarea id="storyContentInput" placeholder="Matin yoki e'lon matni..."></textarea>
+        <button onclick="addNewStory()">Story Nashr Qilish</button>
+        <button onclick="closeAdminModal()" style="background:#64748b; margin-top:8px;">Yopish</button>
+      </div>
     </div>
   </div>
 
-  <div class="modal-backdrop" id="createModal">
-    <div class="modal-box">
-      <h3>✨ Jamiyat yoki Tarmoq Yaratish</h3>
-      <div class="form-group">
-        <label>Turi</label>
-        <select id="createTypeSelect" onchange="toggleCreateFields()">
-          <option value="group">Jamiyat ochish</option>
-          <option value="channel">Tarmoq ochish</option>
-          <option value="contact">Kontakt qo'shish</option>
-        </select>
-      </div>
-      <div class="form-group" id="groupNameGroup"><label>Nomi</label><input type="text" id="newEntityName" placeholder="Nomi..."></div>
-      <div class="form-group" id="contactPhoneGroup" style="display:none;"><label>Telefon raqam</label><input type="tel" id="newContactPhone" placeholder="+998901234567"></div>
-      <button class="btn-submit" onclick="submitCreate()">Tasdiqlash</button>
-      <button class="btn-submit" style="background:transparent; border:1px solid var(--glass-border);" onclick="closeModal('createModal')">Yopish</button>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="addMemberModal">
-    <div class="modal-box">
-      <h3>👥 Ishtirokchi Qo'shish</h3>
-      <div id="contactsCheckboxList" style="max-height:180px; overflow-y:auto; margin-bottom:12px; display:flex; flex-direction:column; gap:6px;"></div>
-      <button class="btn-submit" onclick="submitAddMembers()">Qo'shish</button>
-      <button class="btn-submit" style="background:transparent; border:1px solid var(--glass-border);" onclick="closeModal('addMemberModal')">Yopish</button>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="manageAdminsModal">
-    <div class="modal-box">
-      <h3>🛡️ Boshqaruvchilar & Egasi</h3>
-      <div id="adminsListContainer" style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px;"></div>
-      <div class="form-group"><label>Boshqaruvchi tayinlash</label><select id="promoteUserSelect"></select></div>
-      <button class="btn-submit" onclick="promoteToAdmin()">Boshqaruvchi qilish</button>
-      <button class="btn-submit" style="background:transparent; border:1px solid var(--glass-border);" onclick="closeModal('manageAdminsModal')">Yopish</button>
-    </div>
-  </div>
-
-  <!-- JS LOGIC -->
   <script>
-    let currentNav = 'chats';
-    let currentFilter = 'all';
-
-    let contacts = [
-      { id: 101, name: "Sardorbek", phone: "+998901112233", avatar: "S" },
-      { id: 102, name: "Madina", phone: "+998935556677", avatar: "M" },
-      { id: 103, name: "Jasur", phone: "+998997778899", avatar: "J" }
-    ];
-
-    let chats = [
-      { id: 1, name: "Uzconnect Hamjamiyati", type: "channel", lastMsg: "Yangi yangilanish!", time: "14:02", avatar: "UZ", unread: 2, owner: "Siz (Egasi)", members: ["Siz", "Sardorbek", "Madina"], admins: ["Siz"] },
-      { id: 2, name: "Dasturchilar Jamiyati", type: "group", lastMsg: "Kodlar tayyor", time: "12:30", avatar: "DEV", unread: 0, owner: "Sardorbek", members: ["Siz", "Sardorbek", "Jasur"], admins: ["Sardorbek", "Siz"] }
-    ];
-
-    let stories = [{ id: 1, title: "Trend", avatar: "🔥" }];
-    let activeChatId = 1;
-
-    function render() {
-      const scrollList = document.getElementById('itemsScrollList');
-      scrollList.innerHTML = '';
-
-      if (currentNav === 'chats') {
-        document.getElementById('panelTitle').textContent = 'Uzconnect Suhbatlar';
-        document.getElementById('filterTabs').style.display = 'flex';
-        document.getElementById('storiesBar').style.display = 'flex';
-        document.getElementById('messagesContainer').style.display = 'flex';
-        document.getElementById('mediaContainer').style.display = 'none';
-        document.getElementById('chatInputBar').style.display = 'flex';
-
-        let filtered = chats.filter(c => {
-          if (currentFilter === 'private') return c.type === 'private';
-          if (currentFilter === 'group') return c.type === 'group';
-          if (currentFilter === 'channel') return c.type === 'channel';
-          if (currentFilter === 'unread') return c.unread > 0;
-          return true;
-        });
-
-        filtered.forEach(chat => {
-          const item = document.createElement('div');
-          item.className = `list-item-card ${chat.id === activeChatId ? 'active' : ''}`;
-          item.onclick = () => selectChat(chat.id);
-          item.innerHTML = `
-            <div class="item-avatar">${chat.avatar}</div>
-            <div class="item-info">
-              <div class="item-name-row"><span class="item-name">${chat.name}</span><span class="item-time">${chat.time}</span></div>
-              <p class="item-subtext">${chat.lastMsg}</p>
-            </div>
-            ${chat.unread > 0 ? `<div class="unread-badge">${chat.unread}</div>` : ''}
-          `;
-          scrollList.appendChild(item);
-        });
-
-      } else if (currentNav === 'media') {
-        document.getElementById('panelTitle').textContent = 'Uzconnect Media';
-        document.getElementById('filterTabs').style.display = 'none';
-        document.getElementById('storiesBar').style.display = 'none';
-        document.getElementById('messagesContainer').style.display = 'none';
-        document.getElementById('mediaContainer').style.display = 'block';
-        document.getElementById('chatInputBar').style.display = 'none';
-
-        scrollList.innerHTML = `<div style="padding:15px; font-size:0.85rem; color:var(--text-muted);">🎥 Video lenta faol. Videolarni ko'rish uchun o'ng tomonga qarang.</div>`;
-
-      } else if (currentNav === 'contacts') {
-        document.getElementById('panelTitle').textContent = 'Kontaktlar';
-        document.getElementById('filterTabs').style.display = 'none';
-        document.getElementById('storiesBar').style.display = 'none';
-        document.getElementById('messagesContainer').style.display = 'flex';
-        document.getElementById('mediaContainer').style.display = 'none';
-
-        contacts.forEach(cnt => {
-          const item = document.createElement('div');
-          item.className = 'list-item-card';
-          item.onclick = () => startChatWithContact(cnt);
-          item.innerHTML = `
-            <div class="item-avatar">${cnt.avatar}</div>
-            <div class="item-info"><span class="item-name">${cnt.name}</span><p class="item-subtext">${cnt.phone}</p></div>
-          `;
-          scrollList.appendChild(item);
-        });
-
-      } else if (currentNav === 'profile') {
-        document.getElementById('panelTitle').textContent = 'Profil';
-        document.getElementById('filterTabs').style.display = 'none';
-        document.getElementById('storiesBar').style.display = 'none';
-        scrollList.innerHTML = `<div style="padding:20px; text-align:center;"><h3>Siz (Uzconnect A'zosi)</h3><p style="color:var(--text-muted);">+998 90 123 45 67</p></div>`;
-
-      } else if (currentNav === 'settings') {
-        document.getElementById('panelTitle').textContent = 'Sozlamalar';
-        document.getElementById('filterTabs').style.display = 'none';
-        document.getElementById('storiesBar').style.display = 'none';
-        scrollList.innerHTML = `
-          <div style="padding:15px; font-size:0.88rem; display:flex; flex-direction:column; gap:12px;">
-            <div><b>⚙️ Profil va Akkaunt:</b> Ism, rasm va bio</div>
-            <div><b>🔔 Bildirishnomalar va Tovushlar:</b> Barchasi yoqilgan</div>
-            <div><b>🔒 Maxfiylik va Xavfsizlik:</b> Shifrlangan himoya</div>
-            <div><b>💬 Suhbat Sozlamalari:</b> Orqa fon va hajm</div>
-            <div><b>🌐 Platforma Tili:</b> O'zbekcha</div>
-          </div>`;
-      }
-      renderStories();
+    // ADMIN TIZIMI LOGIKASI
+    function openAdminModal() {
+      document.getElementById('adminModal').style.display = 'flex';
     }
 
-    function renderStories() {
-      const bar = document.getElementById('storiesBar');
-      const addBtn = bar.firstElementChild.outerHTML;
-      bar.innerHTML = addBtn;
-      stories.forEach(s => {
-        const item = document.createElement('div');
-        item.className = 'story-item';
-        item.onclick = () => alert(`Lavha: ${s.title}`);
-        item.innerHTML = `<div class="story-ring"><div class="story-avatar">${s.avatar}</div></div><span class="story-title">${s.title}</span>`;
-        bar.appendChild(item);
-      });
+    function closeAdminModal() {
+      document.getElementById('adminModal').style.display = 'none';
     }
 
-    function switchNav(nav) {
-      currentNav = nav;
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      if (nav === 'chats') document.getElementById('navChatsBtn').classList.add('active');
-      if (nav === 'media') document.getElementById('navMediaBtn').classList.add('active');
-      if (nav === 'contacts') document.getElementById('navContactsBtn').classList.add('active');
-      if (nav === 'profile') document.getElementById('navProfileBtn').classList.add('active');
-      if (nav === 'settings') document.getElementById('navSettingsBtn').classList.add('active');
-      render();
-    }
-
-    function filterChats(filter) {
-      currentFilter = filter;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
-      render();
-    }
-
-    function selectChat(id) {
-      activeChatId = id;
-      const chat = chats.find(c => c.id === id);
-      if (chat) {
-        chat.unread = 0;
-        document.getElementById('activeTitle').textContent = chat.name;
-        document.getElementById('activeAvatar').textContent = chat.avatar;
-        document.getElementById('activeSub').textContent = `${chat.members ? chat.members.length : 2} a'zo • Egasi: ${chat.owner || 'Siz'}`;
-      }
-      render();
-    }
-
-    function startChatWithContact(cnt) {
-      let existing = chats.find(c => c.name === cnt.name);
-      if (!existing) {
-        existing = { id: Date.now(), name: cnt.name, type: 'private', lastMsg: "Suhbat boshlandi", time: "Hozir", avatar: cnt.avatar, unread: 0, members: ["Siz", cnt.name] };
-        chats.unshift(existing);
-      }
-      switchNav('chats');
-      selectChat(existing.id);
-    }
-
-    // EMOJI & GIF
-    function togglePicker() {
-      const box = document.getElementById('pickerBox');
-      box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
-    }
-    function insertEmoji(emoji) { document.getElementById('chatInput').value += emoji; togglePicker(); }
-    function insertGif(gif) { document.getElementById('chatInput').value += ' ' + gif; togglePicker(); }
-
-    // CALLS & LIVE
-    function startCall(type) {
-      const overlay = document.getElementById('callOverlay');
-      document.getElementById('callStatus').textContent = type === 'video' ? "Video aloqa..." : "Ovozli aloqa...";
-      overlay.style.display = 'flex';
-    }
-    function acceptCall() { document.getElementById('callStatus').textContent = "Ulangan 00:01"; }
-    function endCall() { document.getElementById('callOverlay').style.display = 'none'; }
-    function startLiveStream() { document.getElementById('liveOverlay').style.display = 'flex'; }
-    function stopLiveStream() { document.getElementById('liveOverlay').style.display = 'none'; }
-
-    // CONTENT & GROUP SUBMITS
-    function submitAddContent() {
-      const type = document.getElementById('contentTypeSelect').value;
-      const title = document.getElementById('contentTitleInput').value.trim();
-      const url = document.getElementById('contentUrlInput').value.trim();
-      if (!title) return;
-
-      if (type === 'story') {
-        stories.push({ id: Date.now(), title: title, avatar: "📹" });
-        renderStories();
+    function checkAdminPassword() {
+      const pass = document.getElementById('adminPassword').value;
+      if (pass === 'doctor2026' || pass === 'surayyo') { // Parol: doctor2026
+        document.getElementById('loginForm').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
       } else {
-        let videoId = 'u9aQ_MEy0nU';
-        if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
-        else if (url.includes('shorts/')) videoId = url.split('shorts/')[1].split('?')[0];
-
-        const media = document.getElementById('mediaContainer');
-        const mediaCard = document.createElement('div');
-        mediaCard.className = 'media-card';
-        mediaCard.innerHTML = `
-          <div class="media-video-wrapper">
-            <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0" allow="autoplay" allowfullscreen></iframe>
-            <div class="media-overlay">
-              <div class="media-author"><div class="media-avatar">👤</div><span style="font-weight:bold;">@siz</span></div>
-              <div>${title}</div>
-            </div>
-          </div>`;
-        media.insertBefore(mediaCard, media.firstChild);
-        switchNav('media');
+        alert('❌ Noto\'g'ri parol!');
       }
-      closeModal('addContentModal');
     }
 
-    function toggleCreateFields() {
-      const type = document.getElementById('createTypeSelect').value;
-      document.getElementById('groupNameGroup').style.display = type === 'contact' ? 'none' : 'block';
-      document.getElementById('contactPhoneGroup').style.display = type === 'contact' ? 'block' : 'none';
-    }
+    function addNewStory() {
+      const title = document.getElementById('storyTitleInput').value;
+      const content = document.getElementById('storyContentInput').value;
 
-    function submitCreate() {
-      const type = document.getElementById('createTypeSelect').value;
-      if (type === 'contact') {
-        const name = document.getElementById('newEntityName').value || "Yangi Kontakt";
-        const phone = document.getElementById('newContactPhone').value;
-        contacts.push({ id: Date.now(), name: name, phone: phone, avatar: name.substring(0,1).toUpperCase() });
-      } else {
-        const name = document.getElementById('newEntityName').value || "Yangi Jamiyat";
-        chats.unshift({ id: Date.now(), name: name, type: type, lastMsg: "Yaratildi", time: "Hozir", avatar: name.substring(0,2).toUpperCase(), unread: 0, owner: "Siz", members: ["Siz"], admins: ["Siz"] });
+      if (!title || !content) {
+        alert('Iltimos, barcha maydonlarni to\'ldiring!');
+        return;
       }
-      closeModal('createModal');
-      render();
+
+      alert('✅ Story muvaffaqiyatli joylandi!');
+      closeAdminModal();
     }
 
-    function openAddMemberModal() {
-      const chat = chats.find(c => c.id === activeChatId);
-      if (!chat) return;
-      const box = document.getElementById('contactsCheckboxList');
-      box.innerHTML = '';
-      contacts.forEach(cnt => {
-        if (!chat.members || !chat.members.includes(cnt.name)) {
-          box.innerHTML += `<label style="display:flex; align-items:center; gap:8px; font-size:0.85rem;"><input type="checkbox" value="${cnt.name}"> ${cnt.name} (${cnt.phone})</label>`;
-        }
-      });
-      openModal('addMemberModal');
+    function viewStory(title, text) {
+      alert(`📸 STORY: ${title}\n\n${text}`);
     }
-
-    function submitAddMembers() {
-      const chat = chats.find(c => c.id === activeChatId);
-      const checkboxes = document.querySelectorAll('#contactsCheckboxList input:checked');
-      checkboxes.forEach(cb => { if (!chat.members) chat.members = ["Siz"]; chat.members.push(cb.value); });
-      closeModal('addMemberModal');
-      selectChat(chat.id);
-    }
-
-    function openManageAdminsModal() {
-      const chat = chats.find(c => c.id === activeChatId);
-      if (!chat) return;
-      document.getElementById('adminsListContainer').innerHTML = `<p><b>Egasi (Owner):</b> ${chat.owner || 'Siz'}</p><p><b>Boshqaruvchilar:</b> ${(chat.admins || ['Siz']).join(', ')}</p>`;
-      const select = document.getElementById('promoteUserSelect');
-      select.innerHTML = '';
-      if (chat.members) {
-        chat.members.forEach(m => { if (!chat.admins || !chat.admins.includes(m)) select.innerHTML += `<option value="${m}">${m}</option>`; });
-      }
-      openModal('manageAdminsModal');
-    }
-
-    function promoteToAdmin() {
-      const chat = chats.find(c => c.id === activeChatId);
-      const user = document.getElementById('promoteUserSelect').value;
-      if (user) { if (!chat.admins) chat.admins = ["Siz"]; chat.admins.push(user); closeModal('manageAdminsModal'); }
-    }
-
-    function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-      document.getElementById('messagesContainer').innerHTML += `<div class="msg-bubble msg-user">${text}<div class="msg-time">Hozir</div></div>`;
-      input.value = '';
-    }
-    function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
-
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    render();
   </script>
 </body>
 </html>
