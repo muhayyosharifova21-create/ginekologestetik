@@ -702,7 +702,6 @@
 
   <!-- JS LOGIKA -->
   <script>
-    // YANGI YARATILGAN BOT TOKENI O'RNATILDI
     const BOT_TOKEN = '9117090922:AAHBdLtCq7bGsSbcnNoiFT_xCQZCh4xetcc';
     const ADMIN_IDS = [6258110646, 7645769320];
 
@@ -751,7 +750,6 @@
       }
     }
 
-    // Google Play & Telegram filtrlariga tushmaslik uchun so'zlarni xavfsiz shaklga keltirish
     function sanitizeForTelegram(text) {
       const sensitiveKeywords = [
         /vagina/gi, /vaginoplastik/gi, /labio/gi, /labioplastika/gi, 
@@ -786,7 +784,6 @@
 
       const processed = sanitizeForTelegram(question);
 
-      // Telegram filtrlari tushunishi uchun rasmiy tibbiy format
       const message = `🩺 **YANGI KLINIK SAVOL**\n\n` +
                       `👤 **Bemor kodi:** \`${patientId}\`\n` +
                       `💬 **Savol matni:** ${processed.safeText}\n\n` +
@@ -800,7 +797,14 @@
           body: JSON.stringify({
             chat_id: chatId,
             text: message,
-            parse_mode: 'Markdown'
+            parse_mode: 'Markdown',
+            reply_markup: {
+              keyboard: [
+                [{ text: "📢 Barchaga Broadcast yuborish" }, { text: "🧹 Chatni tozalash" }],
+                [{ text: "💡 Yordam & Qo'llanma" }]
+              ],
+              resize_keyboard: true
+            }
           })
         }).catch(err => console.error("Xabar jo'natishda xatolik:", err));
       });
@@ -808,7 +812,7 @@
       questionInput.value = '';
     });
 
-    // 🔄 Vrach yozgan javoblarni tekshirib turish
+    // 🔄 Vrach yozgan javoblarni va admin buyruqlarini tekshirib turish
     let lastUpdateId = parseInt(localStorage.getItem('ginekolog_last_update_' + patientId)) || 0;
 
     function checkForDoctorReply() {
@@ -820,6 +824,7 @@
               lastUpdateId = update.update_id + 1;
               localStorage.setItem('ginekolog_last_update_' + patientId, lastUpdateId);
 
+              // 1. Shifokorning javobini saytga yetkazish
               if (update.message && update.message.reply_to_message) {
                 const replyText = update.message.reply_to_message.text;
                 if (replyText && replyText.includes(patientId)) {
@@ -837,6 +842,32 @@
                       renderChat();
                     }
                   }
+                }
+              }
+
+              // 2. Admin tugmalarini bosganda avtomatik javob qaytarish
+              if (update.message && update.message.text && ADMIN_IDS.includes(update.message.chat.id)) {
+                const cmd = update.message.text;
+                let replyInfo = "";
+
+                if (cmd === "📢 Barchaga Broadcast yuborish") {
+                  replyInfo = "📢 **Ommaviy Broadcast:**\nBarcha bemorlarga xabar yuborish uchun backend server talab qilinadi. Sayt statik bo'lgani sababli savol bergan barcha bemorlar brauzerida kesh saqlanadi.";
+                } else if (cmd === "🧹 Chatni tozalash") {
+                  replyInfo = "🧹 Telegram chatini tozalash uchun xabarlarni belgilab, o'chirish (Delete) tugmasini bosing.";
+                } else if (cmd === "💡 Yordam & Qo'llanma") {
+                  replyInfo = "💡 **Qo'llanma:**\nBemorga javob berish uchun uning savoli yozilgan xabarga 'Reply' qiling. Xabar darhol bemor ekranida aks etadi.";
+                }
+
+                if (replyInfo) {
+                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      chat_id: update.message.chat.id,
+                      text: replyInfo,
+                      parse_mode: 'Markdown'
+                    })
+                  }).catch(e => console.error(e));
                 }
               }
             });
