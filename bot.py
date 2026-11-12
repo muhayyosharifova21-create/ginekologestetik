@@ -1,6 +1,10 @@
 import asyncio
+import html
 import logging
+import re
 import sqlite3
+import time
+from collections import defaultdict
 from datetime import datetime, timedelta
 from aiohttp import web
 from aiogram import Bot, Dispatcher, types, F
@@ -27,10 +31,30 @@ DOCTOR_TELEGRAM = "https://t.me/Sr7431"
 TELEGRAM_CHANNEL = "https://t.me/ginekologplastikx"
 YOUTUBE_CHANNEL = "https://youtube.com/@ginekologestetst"
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 scheduler = AsyncIOScheduler(timezone="Asia/Tashkent")
+
+# ================= ANTI-SPAM VA XAVFSIZLIK =================
+rate_limit_tracker = defaultdict(list)
+
+def is_rate_limited(identifier: str) -> bool:
+    now = time.time()
+    rate_limit_tracker[identifier] = [t for t in rate_limit_tracker[identifier] if now - t < 60]
+    if len(rate_limit_tracker[identifier]) >= 10:
+        return True
+    rate_limit_tracker[identifier].append(now)
+    return False
+
+def clean_text(raw: str) -> str:
+    if not raw:
+        return ""
+    return html.escape(raw.strip()[:800])
 
 # ================= MA'LUMOTLAR BAZASI =================
 conn = sqlite3.connect("surayyo_clinic.db", check_same_thread=False)
@@ -168,7 +192,7 @@ class BookingState(StatesGroup):
 class BroadcastState(StatesGroup):
     waiting_for_message = State()
 
-# ================= BEMOR VA ADMIN TUGMALARI =================
+# ================= TUGMALAR =================
 def patient_menu():
     return ReplyKeyboardMarkup(
         keyboard=[
@@ -177,8 +201,7 @@ def patient_menu():
             [KeyboardButton(text="⭐ Xizmatni baholash")]
         ],
         resize_keyboard=True,
-        is_persistent=True,
-        input_field_placeholder="Tugmani tanlang yoki savol yozing..."
+        is_persistent=True
     )
 
 def admin_menu():
@@ -234,7 +257,7 @@ async def block_media_messages(message: types.Message):
 
     cursor.execute(
         "INSERT OR IGNORE INTO users (user_id, full_name, username) VALUES (?, ?, ?)",
-        (user_id, message.from_user.full_name, message.from_user.username)
+        (user_id, clean_text(message.from_user.full_name), clean_text(message.from_user.username or ""))
     )
     cursor.execute("UPDATE users SET warnings = warnings + 1 WHERE user_id = ?", (user_id,))
     conn.commit()
@@ -262,12 +285,13 @@ async def cmd_start(message: types.Message, state: FSMContext):
     await state.clear()
     cursor.execute(
         "INSERT OR IGNORE INTO users (user_id, full_name, username) VALUES (?, ?, ?)",
-        (message.from_user.id, message.from_user.full_name, message.from_user.username)
+        (message.from_user.id, clean_text(message.from_user.full_name), clean_text(message.from_user.username or ""))
     )
     conn.commit()
 
+    safe_name = clean_text(message.from_user.first_name)
     welcome_text = (
-        f"Assalomu alaykum, <b>{message.from_user.first_name}</b>! 🌸\n\n"
+        f"Assalomu alaykum, <b>{safe_name}</b>! 🌸\n\n"
         f"Estetik ginekolog vrach <b>Surayyo Vahobjonovna</b>ning rasmiy 24/7 konsultant botiga xush kelibsiz.\n\n"
         f"📞 <b>Telefon:</b> {PHONE_NUMBER}\n"
         f"✉️ <b>Shaxsiy Telegram:</b> @Sr7431\n\n"
@@ -339,6 +363,8 @@ async def start_booking(event: types.Message | types.CallbackQuery, state: FSMCo
 async def process_service(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
     srv_key = callback.data.split("_", 1)[1]
+    if srv_key not in SERVICES:
+        return
     srv_name, _ = SERVICES[srv_key]
     await state.update_data(service=srv_name)
 
@@ -359,6 +385,8 @@ async def process_service(callback: types.CallbackQuery, state: FSMContext):
 async def process_type(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
     visit_type = callback.data.split("_")[1]
+    if visit_type not in ["Online", "Offline"]:
+        return
     await state.update_data(visit_type=visit_type)
 
     today = datetime.now()
@@ -376,6 +404,8 @@ async def process_type(callback: types.CallbackQuery, state: FSMContext):
 async def process_date(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
     visit_date = callback.data.split("_")[1]
+    if not re.match(r"^\d{4}-\d{2}-\d{2}$", visit_date):
+        return
     await state.update_data(visit_date=visit_date)
 
     times = ["10:00", "11:30", "12:30", "14:00", "15:00", "16:30"]
@@ -390,6 +420,8 @@ async def process_date(callback: types.CallbackQuery, state: FSMContext):
 async def process_time(callback: types.CallbackQuery, state: FSMContext):
     await callback.answer()
     visit_time = callback.data.split("_")[1]
+    if visit_time not in ["10:00", "11:30", "12:30", "14:00", "15:00", "16:30"]:
+        return
     await state.update_data(visit_time=visit_time)
 
     phone_kb = ReplyKeyboardMarkup(
@@ -414,7 +446,8 @@ async def back_to_main(message: types.Message, state: FSMContext):
 
 @dp.message(BookingState.entering_phone)
 async def finish_booking(message: types.Message, state: FSMContext):
-    phone = message.contact.phone_number if message.contact else message.text
+    raw_phone = message.contact.phone_number if message.contact else (message.text or "")
+    phone = clean_text(raw_phone)[:25]
     data = await state.get_data()
 
     service = data.get("service", "Konsultatsiya")
@@ -456,9 +489,10 @@ async def finish_booking(message: types.Message, state: FSMContext):
     await message.answer(confirm_text, reply_markup=direct_kb, parse_mode="HTML")
     await message.answer("Asosiy menyu:", reply_markup=get_menu(message.from_user.id))
 
+    safe_fullname = clean_text(message.from_user.full_name)
     admin_msg = (
         f"🔔 <b>YANGI QABULGA YOZILISH!</b>\n\n"
-        f"👤 Bemor: {message.from_user.full_name}\n"
+        f"👤 Bemor: {safe_fullname}\n"
         f"📞 Telefon: {phone}\n"
         f"🩺 Xizmat: {service}\n"
         f"📅 Vaqt: {visit_date} | {visit_time}\n"
@@ -507,7 +541,12 @@ async def manual_rating(message: types.Message, state: FSMContext):
 @dp.callback_query(F.data.startswith("rate_"))
 async def process_rating(callback: types.CallbackQuery):
     await callback.answer()
-    stars = int(callback.data.split("_")[1])
+    try:
+        stars = int(callback.data.split("_")[1])
+        if stars not in [1, 2, 3, 4, 5]:
+            return
+    except ValueError:
+        return
     cursor.execute(
         "INSERT INTO ratings (user_id, stars, created_at) VALUES (?, ?, ?)",
         (callback.from_user.id, stars, datetime.now().strftime("%Y-%m-%d %H:%M"))
@@ -535,6 +574,8 @@ async def ask_doctor_prompt(message: types.Message, state: FSMContext):
 async def show_stats(message: types.Message):
     cursor.execute("SELECT COUNT(*) FROM users")
     total_users = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM users WHERE is_banned = 1")
+    banned_users = cursor.fetchone()[0]
     cursor.execute("SELECT COUNT(*) FROM appointments")
     total_appts = cursor.fetchone()[0]
     cursor.execute("SELECT AVG(stars) FROM ratings")
@@ -544,6 +585,7 @@ async def show_stats(message: types.Message):
     await message.answer(
         f"📊 <b>{DOCTOR_NAME} boti statistikasi:</b>\n\n"
         f"👥 <b>{total_users}</b> ta mijoz bazada saqlangan\n"
+        f"🚫 <b>{banned_users}</b> ta spammer bloklangan\n"
         f"📅 <b>{total_appts}</b> ta jami qabulga yozilishlar\n"
         f"⭐ O'rtacha baho: <b>{rating_str}</b>",
         parse_mode="HTML"
@@ -610,7 +652,7 @@ async def admin_help(message: types.Message):
     await message.answer(
         f"💡 <b>{DOCTOR_NAME} — Admin qo'llanmasi:</b>\n\n"
         "1. Ham saytdan, ham botdan kelgan bemor savollariga <b>Reply</b> qilib javob bering.\n"
-        "2. Sayt bemoriga yozilgan javob saytdagi chat oynasiga, bot bemoriga yozilgan javob esa Telegramiga boradi.",
+        "2. Sayt bemoriga yozilgan javob saytga, bot bemoriga yozilgan javob Telegramiga boradi.",
         parse_mode="HTML"
     )
 
@@ -626,12 +668,13 @@ async def handle_messages(message: types.Message):
         if "Bemor kodi:" in orig_text:
             try:
                 patient_id = orig_text.split("Bemor kodi:")[1].strip().split()[0]
-                cursor.execute(
-                    "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
-                    (patient_id, message.text)
-                )
-                conn.commit()
-                await message.answer(f"✅ Javobingiz saytdagi bemorga ({patient_id}) yuborildi!")
+                if re.match(r"^ID-\d{6}$", patient_id):
+                    cursor.execute(
+                        "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
+                        (patient_id, clean_text(message.text or ""))
+                    )
+                    conn.commit()
+                    await message.answer(f"✅ Javobingiz saytdagi bemorga ({patient_id}) yuborildi!")
             except Exception as e:
                 await message.answer(f"❌ Saytga saqlashda xatolik: {e}")
             return
@@ -641,7 +684,7 @@ async def handle_messages(message: types.Message):
                 target_id = int(orig_text.split("TG_USER_ID:")[1].split()[0])
                 await bot.send_message(
                     target_id,
-                    f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{message.text}",
+                    f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{clean_text(message.text or '')}",
                     reply_markup=patient_menu(),
                     parse_mode="HTML"
                 )
@@ -651,10 +694,15 @@ async def handle_messages(message: types.Message):
             return
 
     if message.from_user.id not in ADMIN_IDS and message.text:
-        user_text = message.text.lower().strip()
+        if is_rate_limited(f"tg_{message.from_user.id}"):
+            await message.answer("⏳ Juda tez xabar yuboryapsiz. Iltimos, 1 daqiqa kuting.")
+            return
+
+        safe_user_text = clean_text(message.text)
+        user_text_lower = safe_user_text.lower()
 
         for item in KNOWLEDGE_BASE:
-            if any(kw in user_text for kw in item["keywords"]):
+            if any(kw in user_text_lower for kw in item["keywords"]):
                 await message.answer(
                     f"{item['answer']}\n\n👇 Qabulga yozilish yoki shifokor bilan bog'lanish uchun tugmani bosing:",
                     reply_markup=consult_action_keyboard(),
@@ -662,9 +710,9 @@ async def handle_messages(message: types.Message):
                 )
                 return
 
-        if any(gr in user_text for gr in GREETINGS) and len(user_text.split()) <= 5:
+        if any(gr in user_text_lower for gr in GREETINGS) and len(user_text_lower.split()) <= 5:
             await message.answer(
-                f"Va alaykum assalom, <b>{message.from_user.first_name}</b>! 😊\n\n"
+                f"Va alaykum assalom, <b>{clean_text(message.from_user.first_name)}</b>! 😊\n\n"
                 f"<b>{DOCTOR_NAME}</b>ning virtual yordamchisiman. Quyidagi tugmalardan foydalaning:",
                 reply_markup=patient_menu(),
                 parse_mode="HTML"
@@ -674,9 +722,9 @@ async def handle_messages(message: types.Message):
 
         forward_text = (
             f"🩺 <b>YANGI SAVOL ({DOCTOR_NAME})</b>\n\n"
-            f"👤 Bemor: {message.from_user.full_name}\n"
+            f"👤 Bemor: {clean_text(message.from_user.full_name)}\n"
             f"🆔 TG_USER_ID: {message.from_user.id}\n"
-            f"💬 Savol: {message.text}\n\n"
+            f"💬 Savol: {safe_user_text}\n\n"
             f"👇 <i>Javob berish uchun shu xabarga Reply qiling.</i>"
         )
         for admin_id in ADMIN_IDS:
@@ -692,12 +740,17 @@ async def handle_messages(message: types.Message):
             parse_mode="HTML"
         )
 
-# ================= SAYT UCHUN MINI API SERVER =================
+# ================= SAYT UCHUN API SERVER =================
+CORS_HEADERS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+}
+
 async def get_web_replies(request):
     patient_id = request.query.get("patient_id", "")
-    headers = {"Access-Control-Allow-Origin": "*"}
-    if not patient_id:
-        return web.json_response({"replies": []}, headers=headers)
+    if not re.match(r"^ID-\d{6}$", patient_id):
+        return web.json_response({"replies": []}, headers=CORS_HEADERS)
 
     cursor.execute("SELECT id, reply_text FROM web_replies WHERE patient_id = ? AND delivered = 0", (patient_id,))
     rows = cursor.fetchall()
@@ -706,7 +759,7 @@ async def get_web_replies(request):
         replies.append(text)
         cursor.execute("UPDATE web_replies SET delivered = 1 WHERE id = ?", (row_id,))
     conn.commit()
-    return web.json_response({"replies": replies}, headers=headers)
+    return web.json_response({"replies": replies}, headers=CORS_HEADERS)
 
 async def main():
     scheduler.start()
@@ -716,14 +769,23 @@ async def main():
         BotCommand(command="menu", description="Bemor tugmalarini ochish")
     ])
 
-    app = web.Application()
+    app = web.Application(client_max_size=1024 * 16)
     app.router.add_get("/replies", get_web_replies)
+
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 8080)
     await site.start()
 
-    print(f"{DOCTOR_NAME} boti va Sayt API (port 8080) ishga tushdi...")
+    # Bot muvaffaqiyatli yonganini tasdiqlab sizga xabar yuboradi
+    me = await bot.get_me()
+    print(f"✅ BOT ISHGA TUSHDI: @{me.username}")
+    for admin_id in ADMIN_IDS:
+        try:
+            await bot.send_message(admin_id, f"✅ <b>@{me.username}</b> muvaffaqiyatli ishga tushdi! Tugmalar tayyor.", parse_mode="HTML")
+        except Exception:
+            pass
+
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
