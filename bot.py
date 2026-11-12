@@ -31,10 +31,7 @@ DOCTOR_TELEGRAM = "https://t.me/Sr7431"
 TELEGRAM_CHANNEL = "https://t.me/ginekologplastikx"
 YOUTUBE_CHANNEL = "https://youtube.com/@ginekologestetst"
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
@@ -105,6 +102,15 @@ CREATE TABLE IF NOT EXISTS web_replies (
     patient_id TEXT,
     reply_text TEXT,
     delivered INTEGER DEFAULT 0
+)
+""")
+
+# Shifokor kiritadigan qabul kunlari jadvali
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS schedule_slots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slot_text TEXT,
+    created_at TEXT
 )
 """)
 conn.commit()
@@ -192,24 +198,32 @@ class BookingState(StatesGroup):
 class BroadcastState(StatesGroup):
     waiting_for_message = State()
 
-# ================= TUGMALAR =================
+class AdminReplyState(StatesGroup):
+    waiting_for_reply = State()
+
+class ScheduleState(StatesGroup):
+    waiting_for_schedule = State()
+
+# ================= BEMOR VA ADMIN TUGMALARI (ALOHIDA) =================
 def patient_menu():
+    """Faqat bemorlar ekranida chiqadigan alohida tugmalar"""
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🩺 Tibbiy xizmatlar")],
-            [KeyboardButton(text="💬 Surayyo Vahobjonovnaga savol"), KeyboardButton(text="📞 Aloqa va manzil")],
-            [KeyboardButton(text="⭐ Xizmatni baholash")]
+            [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🗓 Qabul kunlari")],
+            [KeyboardButton(text="🩺 Tibbiy xizmatlar"), KeyboardButton(text="💬 Surayyo Vahobjonovnaga savol")],
+            [KeyboardButton(text="📞 Aloqa va manzil"), KeyboardButton(text="⭐ Xizmatni baholash")]
         ],
         resize_keyboard=True,
         is_persistent=True
     )
 
 def admin_menu():
+    """Faqat Surayyo Vahobjonovna (Admin) ekranida chiqadigan tugmalar"""
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🩺 Tibbiy xizmatlar")],
-            [KeyboardButton(text="📊 Statistika"), KeyboardButton(text="📋 Bugungi qabullar")],
-            [KeyboardButton(text="📢 Barchaga Broadcast yuborish"), KeyboardButton(text="💡 Yordam & Qo'llanma")]
+            [KeyboardButton(text="📅 Qabul kunlarini kiritish"), KeyboardButton(text="🗑 Qabul kunlarini tozalash")],
+            [KeyboardButton(text="📢 Barchaga Push (Broadcast)"), KeyboardButton(text="🧹 Chatni tozalash (Delete)")],
+            [KeyboardButton(text="📋 Bugungi qabullar"), KeyboardButton(text="📊 Statistika")]
         ],
         resize_keyboard=True,
         is_persistent=True
@@ -218,10 +232,18 @@ def admin_menu():
 def get_menu(user_id: int):
     return admin_menu() if user_id in ADMIN_IDS else patient_menu()
 
+def admin_question_buttons(target_type: str, target_id: str):
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="✍️ Javob qaytarish (Push)", callback_data=f"pushreply_{target_type}_{target_id}"),
+            InlineKeyboardButton(text="🗑 Delete", callback_data="del_msg")
+        ]
+    ])
+
 def consult_action_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="📅 Qabulga yozilish", callback_data="start_booking")],
-        [InlineKeyboardButton(text="🩺 Barcha xizmatlar", callback_data="show_services_cb")],
+        [InlineKeyboardButton(text="🗓 Qabul kunlarini ko'rish", callback_data="view_schedule_cb")],
         [InlineKeyboardButton(text="👩‍⚕️ Shifokor lichkasi (@Sr7431)", url=DOCTOR_TELEGRAM)]
     ])
 
@@ -242,6 +264,10 @@ def is_user_banned(user_id: int) -> bool:
     cursor.execute("SELECT is_banned FROM users WHERE user_id = ?", (user_id,))
     row = cursor.fetchone()
     return bool(row and row[0] == 1)
+
+def get_active_schedule_list():
+    cursor.execute("SELECT id, slot_text FROM schedule_slots ORDER BY id DESC LIMIT 10")
+    return cursor.fetchall()
 
 # ================= 🛡️ XAVFSIZLIK FILTRI (18+ RASM/VIDEO BLOKLASH) =================
 @dp.message(
@@ -272,7 +298,7 @@ async def block_media_messages(message: types.Message):
     else:
         await message.answer(
             f"⚠️ <b>Xavfsizlik qoidasi ({warnings}/3):</b>\nBotga rasm, video yoki fayl yuborish taqiqlangan! Faqat matn yuboring.",
-            reply_markup=get_menu(user_id),
+            reply_markup=patient_menu(),
             parse_mode="HTML"
         )
 
@@ -298,8 +324,106 @@ async def cmd_start(message: types.Message, state: FSMContext):
         f"👇 Quyidagi tugmalardan birini tanlang yoki savolingizni yozing:"
     )
     await message.answer(welcome_text, reply_markup=get_menu(message.from_user.id), parse_mode="HTML")
-    await message.answer("Tezkor bo'limlar:", reply_markup=consult_action_keyboard())
+    if message.from_user.id not in ADMIN_IDS:
+        await message.answer("Tezkor bo'limlar:", reply_markup=consult_action_keyboard())
 
+# ================= 📅 ADMIN QABUL KUNLARINI KIRITISHI (SAYTGA + BARCHA BEMORLARGA KETADI) =================
+@dp.message(F.text == "📅 Qabul kunlarini kiritish", F.from_user.id.in_(ADMIN_IDS))
+async def ask_schedule_input(message: types.Message, state: FSMContext):
+    cancel_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
+    await message.answer(
+        "📅 <b>Yangi qabul kunlari va vaqtlarini yozing:</b>\n\n"
+        "<i>Namuna:</i>\n"
+        "<code>Dushanba, Chorshanba, Juma — 10:00 dan 16:00 gacha (Toshkent klinikasi)</code>\n\n"
+        "Yozishingiz bilan:\n"
+        "1️⃣ Saytingizning bosh sahifasida avtomatik chiqadi;\n"
+        "2️⃣ Botdagi barcha bemorlarga xabar yuboriladi!",
+        reply_markup=cancel_kb,
+        parse_mode="HTML"
+    )
+    await state.set_state(ScheduleState.waiting_for_schedule)
+
+@dp.message(ScheduleState.waiting_for_schedule, F.from_user.id.in_(ADMIN_IDS))
+async def save_and_publish_schedule(message: types.Message, state: FSMContext):
+    slot_text = clean_text(message.text or "")
+    if not slot_text:
+        await message.answer("⚠️ Matn ko'rinishida kiriting.")
+        return
+
+    # 1. Bazaga saqlash (Sayt avtomatik shu yerdan oladi!)
+    cursor.execute(
+        "INSERT INTO schedule_slots (slot_text, created_at) VALUES (?, ?)",
+        (slot_text, datetime.now().strftime("%d.%m.%Y %H:%M"))
+    )
+    conn.commit()
+
+    # 2. Botdagi barcha bemorlarga avtomatik tarqatish
+    book_kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📅 Qabulga yozilish", callback_data="start_booking")],
+        [InlineKeyboardButton(text="👩‍⚕️ Shifokor lichkasi (@Sr7431)", url=DOCTOR_TELEGRAM)]
+    ])
+
+    announce_msg = (
+        f"🗓 <b>YANGI QABUL KUNLARI E'LON QILINDI!</b>\n\n"
+        f"👩‍⚕️ <b>{DOCTOR_NAME}</b>\n"
+        f"📅 <b>Qabul kunlari:</b> {slot_text}\n"
+        f"📍 <b>Manzil:</b> {CLINIC_ADDRESS}\n"
+        f"📞 <b>Telefon:</b> {PHONE_NUMBER}\n\n"
+        f"👇 Joy band qilish uchun hoziroq tugmani bosing:"
+    )
+
+    cursor.execute("SELECT user_id FROM users WHERE is_banned = 0")
+    users = cursor.fetchall()
+    sent = 0
+    for (uid,) in users:
+        if uid not in ADMIN_IDS:
+            try:
+                await bot.send_message(uid, announce_msg, reply_markup=book_kb, parse_mode="HTML")
+                sent += 1
+            except Exception:
+                pass
+
+    await message.answer(
+        f"✅ <b>Qabul kunlari saqlandi va tarqatildi!</b>\n\n"
+        f"🌐 Saytingizga joylandi: <b>Ha</b>\n"
+        f"📲 Bemorlarga yuborildi: <b>{sent} ta bemorga</b>",
+        reply_markup=admin_menu(),
+        parse_mode="HTML"
+    )
+    await state.clear()
+
+@dp.message(F.text == "🗑 Qabul kunlarini tozalash", F.from_user.id.in_(ADMIN_IDS))
+async def clear_schedule_slots(message: types.Message):
+    cursor.execute("DELETE FROM schedule_slots")
+    conn.commit()
+    await message.answer("🗑 Barcha eski qabul kunlari tozalandi (saytdan ham olib tashlandi).", reply_markup=admin_menu())
+
+# ================= BEMORLAR QABUL KUNLARINI KO'RISHI =================
+@dp.message(F.text == "🗓 Qabul kunlari")
+@dp.callback_query(F.data == "view_schedule_cb")
+async def view_schedule(event: types.Message | types.CallbackQuery):
+    msg = event.message if isinstance(event, types.CallbackQuery) else event
+    if isinstance(event, types.CallbackQuery):
+        await event.answer()
+
+    slots = get_active_schedule_list()
+    if not slots:
+        text = (
+            f"🗓 <b>{DOCTOR_NAME} — Qabul jadvali:</b>\n\n"
+            f"🕘 <b>Ish vaqti:</b> {WORK_HOURS}\n"
+            f"📍 <b>Manzil:</b> {CLINIC_ADDRESS}\n"
+            f"📞 <b>Telefon:</b> {PHONE_NUMBER}\n\n"
+            f"Qabulga yozilish uchun pastdagi tugmani bosing:"
+        )
+    else:
+        text = f"🗓 <b>{DOCTOR_NAME} — Ochiq qabul kunlari:</b>\n\n"
+        for _, s_text in slots:
+            text += f"✅ <b>{s_text}</b>\n"
+        text += f"\n📍 <b>Manzil:</b> {CLINIC_ADDRESS}\n📞 <b>Telefon:</b> {PHONE_NUMBER}"
+
+    await msg.answer(text, reply_markup=consult_action_keyboard(), parse_mode="HTML")
+
+# ================= XIZMATLAR VA MANZIL =================
 @dp.message(F.text.in_(["🩺 Tibbiy xizmatlar", "Xizmatlar", "Qanday xizmatlar bor?"]))
 @dp.callback_query(F.data == "show_services_cb")
 async def show_services(event: types.Message | types.CallbackQuery, state: FSMContext):
@@ -389,16 +513,38 @@ async def process_type(callback: types.CallbackQuery, state: FSMContext):
         return
     await state.update_data(visit_type=visit_type)
 
+    # Agar shifokor maxsus qabul kunlarini kiritgan bo'lsa, o'shalarni ham chiqaradi
+    slots = get_active_schedule_list()
+    date_buttons = []
+    for slot_id, s_text in slots[:4]:
+        date_buttons.append([InlineKeyboardButton(text=f"🗓 {s_text[:35]}", callback_data=f"customdate_{slot_id}")])
+
     today = datetime.now()
     tomorrow = today + timedelta(days=1)
     day_after = today + timedelta(days=2)
+    date_buttons.append([InlineKeyboardButton(text=f"Ertaga ({tomorrow.strftime('%d.%m.%Y')})", callback_data=f"date_{tomorrow.strftime('%Y-%m-%d')}")])
+    date_buttons.append([InlineKeyboardButton(text=f"Indinga ({day_after.strftime('%d.%m.%Y')})", callback_data=f"date_{day_after.strftime('%Y-%m-%d')}")])
 
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=f"Ertaga ({tomorrow.strftime('%d.%m.%Y')})", callback_data=f"date_{tomorrow.strftime('%Y-%m-%d')}")],
-        [InlineKeyboardButton(text=f"Indinga ({day_after.strftime('%d.%m.%Y')})", callback_data=f"date_{day_after.strftime('%Y-%m-%d')}")]
-    ])
+    kb = InlineKeyboardMarkup(inline_keyboard=date_buttons)
     await callback.message.edit_text("Qabul kunini tanlang:", reply_markup=kb)
     await state.set_state(BookingState.choosing_date)
+
+@dp.callback_query(F.data.startswith("customdate_"))
+async def process_custom_date(callback: types.CallbackQuery, state: FSMContext):
+    await callback.answer()
+    slot_id = int(callback.data.split("_")[1])
+    cursor.execute("SELECT slot_text FROM schedule_slots WHERE id = ?", (slot_id,))
+    row = cursor.fetchone()
+    chosen_day = row[0] if row else "Belgilangan kun"
+    await state.update_data(visit_date=chosen_day)
+
+    times = ["10:00", "11:30", "12:30", "14:00", "15:00", "16:30"]
+    row1 = [InlineKeyboardButton(text=t, callback_data=f"time_{t}") for t in times[:3]]
+    row2 = [InlineKeyboardButton(text=t, callback_data=f"time_{t}") for t in times[3:]]
+    kb = InlineKeyboardMarkup(inline_keyboard=[row1, row2])
+
+    await callback.message.edit_text(f"Tanlangan kun: <b>{chosen_day}</b>\n\nSoatni tanlang:", reply_markup=kb, parse_mode="HTML")
+    await state.set_state(BookingState.choosing_time)
 
 @dp.callback_query(F.data.startswith("date_"))
 async def process_date(callback: types.CallbackQuery, state: FSMContext):
@@ -439,7 +585,7 @@ async def process_time(callback: types.CallbackQuery, state: FSMContext):
     )
     await state.set_state(BookingState.entering_phone)
 
-@dp.message(F.text == "🔙 Asosiy menyuga qaytish")
+@dp.message(F.text.in_(["🔙 Asosiy menyuga qaytish", "❌ Bekor qilish"]))
 async def back_to_main(message: types.Message, state: FSMContext):
     await state.clear()
     await message.answer("Asosiy menyu:", reply_markup=get_menu(message.from_user.id))
@@ -470,8 +616,8 @@ async def finish_booking(message: types.Message, state: FSMContext):
             scheduler.add_job(send_reminder, "date", run_date=reminder_dt, args=[message.from_user.id, visit_time])
         if rating_dt > datetime.now():
             scheduler.add_job(ask_rating, "date", run_date=rating_dt, args=[message.from_user.id])
-    except Exception as e:
-        logging.error(f"Vaqt rejalashtirishda xato: {e}")
+    except Exception:
+        pass
 
     direct_kb = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="👩‍⚕️ Shifokor lichkasiga yozish (@Sr7431)", url=DOCTOR_TELEGRAM)]
@@ -500,7 +646,12 @@ async def finish_booking(message: types.Message, state: FSMContext):
     )
     for admin_id in ADMIN_IDS:
         try:
-            await bot.send_message(admin_id, admin_msg, parse_mode="HTML")
+            await bot.send_message(
+                admin_id,
+                admin_msg,
+                reply_markup=admin_question_buttons("tg", str(message.from_user.id)),
+                parse_mode="HTML"
+            )
         except Exception:
             pass
 
@@ -513,8 +664,8 @@ async def send_reminder(user_id: int, visit_time: str):
             f"⏰ <b>Eslatma!</b>\n\nBir soatdan keyin, soat <b>{visit_time}</b> da <b>{DOCTOR_NAME}</b> qabuliga yozilgansiz.\n📍 {CLINIC_ADDRESS}\n📞 {PHONE_NUMBER}",
             parse_mode="HTML"
         )
-    except Exception as e:
-        logging.error(f"Eslatma yuborishda xato: {e}")
+    except Exception:
+        pass
 
 async def ask_rating(user_id: int):
     try:
@@ -569,7 +720,85 @@ async def ask_doctor_prompt(message: types.Message, state: FSMContext):
         parse_mode="HTML"
     )
 
-# ================= ADMIN FUNKSIYALARI =================
+# ================= ADMIN PUSH (JAVOB QAYTARISH) VA DELETE TUGMALARI =================
+@dp.callback_query(F.data == "del_msg")
+async def delete_single_message(callback: types.CallbackQuery):
+    await callback.answer("Xabar o'chirildi 🗑")
+    try:
+        await callback.message.delete()
+    except Exception:
+        pass
+
+@dp.callback_query(F.data.startswith("pushreply_"), F.from_user.id.in_(ADMIN_IDS))
+async def start_push_reply(callback: types.CallbackQuery, state: FSMContext):
+    await callback.answer()
+    parts = callback.data.split("_", 2)
+    target_type = parts[1]
+    target_id = parts[2]
+
+    await state.update_data(target_type=target_type, target_id=target_id)
+    await state.set_state(AdminReplyState.waiting_for_reply)
+
+    cancel_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
+    where = "Saytdagi bemorga" if target_type == "web" else "Telegram bemoriga"
+    await callback.message.answer(
+        f"✍️ <b>{where} ({target_id})</b> yuboriladigan javob matnini yozing:",
+        reply_markup=cancel_kb,
+        parse_mode="HTML"
+    )
+
+@dp.message(AdminReplyState.waiting_for_reply, F.from_user.id.in_(ADMIN_IDS))
+async def send_push_reply(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    target_type = data.get("target_type")
+    target_id = data.get("target_id")
+    reply_text = clean_text(message.text or "")
+
+    if not reply_text:
+        await message.answer("⚠️ Faqat matnli javob yuboring.")
+        return
+
+    if target_type == "web":
+        cursor.execute(
+            "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
+            (target_id, reply_text)
+        )
+        conn.commit()
+        await message.answer(
+            f"✅ Javobingiz saytdagi bemorga (<code>{target_id}</code>) Push qilindi!",
+            reply_markup=admin_menu(),
+            parse_mode="HTML"
+        )
+    elif target_type == "tg":
+        try:
+            await bot.send_message(
+                int(target_id),
+                f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{reply_text}",
+                reply_markup=patient_menu(),
+                parse_mode="HTML"
+            )
+            await message.answer("✅ Javobingiz Telegram bemoriga yetkazildi!", reply_markup=admin_menu())
+        except Exception as e:
+            await message.answer(f"❌ Yuborishda xatolik: {e}", reply_markup=admin_menu())
+
+    await state.clear()
+
+@dp.message(F.text == "🧹 Chatni tozalash (Delete)", F.from_user.id.in_(ADMIN_IDS))
+async def clear_admin_chat(message: types.Message):
+    deleted = 0
+    for msg_id in range(message.message_id, max(1, message.message_id - 40), -1):
+        try:
+            await bot.delete_message(message.chat.id, msg_id)
+            deleted += 1
+        except Exception:
+            pass
+    info = await bot.send_message(message.chat.id, f"🧹 So'nggi {deleted} ta xabar tozalandi.", reply_markup=admin_menu())
+    await asyncio.sleep(3)
+    try:
+        await info.delete()
+    except Exception:
+        pass
+
 @dp.message(F.text == "📊 Statistika", F.from_user.id.in_(ADMIN_IDS))
 async def show_stats(message: types.Message):
     cursor.execute("SELECT COUNT(*) FROM users")
@@ -588,6 +817,7 @@ async def show_stats(message: types.Message):
         f"🚫 <b>{banned_users}</b> ta spammer bloklangan\n"
         f"📅 <b>{total_appts}</b> ta jami qabulga yozilishlar\n"
         f"⭐ O'rtacha baho: <b>{rating_str}</b>",
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🗑 Delete", callback_data="del_msg")]]),
         parse_mode="HTML"
     )
 
@@ -601,33 +831,16 @@ async def today_appointments(message: types.Message):
     text = "📋 <b>So'nggi yozilgan bemorlar:</b>\n\n"
     for r in rows:
         text += f"• {r[1]} <b>{r[2]}</b> ({r[3]}) — {r[0]} | 📞 {r[4]}\n"
-    await message.answer(text, parse_mode="HTML")
+    await message.answer(
+        text,
+        reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🗑 Delete", callback_data="del_msg")]]),
+        parse_mode="HTML"
+    )
 
-@dp.message(Command("elon"), F.from_user.id.in_(ADMIN_IDS))
-async def quick_announcement(message: types.Message):
-    raw_text = message.text.replace("/elon barchaga", "").replace("/elon", "").strip()
-    if not raw_text:
-        await message.answer("Namuna:\n<code>/elon barchaga 🔥 Yangilik!</code>", parse_mode="HTML")
-        return
-
-    book_btn = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="Qabulga yozilish", callback_data="start_booking")]
-    ])
-
-    cursor.execute("SELECT user_id FROM users WHERE is_banned = 0")
-    users = cursor.fetchall()
-    sent = 0
-    for (uid,) in users:
-        try:
-            await bot.send_message(uid, raw_text, reply_markup=book_btn)
-            sent += 1
-        except Exception:
-            pass
-    await message.answer(f"✅ E'lon {sent} ta mijozga yuborildi!")
-
-@dp.message(F.text == "📢 Barchaga Broadcast yuborish", F.from_user.id.in_(ADMIN_IDS))
+@dp.message(F.text.in_(["📢 Barchaga Push (Broadcast)", "📢 Barchaga Broadcast yuborish"]), F.from_user.id.in_(ADMIN_IDS))
 async def start_broadcast(message: types.Message, state: FSMContext):
-    await message.answer("📢 Barcha foydalanuvchilarga yuboriladigan xabar matnini yuboring:")
+    cancel_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
+    await message.answer("📢 Barcha bemorlarga Push qilinadigan xabar matnini yuboring:", reply_markup=cancel_kb)
     await state.set_state(BroadcastState.waiting_for_message)
 
 @dp.message(BroadcastState.waiting_for_message, F.from_user.id.in_(ADMIN_IDS))
@@ -644,17 +857,8 @@ async def send_broadcast(message: types.Message, state: FSMContext):
             sent += 1
         except Exception:
             pass
-    await message.answer(f"✅ Xabar {sent} ta foydalanuvchiga muvaffaqiyatli yuborildi!")
+    await message.answer(f"✅ Xabar {sent} ta foydalanuvchiga muvaffaqiyatli Push qilindi!", reply_markup=admin_menu())
     await state.clear()
-
-@dp.message(F.text == "💡 Yordam & Qo'llanma", F.from_user.id.in_(ADMIN_IDS))
-async def admin_help(message: types.Message):
-    await message.answer(
-        f"💡 <b>{DOCTOR_NAME} — Admin qo'llanmasi:</b>\n\n"
-        "1. Ham saytdan, ham botdan kelgan bemor savollariga <b>Reply</b> qilib javob bering.\n"
-        "2. Sayt bemoriga yozilgan javob saytga, bot bemoriga yozilgan javob Telegramiga boradi.",
-        parse_mode="HTML"
-    )
 
 # ================= HAM BOT, HAM SAYT JAVOBLARINI QABUL QILISH =================
 @dp.message()
@@ -665,30 +869,28 @@ async def handle_messages(message: types.Message):
     if message.from_user.id in ADMIN_IDS and message.reply_to_message:
         orig_text = message.reply_to_message.text or ""
 
-        if "Bemor kodi:" in orig_text:
-            try:
-                patient_id = orig_text.split("Bemor kodi:")[1].strip().split()[0]
-                if re.match(r"^ID-\d{6}$", patient_id):
-                    cursor.execute(
-                        "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
-                        (patient_id, clean_text(message.text or ""))
-                    )
-                    conn.commit()
-                    await message.answer(f"✅ Javobingiz saytdagi bemorga ({patient_id}) yuborildi!")
-            except Exception as e:
-                await message.answer(f"❌ Saytga saqlashda xatolik: {e}")
+        web_match = re.search(r"ID-\d{6}", orig_text)
+        if web_match:
+            patient_id = web_match.group(0)
+            cursor.execute(
+                "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
+                (patient_id, clean_text(message.text or ""))
+            )
+            conn.commit()
+            await message.answer(f"✅ Javobingiz saytdagi bemorga ({patient_id}) yuborildi!", reply_markup=admin_menu())
             return
 
-        if "TG_USER_ID:" in orig_text:
+        tg_match = re.search(r"TG_USER_ID:\s*(\d+)", orig_text)
+        if tg_match:
+            target_id = int(tg_match.group(1))
             try:
-                target_id = int(orig_text.split("TG_USER_ID:")[1].split()[0])
                 await bot.send_message(
                     target_id,
                     f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{clean_text(message.text or '')}",
                     reply_markup=patient_menu(),
                     parse_mode="HTML"
                 )
-                await message.answer("✅ Javobingiz Telegram bemoriga yetkazildi!")
+                await message.answer("✅ Javobingiz Telegram bemoriga yetkazildi!", reply_markup=admin_menu())
             except Exception as e:
                 await message.answer(f"❌ Xatolik: {e}")
             return
@@ -724,12 +926,16 @@ async def handle_messages(message: types.Message):
             f"🩺 <b>YANGI SAVOL ({DOCTOR_NAME})</b>\n\n"
             f"👤 Bemor: {clean_text(message.from_user.full_name)}\n"
             f"🆔 TG_USER_ID: {message.from_user.id}\n"
-            f"💬 Savol: {safe_user_text}\n\n"
-            f"👇 <i>Javob berish uchun shu xabarga Reply qiling.</i>"
+            f"💬 Savol: {safe_user_text}"
         )
         for admin_id in ADMIN_IDS:
             try:
-                await bot.send_message(admin_id, forward_text, parse_mode="HTML")
+                await bot.send_message(
+                    admin_id,
+                    forward_text,
+                    reply_markup=admin_question_buttons("tg", str(message.from_user.id)),
+                    parse_mode="HTML"
+                )
             except Exception:
                 pass
 
@@ -740,7 +946,7 @@ async def handle_messages(message: types.Message):
             parse_mode="HTML"
         )
 
-# ================= SAYT UCHUN API SERVER =================
+# ================= SAYT UCHUN API (JAVOBLAR + QABUL KUNLARI) =================
 CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -761,28 +967,41 @@ async def get_web_replies(request):
     conn.commit()
     return web.json_response({"replies": replies}, headers=CORS_HEADERS)
 
+async def get_web_schedule(request):
+    """Shifokor kiritgan qabul kunlarini saytga uzatadi"""
+    slots = get_active_schedule_list()
+    items = [{"text": s[1], "time": ""} for s in slots]
+    return web.json_response({"schedule": items}, headers=CORS_HEADERS)
+
 async def main():
     scheduler.start()
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands([
         BotCommand(command="start", description="Botni ishga tushirish"),
-        BotCommand(command="menu", description="Bemor tugmalarini ochish")
+        BotCommand(command="menu", description="Asosiy tugmalarni ochish")
     ])
 
     app = web.Application(client_max_size=1024 * 16)
     app.router.add_get("/replies", get_web_replies)
+    app.router.add_get("/schedule", get_web_schedule)
 
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 8080)
     await site.start()
 
-    # Bot muvaffaqiyatli yonganini tasdiqlab sizga xabar yuboradi
     me = await bot.get_me()
     print(f"✅ BOT ISHGA TUSHDI: @{me.username}")
     for admin_id in ADMIN_IDS:
         try:
-            await bot.send_message(admin_id, f"✅ <b>@{me.username}</b> muvaffaqiyatli ishga tushdi! Tugmalar tayyor.", parse_mode="HTML")
+            await bot.send_message(
+                admin_id,
+                f"✅ <b>@{me.username}</b> ishga tushdi!\n"
+                f"• Bemorlar uchun alohida tugmalar tayyor;\n"
+                f"• «📅 Qabul kunlarini kiritish» tugmasi orqali kiritgan kunlaringiz saytga va barcha bemorlarga ketadi.",
+                reply_markup=admin_menu(),
+                parse_mode="HTML"
+            )
         except Exception:
             pass
 
