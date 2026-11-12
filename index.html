@@ -440,6 +440,9 @@
         <blockquote class="quote">
           <span>“</span>Shifokor — bu kasb emas, bu chaqiriq. Insonlarga yaxshilik qilish – eng katta baxt.<span>”</span>
         </blockquote>
+
+        <!-- SHIFOKOR BOTDAN KIRITGAN OCHIQ QABUL KUNLARI -->
+        <div id="liveScheduleBanner" style="display:none; margin: 15px auto 20px auto; padding: 14px 18px; border-radius: 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; font-size: 0.93rem; line-height: 1.6; text-align: left;"></div>
       </div>
 
       <div class="card-footer-bar">
@@ -704,7 +707,7 @@
   <script>
     const BOT_TOKEN = '9117090922:AAHBdLtCq7bGsSbcnNoiFT_xCQZCh4xetcc';
     const ADMIN_IDS = [6258110646, 7645769320];
-    const BOT_API_URL = 'http://127.0.0.1:8080/replies';
+    const BOT_SERVER_URL = 'http://127.0.0.1:8080';
 
     let patientId = localStorage.getItem('ginekolog_patient_id');
     if (!patientId) {
@@ -772,7 +775,7 @@
       };
     }
 
-    // Saytdan shifokorga savol yuborish
+    // Saytdan shifokorga savol yuborish (Push va Delete tugmalari bilan boradi)
     document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const questionInput = document.getElementById('chatQuestionText');
@@ -785,10 +788,10 @@
 
       const processed = sanitizeForTelegram(question);
 
-      const message = `🩺 *YANGI KLINIK SAVOL (SAYTDAN)*\n\n` +
-                      `👤 *Bemor kodi:* \`${patientId}\`\n` +
-                      `💬 *Savol matni:* ${processed.safeText}\n\n` +
-                      `👇 *Javob berish uchun ushbu xabarga Reply qiling.*`;
+      const message = `🩺 <b>YANGI KLINIK SAVOL (SAYTDAN)</b>\n\n` +
+                      `👤 <b>Bemor kodi:</b> <code>${patientId}</code>\n` +
+                      `💬 <b>Savol matni:</b> ${processed.safeText}\n\n` +
+                      `👇 <i>Javob berish uchun pastdagi tugmani bosing yoki Reply qiling.</i>`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -797,7 +800,13 @@
           body: JSON.stringify({
             chat_id: chatId,
             text: message,
-            parse_mode: 'Markdown'
+            parse_mode: 'HTML',
+            reply_markup: {
+              inline_keyboard: [[
+                { text: "✍️ Javob qaytarish (Push)", callback_data: `pushreply_web_${patientId}` },
+                { text: "🗑 Delete", callback_data: "del_msg" }
+              ]]
+            }
           })
         }).catch(err => console.error("Xabar jo'natishda xatolik:", err));
       });
@@ -807,7 +816,7 @@
 
     // 🔄 Shifokor yozgan javoblarni bot.py serveridan olish
     function checkForDoctorReply() {
-      fetch(`${BOT_API_URL}?patient_id=${encodeURIComponent(patientId)}`)
+      fetch(`${BOT_SERVER_URL}/replies?patient_id=${encodeURIComponent(patientId)}`)
         .then(response => response.json())
         .then(data => {
           if (data.replies && data.replies.length > 0) {
@@ -829,7 +838,27 @@
         .catch(() => {});
     }
 
+    // 🗓 Shifokor botdan kiritgan qabul kunlarini saytda ko'rsatish
+    function loadClinicSchedule() {
+      fetch(`${BOT_SERVER_URL}/schedule`)
+        .then(res => res.json())
+        .then(data => {
+          const banner = document.getElementById('liveScheduleBanner');
+          if (!banner) return;
+          if (data.schedule && data.schedule.length > 0) {
+            banner.innerHTML = '🗓 <b>Ochiq qabul kunlari:</b><br>' +
+              data.schedule.map(s => '✅ ' + s.text).join('<br>');
+            banner.style.display = 'block';
+          } else {
+            banner.style.display = 'none';
+          }
+        })
+        .catch(() => {});
+    }
+
     setInterval(checkForDoctorReply, 4000);
+    loadClinicSchedule();
+    setInterval(loadClinicSchedule, 10000);
   </script>
 </body>
 </html>
