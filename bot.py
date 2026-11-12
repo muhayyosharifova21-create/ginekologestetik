@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sqlite3
 from datetime import datetime, timedelta
+from aiohttp import web
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart, Command
 from aiogram.fsm.context import FSMContext
@@ -31,7 +32,7 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 scheduler = AsyncIOScheduler(timezone="Asia/Tashkent")
 
-# ================= MA'LUMOTLAR BAZASI VA AVTO-TUZATISH =================
+# ================= MA'LUMOTLAR BAZASI =================
 conn = sqlite3.connect("surayyo_clinic.db", check_same_thread=False)
 cursor = conn.cursor()
 
@@ -46,7 +47,6 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
-# Eski bazada yangi ustunlar yo'q bo'lsa avtomatik qo'shish
 for col in ["warnings INTEGER DEFAULT 0", "is_banned INTEGER DEFAULT 0"]:
     try:
         cursor.execute(f"ALTER TABLE users ADD COLUMN {col}")
@@ -74,6 +74,15 @@ CREATE TABLE IF NOT EXISTS ratings (
     created_at TEXT
 )
 """)
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS web_replies (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    patient_id TEXT,
+    reply_text TEXT,
+    delivered INTEGER DEFAULT 0
+)
+""")
 conn.commit()
 
 # ================= XIZMATLAR RO'YXATI =================
@@ -92,115 +101,63 @@ SERVICES = {
     "razriv": ("🪡 Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv)", "45-60 daq"),
 }
 
-# ================= AVTOMATIK KONSULTANT BILIMLAR BAZASI =================
 KNOWLEDGE_BASE = [
     {
         "keywords": ["estetik ginekologiya", "lazer so2", "co2", "so2"],
-        "answer": (
-            "🌸 <b>Estetik ginekologiya va Lazer SO2:</b>\n\n"
-            "Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida og'riqsiz va qonsiz tiklash yo'nalishidir."
-        )
+        "answer": "🌸 <b>Estetik ginekologiya va Lazer SO2:</b>\n\nAyollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida og'riqsiz va qonsiz tiklash yo'nalishidir."
     },
     {
         "keywords": ["labioplastika", "labio", "kichik jinsiy lab", "lablar plastikasi"],
-        "answer": (
-            "✨ <b>Labioplastika (Kichik jinsiy lablar plastikasi):</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 30–45 daqiqa (mahalliy og'riqsizlantirish ostida).\n"
-            "• <b>Tiklanish davri:</b> To'liq bitish 3–4 hafta.\n"
-            "• <b>Cheklovlar:</b> 3–4 hafta jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi."
-        )
+        "answer": "✨ <b>Labioplastika:</b>\n• <b>Muolaja vaqti:</b> 30–45 daqiqa (mahalliy og'riqsizlantirish ostida).\n• <b>Tiklanish davri:</b> To'liq bitish 3–4 hafta.\n• <b>Cheklovlar:</b> 3–4 hafta jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi."
     },
     {
         "keywords": ["vaginoplastika", "vagina", "toraytirish", "kengayish"],
-        "answer": (
-            "✨ <b>Vaginoplastika (Vagina devorlarini toraytirish):</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 1 – 1.5 soat (umumiy yoki spinal og'riqsizlantirish ostida).\n"
-            "• <b>Tiklanish davri:</b> 6–8 hafta.\n"
-            "• <b>Cheklovlar:</b> 2 oy (8 hafta) jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi."
-        )
+        "answer": "✨ <b>Vaginoplastika:</b>\n• <b>Muolaja vaqti:</b> 1 – 1.5 soat.\n• <b>Tiklanish davri:</b> 6–8 hafta.\n• <b>Cheklovlar:</b> 2 oy (8 hafta) jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi."
     },
     {
         "keywords": ["klitor", "klitoroplastika", "kilitra"],
-        "answer": (
-            "✨ <b>Klitoroplastika:</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 30–40 daqiqa (mahalliy og'riqsizlantirish ostida).\n"
-            "• <b>Tiklanish davri:</b> 3 hafta ichida to'liq tuzaladi."
-        )
+        "answer": "✨ <b>Klitoroplastika:</b>\n• <b>Muolaja vaqti:</b> 30–40 daqiqa.\n• <b>Tiklanish davri:</b> 3 hafta ichida to'liq tuzaladi."
     },
     {
         "keywords": ["oqartirish", "pigment", "qorayish"],
-        "answer": (
-            "🌸 <b>Intim zona pigmentatsiyasini yo'qotish (Oqartirish):</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 20–30 daqiqa (kursi 3–4 ta muolajadan iborat).\n"
-            "• <b>Tiklanish davri:</b> 5–7 kun."
-        )
+        "answer": "🌸 <b>Intim zona oqartirish:</b>\n• <b>Muolaja vaqti:</b> 20–30 daqiqa (kursi 3–4 ta muolaja).\n• <b>Tiklanish davri:</b> 5–7 kun."
     },
     {
         "keywords": ["prp", "plazma", "plazmoterapiya", "yoshartirish", "qurish", "qichishish"],
-        "answer": (
-            "💉 <b>Intim yoshartirish va Plazmoterapiya (PRP):</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 30 daqiqa (bemorning o'z qonidan plazma tayyorlanadi).\n"
-            "• <b>Tiklanish:</b> 1–2 kunda tiklanadi."
-        )
+        "answer": "💉 <b>Intim yoshartirish va Plazmoterapiya (PRP):</b>\n• <b>Muolaja vaqti:</b> 30 daqiqa.\n• <b>Tiklanish:</b> 1–2 kunda tiklanadi."
     },
     {
         "keywords": ["eroziya", "bachadon bo'yni"],
-        "answer": (
-            "🔬 <b>Bachadon bo'yni eroziyasini davolash:</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 15–20 daqiqa (lazer yoki radioto'lqin usulida).\n"
-            "• <b>Tiklanish davri:</b> 3–4 hafta."
-        )
+        "answer": "🔬 <b>Bachadon bo'yni eroziyasini davolash:</b>\n• <b>Muolaja vaqti:</b> 15–20 daqiqa (lazer yoki radioto'lqin).\n• <b>Tiklanish davri:</b> 3–4 hafta."
     },
     {
         "keywords": ["polip"],
-        "answer": (
-            "🔬 <b>Bachadon bo'yni va devori poliplarini olish:</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 15–30 daqiqa.\n"
-            "• <b>Tiklanish davri:</b> 2 hafta ichida tiklanadi."
-        )
+        "answer": "🔬 <b>Bachadon bo'yni poliplarini olish:</b>\n• <b>Muolaja vaqti:</b> 15–30 daqiqa.\n• <b>Tiklanish davri:</b> 2 hafta ichida tiklanadi."
     },
     {
         "keywords": ["spiral", "implantsperal", "homiladorlik"],
-        "answer": (
-            "🛡 <b>Spiral (Implantsperal) o'rnatish:</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 5–10 daqiqa.\n"
-            "• <b>Tiklanish:</b> 1–2 kunda organizm moslashadi."
-        )
+        "answer": "🛡 <b>Spiral (Implantsperal) o'rnatish:</b>\n• <b>Muolaja vaqti:</b> 5–10 daqiqa.\n• <b>Tiklanish:</b> 1–2 kunda moslashadi."
     },
     {
         "keywords": ["sistit", "siydik"],
-        "answer": (
-            "⚡ <b>Sistitni lazer SO2 da davolash:</b>\n\n"
-            "Zamonaviy lazer SO2 aparati yordamida og'riqsiz va qonsiz davolanadi. Tiklanish vaqti 5–7 kun."
-        )
+        "answer": "⚡ <b>Sistitni lazer SO2 da davolash:</b>\nZamonaviy lazer SO2 aparati yordamida og'riqsiz va qonsiz davolanadi. Tiklanish vaqti 5–7 kun."
     },
     {
         "keywords": ["miyoma"],
-        "answer": (
-            "🏥 <b>Bachadon miyomasi va uni davolash:</b>\n\n"
-            "Zamonaviy dori-darmonlar yoki kichik invaziv jarrohlik yo'li bilan davolanadi. Tiklanish davri 3–4 hafta."
-        )
+        "answer": "🏥 <b>Bachadon miyomasi:</b>\nZamonaviy dori-darmonlar yoki kichik invaziv jarrohlik yo'li bilan davolanadi. Tiklanish davri 3–4 hafta."
     },
     {
         "keywords": ["razriv", "yirtilish", "chandiq"],
-        "answer": (
-            "🪡 <b>Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv):</b>\n\n"
-            "• <b>Muolaja vaqti:</b> 45–60 daqiqa.\n"
-            "• <b>Tiklanish davri:</b> To'liq bitish 4–6 hafta."
-        )
+        "answer": "🪡 <b>Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv):</b>\n• <b>Muolaja vaqti:</b> 45–60 daqiqa.\n• <b>Tiklanish davri:</b> 4–6 hafta."
     },
     {
         "keywords": ["narx", "qancha", "necha pul", "to'lov", "summa"],
-        "answer": (
-            f"ℹ️ Muolajalar narxi individual ko'rik natijasiga qarab belgilanadi.\n\n"
-            f"📞 Telefon: {PHONE_NUMBER}\n✉️ Telegram: @Sr7431"
-        )
+        "answer": f"ℹ️ Muolajalar narxi individual ko'rik natijasiga qarab belgilanadi.\n\n📞 Telefon: {PHONE_NUMBER}\n✉️ Telegram: @Sr7431"
     }
 ]
 
 GREETINGS = ["assalomu alaykum", "assalom", "salom", "qalaysiz", "yaxshimisiz", "murojaat", "savolim bor"]
 
-# ================= HOLATLAR (FSM) =================
 class BookingState(StatesGroup):
     choosing_service = State()
     choosing_type = State()
@@ -211,21 +168,37 @@ class BookingState(StatesGroup):
 class BroadcastState(StatesGroup):
     waiting_for_message = State()
 
-# ================= TUGMALAR =================
-def main_menu(user_id: int):
-    buttons = [
-        [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🩺 Tibbiy xizmatlar")],
-        [KeyboardButton(text="💬 Surayyo Vahobjonovnaga savol"), KeyboardButton(text="📞 Aloqa va manzil")],
-        [KeyboardButton(text="⭐ Xizmatni baholash")]
-    ]
-    if user_id in ADMIN_IDS:
-        buttons.append([KeyboardButton(text="📊 Statistika"), KeyboardButton(text="📋 Bugungi qabullar")])
-        buttons.append([KeyboardButton(text="📢 Barchaga Broadcast yuborish"), KeyboardButton(text="💡 Yordam & Qo'llanma")])
-    return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True, is_persistent=True)
+# ================= BEMOR VA ADMIN TUGMALARI =================
+def patient_menu():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🩺 Tibbiy xizmatlar")],
+            [KeyboardButton(text="💬 Surayyo Vahobjonovnaga savol"), KeyboardButton(text="📞 Aloqa va manzil")],
+            [KeyboardButton(text="⭐ Xizmatni baholash")]
+        ],
+        resize_keyboard=True,
+        is_persistent=True,
+        input_field_placeholder="Tugmani tanlang yoki savol yozing..."
+    )
+
+def admin_menu():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="📅 Qabulga yozilish"), KeyboardButton(text="🩺 Tibbiy xizmatlar")],
+            [KeyboardButton(text="📊 Statistika"), KeyboardButton(text="📋 Bugungi qabullar")],
+            [KeyboardButton(text="📢 Barchaga Broadcast yuborish"), KeyboardButton(text="💡 Yordam & Qo'llanma")]
+        ],
+        resize_keyboard=True,
+        is_persistent=True
+    )
+
+def get_menu(user_id: int):
+    return admin_menu() if user_id in ADMIN_IDS else patient_menu()
 
 def consult_action_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="📅 Qabulga yozilish", callback_data="start_booking")],
+        [InlineKeyboardButton(text="🩺 Barcha xizmatlar", callback_data="show_services_cb")],
         [InlineKeyboardButton(text="👩‍⚕️ Shifokor lichkasi (@Sr7431)", url=DOCTOR_TELEGRAM)]
     ])
 
@@ -247,7 +220,7 @@ def is_user_banned(user_id: int) -> bool:
     row = cursor.fetchone()
     return bool(row and row[0] == 1)
 
-# ================= 🛡️ XAVFSIZLIK FILTRI =================
+# ================= 🛡️ XAVFSIZLIK FILTRI (18+ RASM/VIDEO BLOKLASH) =================
 @dp.message(
     F.from_user.id.not_in(ADMIN_IDS),
     (F.photo | F.video | F.animation | F.document | F.video_note | F.sticker)
@@ -272,16 +245,15 @@ async def block_media_messages(message: types.Message):
     if warnings >= 3:
         cursor.execute("UPDATE users SET is_banned = 1 WHERE user_id = ?", (user_id,))
         conn.commit()
-        await message.answer("🚫 Xavfsizlik qoidalarini 3 marta buzganingiz sababli botdan foydalanish huquqingiz cheklandi.")
+        await message.answer("🚫 Xavfsizlik qoidalarini 3 marta buzganingiz sababli bloklandingiz.")
     else:
         await message.answer(
-            f"⚠️ <b>Xavfsizlik qoidasi ({warnings}/3):</b>\n\n"
-            f"Botga rasm, video yoki fayl yuborish <b>qat'iyan taqiqlangan!</b>\n"
-            f"Iltimos, faqat <b>matnli savol</b> yuboring.",
+            f"⚠️ <b>Xavfsizlik qoidasi ({warnings}/3):</b>\nBotga rasm, video yoki fayl yuborish taqiqlangan! Faqat matn yuboring.",
+            reply_markup=get_menu(user_id),
             parse_mode="HTML"
         )
 
-# ================= START VA MENU BUYRUQLARI =================
+# ================= START VA MENU =================
 @dp.message(CommandStart())
 @dp.message(Command("menu"))
 async def cmd_start(message: types.Message, state: FSMContext):
@@ -299,25 +271,28 @@ async def cmd_start(message: types.Message, state: FSMContext):
         f"Estetik ginekolog vrach <b>Surayyo Vahobjonovna</b>ning rasmiy 24/7 konsultant botiga xush kelibsiz.\n\n"
         f"📞 <b>Telefon:</b> {PHONE_NUMBER}\n"
         f"✉️ <b>Shaxsiy Telegram:</b> @Sr7431\n\n"
-        f"Pastdagi tugmalardan foydalaning yoki savolingizni yozing:"
+        f"👇 Quyidagi tugmalardan birini tanlang yoki savolingizni yozing:"
     )
-    await message.answer(welcome_text, reply_markup=main_menu(message.from_user.id), parse_mode="HTML")
-    await message.answer("Tezkor amallar:", reply_markup=consult_action_keyboard())
+    await message.answer(welcome_text, reply_markup=get_menu(message.from_user.id), parse_mode="HTML")
+    await message.answer("Tezkor bo'limlar:", reply_markup=consult_action_keyboard())
 
-# ================= XIZMATLAR RO'YXATI =================
 @dp.message(F.text.in_(["🩺 Tibbiy xizmatlar", "Xizmatlar", "Qanday xizmatlar bor?"]))
-async def show_services(message: types.Message, state: FSMContext):
-    await state.clear()
-    if is_user_banned(message.from_user.id):
+@dp.callback_query(F.data == "show_services_cb")
+async def show_services(event: types.Message | types.CallbackQuery, state: FSMContext):
+    if is_user_banned(event.from_user.id):
         return
+    await state.clear()
+    msg = event.message if isinstance(event, types.CallbackQuery) else event
+    if isinstance(event, types.CallbackQuery):
+        await event.answer()
+
     text = f"<b>🩺 {DOCTOR_NAME} — Tibbiy xizmatlarimiz:</b>\n\n"
     for name, duration in SERVICES.values():
         text += f"• <b>{name}</b> — {duration}\n"
     text += f"\n📍 <b>Manzil:</b> {CLINIC_ADDRESS}\n🕘 <b>Ish vaqti:</b> {WORK_HOURS}\n📞 <b>Telefon:</b> {PHONE_NUMBER}"
 
-    await message.answer(text, reply_markup=consult_action_keyboard(), parse_mode="HTML")
+    await msg.answer(text, reply_markup=consult_action_keyboard(), parse_mode="HTML")
 
-# ================= MANZIL VA BOG'LANISH =================
 @dp.message(F.text == "📞 Aloqa va manzil")
 async def show_location(message: types.Message, state: FSMContext):
     await state.clear()
@@ -340,7 +315,7 @@ async def show_location(message: types.Message, state: FSMContext):
         parse_mode="HTML"
     )
 
-# ================= QABULGA YOZILISH JARAYONI =================
+# ================= QABULGA YOZILISH =================
 @dp.message(F.text.in_(["📅 Qabulga yozilish", "Yozilmoqchiman", "Assalomu alaykum, ertaga qabul bormi?", "Qabul bormi", "Yozilish"]))
 @dp.callback_query(F.data == "start_booking")
 async def start_booking(event: types.Message | types.CallbackQuery, state: FSMContext):
@@ -351,10 +326,7 @@ async def start_booking(event: types.Message | types.CallbackQuery, state: FSMCo
     if isinstance(event, types.CallbackQuery):
         await event.answer()
 
-    buttons = []
-    for key, (name, _) in SERVICES.items():
-        buttons.append([InlineKeyboardButton(text=name, callback_data=f"srv_{key}")])
-
+    buttons = [[InlineKeyboardButton(text=name, callback_data=f"srv_{key}")] for key, (name, _) in SERVICES.items()]
     kb = InlineKeyboardMarkup(inline_keyboard=buttons)
     await msg.answer(
         f"Assalomu alaykum! 😊 <b>{DOCTOR_NAME}</b> qabuliga bo'sh vaqtlar bor.\n\nQaysi xizmat turiga yozilmoqchisiz?",
@@ -421,7 +393,10 @@ async def process_time(callback: types.CallbackQuery, state: FSMContext):
     await state.update_data(visit_time=visit_time)
 
     phone_kb = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text="📱 Telefon raqamni yuborish", request_contact=True)]],
+        keyboard=[
+            [KeyboardButton(text="📱 Telefon raqamni yuborish", request_contact=True)],
+            [KeyboardButton(text="🔙 Asosiy menyuga qaytish")]
+        ],
         resize_keyboard=True,
         one_time_keyboard=True
     )
@@ -431,6 +406,11 @@ async def process_time(callback: types.CallbackQuery, state: FSMContext):
         reply_markup=phone_kb
     )
     await state.set_state(BookingState.entering_phone)
+
+@dp.message(F.text == "🔙 Asosiy menyuga qaytish")
+async def back_to_main(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer("Asosiy menyu:", reply_markup=get_menu(message.from_user.id))
 
 @dp.message(BookingState.entering_phone)
 async def finish_booking(message: types.Message, state: FSMContext):
@@ -474,7 +454,7 @@ async def finish_booking(message: types.Message, state: FSMContext):
         f"<i>Qabuldan 1 soat oldin sizga eslatma yuboramiz.</i>"
     )
     await message.answer(confirm_text, reply_markup=direct_kb, parse_mode="HTML")
-    await message.answer("Asosiy menyu:", reply_markup=main_menu(message.from_user.id))
+    await message.answer("Asosiy menyu:", reply_markup=get_menu(message.from_user.id))
 
     admin_msg = (
         f"🔔 <b>YANGI QABULGA YOZILISH!</b>\n\n"
@@ -502,7 +482,6 @@ async def send_reminder(user_id: int, visit_time: str):
     except Exception as e:
         logging.error(f"Eslatma yuborishda xato: {e}")
 
-# ================= XIZMATNI BAHOLASH =================
 async def ask_rating(user_id: int):
     try:
         await bot.send_message(
@@ -534,19 +513,8 @@ async def process_rating(callback: types.CallbackQuery):
         (callback.from_user.id, stars, datetime.now().strftime("%Y-%m-%d %H:%M"))
     )
     conn.commit()
-
     await callback.message.edit_text(f"⭐ {stars} — Fikringiz uchun katta rahmat! 🙏")
-    for admin_id in ADMIN_IDS:
-        try:
-            await bot.send_message(
-                admin_id,
-                f"⭐ <b>Yangi baho:</b> {stars}/5\n👤 Bemor: {callback.from_user.full_name}",
-                parse_mode="HTML"
-            )
-        except Exception:
-            pass
 
-# ================= SHIFOKORGA SAVOL BERISH =================
 @dp.message(F.text == "💬 Surayyo Vahobjonovnaga savol")
 async def ask_doctor_prompt(message: types.Message, state: FSMContext):
     await state.clear()
@@ -597,10 +565,7 @@ async def today_appointments(message: types.Message):
 async def quick_announcement(message: types.Message):
     raw_text = message.text.replace("/elon barchaga", "").replace("/elon", "").strip()
     if not raw_text:
-        await message.answer(
-            "Namuna:\n<code>/elon barchaga 🔥 Yangilik! Qabulga yozilish uchun pastdagi tugmani bosing.</code>",
-            parse_mode="HTML"
-        )
+        await message.answer("Namuna:\n<code>/elon barchaga 🔥 Yangilik!</code>", parse_mode="HTML")
         return
 
     book_btn = InlineKeyboardMarkup(inline_keyboard=[
@@ -616,7 +581,7 @@ async def quick_announcement(message: types.Message):
             sent += 1
         except Exception:
             pass
-    await message.answer(f"✅ E'lon {sent} ta mijozga «Qabulga yozilish» tugmasi bilan yuborildi!")
+    await message.answer(f"✅ E'lon {sent} ta mijozga yuborildi!")
 
 @dp.message(F.text == "📢 Barchaga Broadcast yuborish", F.from_user.id.in_(ADMIN_IDS))
 async def start_broadcast(message: types.Message, state: FSMContext):
@@ -644,13 +609,12 @@ async def send_broadcast(message: types.Message, state: FSMContext):
 async def admin_help(message: types.Message):
     await message.answer(
         f"💡 <b>{DOCTOR_NAME} — Admin qo'llanmasi:</b>\n\n"
-        "1. <b>📊 Statistika:</b> Bazadagi mijozlar soni.\n"
-        "2. <b>/elon barchaga Matn:</b> Barchaga «Qabulga yozilish» tugmasi bilan e'lon yuborish.\n"
-        "3. <b>Reply:</b> Bemor savoliga javob berish uchun xabarga Reply qiling.",
+        "1. Ham saytdan, ham botdan kelgan bemor savollariga <b>Reply</b> qilib javob bering.\n"
+        "2. Sayt bemoriga yozilgan javob saytdagi chat oynasiga, bot bemoriga yozilgan javob esa Telegramiga boradi.",
         parse_mode="HTML"
     )
 
-# ================= AVTOMATIK SUHBAT VA SAVOL-JAVOB =================
+# ================= HAM BOT, HAM SAYT JAVOBLARINI QABUL QILISH =================
 @dp.message()
 async def handle_messages(message: types.Message):
     if is_user_banned(message.from_user.id):
@@ -658,18 +622,33 @@ async def handle_messages(message: types.Message):
 
     if message.from_user.id in ADMIN_IDS and message.reply_to_message:
         orig_text = message.reply_to_message.text or ""
+
+        if "Bemor kodi:" in orig_text:
+            try:
+                patient_id = orig_text.split("Bemor kodi:")[1].strip().split()[0]
+                cursor.execute(
+                    "INSERT INTO web_replies (patient_id, reply_text) VALUES (?, ?)",
+                    (patient_id, message.text)
+                )
+                conn.commit()
+                await message.answer(f"✅ Javobingiz saytdagi bemorga ({patient_id}) yuborildi!")
+            except Exception as e:
+                await message.answer(f"❌ Saytga saqlashda xatolik: {e}")
+            return
+
         if "TG_USER_ID:" in orig_text:
             try:
                 target_id = int(orig_text.split("TG_USER_ID:")[1].split()[0])
                 await bot.send_message(
                     target_id,
                     f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{message.text}",
+                    reply_markup=patient_menu(),
                     parse_mode="HTML"
                 )
-                await message.answer("✅ Javobingiz bemorga yetkazildi!")
+                await message.answer("✅ Javobingiz Telegram bemoriga yetkazildi!")
             except Exception as e:
                 await message.answer(f"❌ Xatolik: {e}")
-        return
+            return
 
     if message.from_user.id not in ADMIN_IDS and message.text:
         user_text = message.text.lower().strip()
@@ -686,10 +665,11 @@ async def handle_messages(message: types.Message):
         if any(gr in user_text for gr in GREETINGS) and len(user_text.split()) <= 5:
             await message.answer(
                 f"Va alaykum assalom, <b>{message.from_user.first_name}</b>! 😊\n\n"
-                f"<b>{DOCTOR_NAME}</b>ning virtual yordamchisiman. Sizga qanday yordam bera olaman?",
-                reply_markup=consult_action_keyboard(),
+                f"<b>{DOCTOR_NAME}</b>ning virtual yordamchisiman. Quyidagi tugmalardan foydalaning:",
+                reply_markup=patient_menu(),
                 parse_mode="HTML"
             )
+            await message.answer("Tezkor amallar:", reply_markup=consult_action_keyboard())
             return
 
         forward_text = (
@@ -708,19 +688,42 @@ async def handle_messages(message: types.Message):
         await message.answer(
             f"✅ Savolingiz qabul qilindi va shaxsan <b>{DOCTOR_NAME}</b>ga yuborildi.\n"
             f"📞 Telefon: {PHONE_NUMBER}",
-            reply_markup=consult_action_keyboard(),
+            reply_markup=patient_menu(),
             parse_mode="HTML"
         )
 
-# ================= ISHGA TUSHIRISH =================
+# ================= SAYT UCHUN MINI API SERVER =================
+async def get_web_replies(request):
+    patient_id = request.query.get("patient_id", "")
+    headers = {"Access-Control-Allow-Origin": "*"}
+    if not patient_id:
+        return web.json_response({"replies": []}, headers=headers)
+
+    cursor.execute("SELECT id, reply_text FROM web_replies WHERE patient_id = ? AND delivered = 0", (patient_id,))
+    rows = cursor.fetchall()
+    replies = []
+    for row_id, text in rows:
+        replies.append(text)
+        cursor.execute("UPDATE web_replies SET delivered = 1 WHERE id = ?", (row_id,))
+    conn.commit()
+    return web.json_response({"replies": replies}, headers=headers)
+
 async def main():
     scheduler.start()
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands([
         BotCommand(command="start", description="Botni ishga tushirish"),
-        BotCommand(command="menu", description="Asosiy tugmalarni ochish")
+        BotCommand(command="menu", description="Bemor tugmalarini ochish")
     ])
-    print(f"{DOCTOR_NAME} boti ishga tushdi...")
+
+    app = web.Application()
+    app.router.add_get("/replies", get_web_replies)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", 8080)
+    await site.start()
+
+    print(f"{DOCTOR_NAME} boti va Sayt API (port 8080) ishga tushdi...")
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
