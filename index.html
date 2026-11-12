@@ -50,7 +50,7 @@
       padding: 20px 12px 40px 12px;
     }
 
-    /* GLASSMOPRHISM HERO CARD */
+    /* GLASSMORPHISM HERO CARD */
     .hero-section {
       margin-bottom: 30px;
       position: relative;
@@ -478,7 +478,7 @@
         </div>
         <div class="procedure-content">
           <h3>Estetik ginekologiya nima?</h3>
-          <p><strong>Estetik ginekalogiya bu:</strong>-Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
+          <p><strong>Estetik ginekalogiya bu:</strong> Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
           <p><strong>Afzalliklari:</strong> Ayollarda o'ziga bo'lgan ishonchni qaytarish, jinsiy hayot sifatini yaxshilash va intim hudud salomatligini mustahkamlashda muhim rol o'ynaydi.</p>
         </div>
       </section>
@@ -610,8 +610,8 @@
         <div class="procedure-content">
           <h3>9. Sistit (Siydik pufagining yallig'lanishi)</h3>
           <p><strong>Nima uchun kelib chiqadi:</strong> Sovqotish, shaxsiy gigiyena qoidalariga rioya qilmaslik yoki infeksiyalar tushishi natijasida yuzaga keladi.</p>
-          <p><strong>Davolash usuli:</strong> Bakterial infeksiyaga qarshi zamonaviy lazer SO2 aparati yordamida sistit muamosidan butunlay xalos bo`lasiz.Og`riqsiz va qonsiz jarayon.</p>
-          <p><strong>Tiklanish vaqti:</strong> 5–7 kun ichida to'liq bartaraf bo`ladi.</p>
+          <p><strong>Davolash usuli:</strong> Bakterial infeksiyaga qarshi zamonaviy lazer SO2 aparati yordamida sistit muamosidan butunlay xalos bo'lasiz. Og'riqsiz va qonsiz jarayon.</p>
+          <p><strong>Tiklanish vaqti:</strong> 5–7 kun ichida to'liq bartaraf bo'ladi.</p>
         </div>
       </section>
 
@@ -659,7 +659,7 @@
         </div>
         <div class="procedure-content">
           <h3>13. Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv)</h3>
-          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirtilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
           <p><strong>Muolaja vaqti:</strong> 45 – 60 daqiqa.</p>
           <p><strong>Tiklanish vaqti:</strong> To'liq bitish 4–6 hafta.</p>
         </div>
@@ -704,6 +704,7 @@
   <script>
     const BOT_TOKEN = '9117090922:AAHBdLtCq7bGsSbcnNoiFT_xCQZCh4xetcc';
     const ADMIN_IDS = [6258110646, 7645769320];
+    const BOT_API_URL = 'http://127.0.0.1:8080/replies';
 
     let patientId = localStorage.getItem('ginekolog_patient_id');
     if (!patientId) {
@@ -771,7 +772,7 @@
       };
     }
 
-    // Matnli xabar yuborish
+    // Saytdan shifokorga savol yuborish
     document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const questionInput = document.getElementById('chatQuestionText');
@@ -784,11 +785,10 @@
 
       const processed = sanitizeForTelegram(question);
 
-      const message = `🩺 **YANGI KLINIK SAVOL**\n\n` +
-                      `👤 **Bemor kodi:** \`${patientId}\`\n` +
-                      `💬 **Savol matni:** ${processed.safeText}\n\n` +
-                      `ℹ️ *Tibbiy konsultatsiya so'rovi (Play Store xavfsiz rejimida uzatildi)*\n` +
-                      `👇 **Javob berish uchun ushbu xabarga Reply qiling.**`;
+      const message = `🩺 *YANGI KLINIK SAVOL (SAYTDAN)*\n\n` +
+                      `👤 *Bemor kodi:* \`${patientId}\`\n` +
+                      `💬 *Savol matni:* ${processed.safeText}\n\n` +
+                      `👇 *Javob berish uchun ushbu xabarga Reply qiling.*`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -797,14 +797,7 @@
           body: JSON.stringify({
             chat_id: chatId,
             text: message,
-            parse_mode: 'Markdown',
-            reply_markup: {
-              keyboard: [
-                [{ text: "📢 Barchaga Broadcast yuborish" }, { text: "🧹 Chatni tozalash" }],
-                [{ text: "💡 Yordam & Qo'llanma" }]
-              ],
-              resize_keyboard: true
-            }
+            parse_mode: 'Markdown'
           })
         }).catch(err => console.error("Xabar jo'natishda xatolik:", err));
       });
@@ -812,71 +805,30 @@
       questionInput.value = '';
     });
 
-    // 🔄 Vrach yozgan javoblarni va admin buyruqlarini tekshirib turish
-    let lastUpdateId = parseInt(localStorage.getItem('ginekolog_last_update_' + patientId)) || 0;
-
+    // 🔄 Shifokor yozgan javoblarni bot.py serveridan olish
     function checkForDoctorReply() {
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
+      fetch(`${BOT_API_URL}?patient_id=${encodeURIComponent(patientId)}`)
         .then(response => response.json())
         .then(data => {
-          if (data.ok && data.result.length > 0) {
-            data.result.forEach(update => {
-              lastUpdateId = update.update_id + 1;
-              localStorage.setItem('ginekolog_last_update_' + patientId, lastUpdateId);
+          if (data.replies && data.replies.length > 0) {
+            data.replies.forEach(doctorAnswer => {
+              chatHistory.push({ sender: 'doctor', text: doctorAnswer });
+              localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
 
-              // 1. Shifokorning javobini saytga yetkazish
-              if (update.message && update.message.reply_to_message) {
-                const replyText = update.message.reply_to_message.text;
-                if (replyText && replyText.includes(patientId)) {
-                  const doctorAnswer = update.message.text;
-                  if (doctorAnswer) {
-                    chatHistory.push({ sender: 'doctor', text: doctorAnswer });
-                    localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
-
-                    const popup = document.getElementById('chatPopup');
-                    if (popup.style.display !== 'flex') {
-                      unreadCount++;
-                      localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
-                      updateBadge();
-                    } else {
-                      renderChat();
-                    }
-                  }
-                }
-              }
-
-              // 2. Admin tugmalarini bosganda avtomatik javob qaytarish
-              if (update.message && update.message.text && ADMIN_IDS.includes(update.message.chat.id)) {
-                const cmd = update.message.text;
-                let replyInfo = "";
-
-                if (cmd === "📢 Barchaga Broadcast yuborish") {
-                  replyInfo = "📢 **Ommaviy Broadcast:**\nBarcha bemorlarga xabar yuborish uchun backend server talab qilinadi. Sayt statik bo'lgani sababli savol bergan barcha bemorlar brauzerida kesh saqlanadi.";
-                } else if (cmd === "🧹 Chatni tozalash") {
-                  replyInfo = "🧹 Telegram chatini tozalash uchun xabarlarni belgilab, o'chirish (Delete) tugmasini bosing.";
-                } else if (cmd === "💡 Yordam & Qo'llanma") {
-                  replyInfo = "💡 **Qo'llanma:**\nBemorga javob berish uchun uning savoli yozilgan xabarga 'Reply' qiling. Xabar darhol bemor ekranida aks etadi.";
-                }
-
-                if (replyInfo) {
-                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      chat_id: update.message.chat.id,
-                      text: replyInfo,
-                      parse_mode: 'Markdown'
-                    })
-                  }).catch(e => console.error(e));
-                }
+              const popup = document.getElementById('chatPopup');
+              if (popup.style.display !== 'flex') {
+                unreadCount++;
+                localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
+                updateBadge();
+              } else {
+                renderChat();
               }
             });
           }
         })
-        .catch(err => console.error("Javob tekshirishda xatolik:", err));
+        .catch(() => {});
     }
 
-    // Har 4 sekundda yangi xabarlarni tekshirish
     setInterval(checkForDoctorReply, 4000);
   </script>
 </body>
