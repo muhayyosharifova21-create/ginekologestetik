@@ -2,1375 +2,6 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <title>Dr. Ulmasbek Vahobjonovich | Otorinolaringolog, LOR-Xirurg</title>
-  <meta name="description" content="Navoiyda zamonaviy LOR xizmati: Dr. Ulmasbek Vahobjonovich boshchiligidagi endoskopik LOR-xirurgiya, septoplastika, gaymorit, adenoid va 24/7 qabul.">
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  
-  <!-- Google Search Console Tasdiqlash Kodi -->
-  <meta name="google-site-verification" content="jtV4EQqDEheqivbszE2pgCumSXwwGujTve8NJPQBOAM" />
-
-  <!-- Google Fonts: Plus Jakarta Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --primary: #0284c7;
-      --primary-hover: #0369a1;
-      --primary-cyan: #06b6d4;
-      --accent: #2563eb;
-      --dark-bg: #070d18;
-      --card-bg: rgba(15, 23, 42, 0.85);
-      --glass-border: rgba(56, 189, 248, 0.25);
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      -webkit-text-size-adjust: 100%;
-    }
-
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--dark-bg);
-      background-image: 
-        radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.18) 0px, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.14) 0px, transparent 40%);
-      background-attachment: fixed;
-      color: var(--text-main);
-      line-height: 1.5;
-      overflow-x: hidden;
-      word-wrap: break-word;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 0 16px;
-    }
-
-    /* PUSH HABAR BANNERI */
-    .push-banner {
-      display: none;
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-      color: #ffffff;
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin: 16px auto;
-      max-width: 1180px;
-      box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 0.9rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .push-banner button {
-      background: rgba(255, 255, 255, 0.2);
-      border: none;
-      color: #fff;
-      font-size: 1.1rem;
-      cursor: pointer;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* NAVBAR */
-    .navbar {
-      width: 100%;
-      background: rgba(7, 13, 24, 0.95);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border-bottom: 1px solid var(--glass-border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .navbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      gap: 12px;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      min-width: 0;
-    }
-
-    .brand-icon {
-      font-size: 1.4rem;
-      flex-shrink: 0;
-    }
-
-    .brand-title {
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .nav-contact-btn {
-      background: var(--primary);
-      color: #ffffff;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: background 0.2s ease, transform 0.2s ease;
-    }
-
-    .nav-contact-btn:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-
-    /* HERO SECTION */
-    .hero-section {
-      padding: 24px 0 30px 0;
-    }
-
-    .hero-grid {
-      display: flex;
-      flex-direction: column-reverse;
-      gap: 24px;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      padding: 5px 12px;
-      border-radius: 50px;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .hero-title {
-      font-size: 1.6rem;
-      line-height: 1.25;
-      font-weight: 800;
-      margin-bottom: 12px;
-      background: linear-gradient(135deg, #ffffff 0%, #bae6fd 60%, #38bdf8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero-desc {
-      font-size: 0.92rem;
-      line-height: 1.55;
-      color: #cbd5e1;
-      margin-bottom: 18px;
-    }
-
-    /* DOCTOR PHOTO */
-    .doctor-image-wrapper {
-      width: 100%;
-      max-width: 380px;
-      margin: 0 auto;
-    }
-
-    .doctor-image-card {
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1.5px solid var(--glass-border);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
-      background: #0b1329;
-    }
-
-    .doctor-image-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* ACTION BUTTONS GRID */
-    .actions-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin: 18px 0;
-    }
-
-    .btn-card {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 0.82rem;
-      font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    .btn-card:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    .btn-call { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .btn-tg { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
-    .btn-insta { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); }
-    .btn-email { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
-    .btn-map { 
-      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); 
-      grid-column: span 2;
-    }
-
-    .btn-card svg {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-      flex-shrink: 0;
-    }
-
-    /* STATS COUNTERS */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin: 24px 0;
-    }
-
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: #38bdf8;
-      line-height: 1.1;
-      margin-bottom: 4px;
-    }
-
-    .stat-label {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    /* EMERGENCY BANNER */
-    .emergency-banner {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.25) 0%, rgba(37, 99, 235, 0.25) 100%);
-      border: 1px solid #38bdf8;
-      border-radius: 18px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      text-align: center;
-      margin: 24px 0;
-    }
-
-    .emergency-banner h3 {
-      font-size: 1.1rem;
-      color: #ffffff;
-      margin-bottom: 4px;
-    }
-
-    .emergency-banner p {
-      font-size: 0.82rem;
-      color: #cbd5e1;
-      line-height: 1.4;
-    }
-
-    .emergency-btn {
-      background: #10b981;
-      color: #ffffff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      white-space: nowrap;
-      transition: background 0.2s ease;
-    }
-
-    .emergency-btn:hover {
-      background: #059669;
-    }
-
-    /* SECTION HEADERS */
-    .section-header {
-      text-align: center;
-      margin: 36px 0 20px 0;
-    }
-
-    .section-tag {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      color: #38bdf8;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .section-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, #ffffff 0%, #bae6fd 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    /* 9 SERVICES GRID */
-    .services-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    .service-box {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 18px;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .service-box:hover {
-      border-color: #38bdf8;
-      transform: translateY(-2px);
-    }
-
-    .service-num {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: #38bdf8;
-      margin-bottom: 6px;
-    }
-
-    .service-box h3 {
-      font-size: 1.05rem;
-      color: #ffffff;
-      margin-bottom: 6px;
-    }
-
-    .service-box p {
-      font-size: 0.84rem;
-      color: #cbd5e1;
-      line-height: 1.45;
-    }
-
-    /* BIO SECTION */
-    .bio-card {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      padding: 22px 16px;
-      margin: 32px 0;
-    }
-
-    .bio-card h3 {
-      font-size: 1.2rem;
-      color: #38bdf8;
-      margin-bottom: 10px;
-    }
-
-    .bio-card p {
-      color: #cbd5e1;
-      line-height: 1.55;
-      font-size: 0.88rem;
-      margin-bottom: 10px;
-    }
-
-    .bio-list {
-      list-style: none;
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .bio-list li {
-      color: #e2e8f0;
-      font-size: 0.84rem;
-      line-height: 1.4;
-    }
-
-    /* FORM */
-    .form-container {
-      background: linear-gradient(135deg, rgba(2, 132, 199, 0.2) 0%, rgba(15, 23, 42, 0.9) 100%);
-      border: 1px solid var(--glass-border);
-      border-radius: 22px;
-      padding: 24px 16px;
-      margin: 32px 0;
-    }
-
-    .form-container h2 {
-      font-size: 1.35rem;
-      margin-bottom: 6px;
-      text-align: center;
-    }
-
-    .form-container p {
-      color: var(--text-muted);
-      margin-bottom: 18px;
-      font-size: 0.82rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #e2e8f0;
-    }
-
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.5);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 0.88rem;
-    }
-
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      outline: none;
-      border-color: #38bdf8;
-    }
-
-    .submit-btn {
-      width: 100%;
-      background: var(--primary);
-      color: #ffffff;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.92rem;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
-      transition: background 0.2s ease;
-    }
-
-    .submit-btn:hover {
-      background: var(--primary-hover);
-    }
-
-    /* FAQ */
-    .faq-container {
-      margin: 32px 0;
-    }
-
-    .faq-item {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
-      margin-bottom: 10px;
-      overflow: hidden;
-    }
-
-    .faq-question {
-      padding: 14px 16px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 700;
-      font-size: 0.88rem;
-      color: #f1f5f9;
-      user-select: none;
-    }
-
-    .faq-question span:last-child {
-      font-size: 1.2rem;
-      line-height: 1;
-      margin-left: 8px;
-    }
-
-    .faq-answer {
-      padding: 0 16px 14px 16px;
-      color: #cbd5e1;
-      font-size: 0.82rem;
-      line-height: 1.45;
-      display: none;
-    }
-
-    /* FOOTER */
-    .site-footer {
-      text-align: center;
-      padding: 24px 0;
-      border-top: 1px solid var(--glass-border);
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      line-height: 1.4;
-    }
-
-    /* FLOATING CHAT BUTTON */
-    .chat-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 52px;
-      height: 52px;
-      background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--primary) 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 8px 24px rgba(6, 182, 212, 0.4);
-      cursor: pointer;
-      z-index: 1000;
-    }
-
-    .chat-toggle svg {
-      width: 24px;
-      height: 24px;
-      fill: #ffffff;
-    }
-
-    .chat-badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #ef4444;
-      color: #ffffff;
-      font-size: 0.7rem;
-      font-weight: bold;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #070d18;
-    }
-
-    /* CHAT POPUP */
-    .chat-popup {
-      position: fixed;
-      bottom: 82px;
-      right: 16px;
-      left: 16px;
-      max-width: 380px;
-      margin: 0 auto;
-      height: 440px;
-      background: #0f172a;
-      border: 1px solid var(--glass-border);
-      border-radius: 18px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .chat-header {
-      background: linear-gradient(135deg, var(--primary) 0%, #0369a1 100%);
-      color: #ffffff;
-      padding: 12px 14px;
-      font-size: 0.88rem;
-      font-weight: bold;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .chat-close {
-      background: none;
-      border: none;
-      color: #ffffff;
-      font-size: 22px;
-      cursor: pointer;
-      padding: 0 4px;
-      line-height: 1;
-    }
-
-    .chat-body {
-      padding: 12px;
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .chat-footer {
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.4);
-      border-top: 1px solid var(--glass-border);
-    }
-
-    .chat-footer textarea {
-      width: 100%;
-      height: 48px;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--glass-border);
-      border-radius: 8px;
-      color: #ffffff;
-      resize: none;
-      font-family: inherit;
-      font-size: 0.85rem;
-    }
-
-    .chat-hint {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-align: center;
-    }
-
-    .msg-bubble {
-      padding: 8px 12px;
-      border-radius: 10px;
-      font-size: 0.84rem;
-      max-width: 88%;
-      line-height: 1.4;
-      word-break: break-word;
-    }
-
-    .msg-user {
-      background: var(--primary);
-      color: #ffffff;
-      align-self: flex-end;
-      border-bottom-right-radius: 2px;
-    }
-
-    .msg-doctor {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      align-self: flex-start;
-      border-bottom-left-radius: 2px;
-      border: 1px solid var(--glass-border);
-    }
-
-    .msg-doctor img, .msg-doctor video {
-      max-width: 100%;
-      border-radius: 8px;
-      margin-top: 6px;
-      display: block;
-    }
-
-    /* TABLET (min-width: 640px) */
-    @media (min-width: 640px) {
-      .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .actions-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-      .btn-map {
-        grid-column: span 1;
-      }
-      .form-container {
-        padding: 30px;
-        max-width: 620px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .faq-container {
-        max-width: 720px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-    }
-
-    /* DESKTOP (min-width: 1024px) */
-    @media (min-width: 1024px) {
-      .hero-grid {
-        display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 40px;
-        align-items: center;
-      }
-      .hero-title {
-        font-size: 2.5rem;
-      }
-      .hero-desc {
-        font-size: 1rem;
-      }
-      .doctor-image-wrapper {
-        max-width: 100%;
-      }
-      .stats-row {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-      }
-      .emergency-banner {
-        flex-direction: row;
-        justify-content: space-between;
-        text-align: left;
-        padding: 22px 30px;
-      }
-      .services-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 18px;
-      }
-      .actions-grid {
-        grid-template-columns: repeat(5, 1fr);
-      }
-      .chat-popup {
-        right: 30px;
-        left: auto;
-        width: 380px;
-      }
-    }
-  </style>
-</head>
-<body>
-
-  <!-- PUSH HABAR BANNERI -->
-  <div class="push-banner" id="pushBanner">
-    <span id="pushBannerText"></span>
-    <button onclick="document.getElementById('pushBanner').style.display='none'">&times;</button>
-  </div>
-
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="container navbar-inner">
-      <a href="/" class="nav-brand">
-        <span class="brand-icon">🩺</span>
-        <span class="brand-title">Dr. Ulmasbek Vahobjonovich</span>
-      </a>
-      <a href="tel:+998906187228" class="nav-contact-btn">
-        📞 +998 90 618 72 28
-      </a>
-    </div>
-  </nav>
-
-  <div class="container">
-
-    <!-- HERO SECTION -->
-    <section class="hero-section">
-      <div class="hero-grid">
-        
-        <!-- MATN VA TUGMALAR -->
-        <div>
-          <div class="hero-badge">🏥 Grand Medikal Markazi · Navoiy</div>
-          <h1 class="hero-title">Quloq, burun va tomoq davosida aniq tashxis, ishonchli natija</h1>
-          <p class="hero-desc">
-            LOR-xirurg Dr. Ulmasbek Vahobjonovich boshchiligidagi amaliyot — zamonaviy diagnostika, endoskopik xirurgik yechimlar va g'amxo'r munosabat bitta joyda, kattalardan tortib bolalargacha.
-          </p>
-
-          <!-- TUGMALAR -->
-          <div class="actions-grid">
-            <a href="tel:+998906187228" class="btn-card btn-call">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-              Qo'ng'iroq
-            </a>
-            <!-- TELEGRAM LICHKAGA YO'NALTIRILGAN HAVOLA -->
-            <a href="https://t.me/+998906187228" target="_blank" rel="noopener" class="btn-card btn-tg">
-              <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
-              Telegram Lichka
-            </a>
-            <a href="https://instagram.com/dr._ulmas" target="_blank" rel="noopener" class="btn-card btn-insta">
-              <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              Instagram
-            </a>
-            <a href="mailto:hayitov8427@mail.ru" class="btn-card btn-email">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-              Email
-            </a>
-            <a href="https://maps.google.com/?q=Grand+Medikal+Center+Navoiy" target="_blank" rel="noopener" class="btn-card btn-map">
-              <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-              Manzil
-            </a>
-          </div>
-        </div>
-
-        <!-- DOCTOR SURATI -->
-        <div class="doctor-image-wrapper">
-          <div class="doctor-image-card">
-            <img src="photo_2026-11-07_18-36-44.jpg" alt="Dr. Ulmasbek Vahobjonovich - LOR Vrach, Otorinolaringolog">
-          </div>
-        </div>
-
-      </div>
-
-      <!-- STATISTIKA KO'RSATKICHLARI -->
-      <div class="stats-row">
-        <div class="stat-card">
-          <div class="stat-number">15+</div>
-          <div class="stat-label">Yil Tajriba</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">12,000+</div>
-          <div class="stat-label">Muvaffaqiyatli Operatsiya</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">9</div>
-          <div class="stat-label">Asosiy Yo'nalish</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-number">99%</div>
-          <div class="stat-label">Mamnun Bemorlar</div>
-        </div>
-      </div>
-
-      <!-- 24/7 SHOSHILINCH YORDAM BANNERI -->
-      <div class="emergency-banner">
-        <div>
-          <h3>🚨 24/7 Shoshilinch LOR Xizmati</h3>
-          <p>Tunda, dam olish va bayram kunlari ham shoshilinch qabul — favqulodda holatda kutish shart emas.</p>
-        </div>
-        <a href="tel:+998906187228" class="emergency-btn">Hoziroq bog'laning</a>
-      </div>
-    </section>
-
-    <!-- 9 TA ASOSIY YO'NALISH -->
-    <section>
-      <div class="section-header">
-        <div class="section-tag">YO'NALISHLAR</div>
-        <h2 class="section-title">Klinikaning 9 ta asosiy yo'nalishi</h2>
-      </div>
-
-      <div class="services-grid">
-        <div class="service-box">
-          <div class="service-num">01</div>
-          <h3>LOR 24/7</h3>
-          <p>Klinikamizda LOR-shifokor har kuni, kecha-kunduz shoshilinch yordam ko'rsatishga tayyor.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">02</div>
-          <h3>Septoplastika (Burun to'sig'i)</h3>
-          <p>Endoskopik usulda egrilikni to'g'rilash va burun orqali erkin nafas olishni qaytarish.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">03</div>
-          <h3>Gaymorit va Sinusit (FESS)</h3>
-          <p>Punksiyasiz (tesmasdan), mikro-endoskop yordamida gaymoritni butunlay davolash.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">04</div>
-          <h3>Bolalarda Adenotomiya</h3>
-          <p>Kichik bemorlar uchun xavfsiz va og'riqsiz adenoidlarni lazer/endoskopik olish.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">05</div>
-          <h3>Surunkali Tonzillit (Angina)</h3>
-          <p>Bodomcha bezlarini apparatda vakuumli tozalash yoki zamonaviy tonzilloektomiya.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">06</div>
-          <h3>Otit va Timpanoplastika</h3>
-          <p>Quloq pardasini mikroxirurgik usulda tiklash va eshitish qobiliyatini yaxshilash.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">07</div>
-          <h3>Rinoplastika (Estetik burun)</h3>
-          <p>Nafas olish funksiyasini saqlagan holda burunning estetik shaklini ideal qilish.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">08</div>
-          <h3>3D KT va Endoskopik Tekshiruv</h3>
-          <p>Burun va quloq bo'shliqlarini eng so'nggi raqamli texnologiyalarda chuqur tekshirish.</p>
-        </div>
-        <div class="service-box">
-          <div class="service-num">09</div>
-          <h3>Vazomotor va Allergik Rinit</h3>
-          <p>Burun spreyiga qaramlikdan radiochastotali vazotomiya yordamida tezda xalos bo'lish.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- SHIFOKOR HAQIDA MA'LUMOT (BIO) -->
-    <section class="bio-card">
-      <div class="section-tag">SHIFOKOR HAQIDA</div>
-      <h3>Dr. Ulmasbek Vahobjonovich — Otorinolaringolog, LOR-Xirurg</h3>
-      <p>
-        "Har bir bemor uchun aniq tashxis va shaxsiy yondashuv — bizning ishimizning eng asosiy poydevoridir."
-      </p>
-      <p>
-        Dr. Ulmasbek Vahobjonovich LOR a'zolari kasalliklarini konservativ va xirurgik yo'l bilan davolashda katta klinik amaliyotga ega. Jarrohlik amaliyotlarida eng so'nggi kam invaziv endoskopik uskunalardan foydalanadi, bu esa bemorning tez va asoratsiz oyoqqa turishini ta'minlaydi.
-      </p>
-      <ul class="bio-list">
-        <li>✅ <strong>Mutaxassislik:</strong> Otorinolaringologiya, Endoskopik LOR-xirurgiya, Rinoplastika</li>
-        <li>✅ <strong>Klinika:</strong> Grand Medikal Markazi (Navoiy)</li>
-        <li>✅ <strong>Aloqa telefon:</strong> +998 90 618 72 28</li>
-        <li>✅ <strong>Telegram:</strong> <a href="https://t.me/+998906187228" target="_blank" style="color:#38bdf8; text-decoration:none;">+998 90 618 72 28 (Lichka)</a> | <strong>Instagram:</strong> @dr._ulmas</li>
-      </ul>
-    </section>
-
-    <!-- QABULGA YOZILISH FORMASI -->
-    <section class="form-container" id="appointment">
-      <h2>Qabulga yozilish</h2>
-      <p>Ma'lumotlaringizni qoldiring, administratorimiz 15 daqiqa ichida siz bilan bog'lanib, qulay vaqtni belgilaydi.</p>
-
-      <form id="appointmentForm">
-        <div class="form-group">
-          <label for="patientName">Ismingiz</label>
-          <input type="text" id="patientName" class="form-input" placeholder="Ism va familiyangiz" required>
-        </div>
-
-        <div class="form-group">
-          <label for="patientPhone">Telefon raqamingiz</label>
-          <input type="tel" id="patientPhone" class="form-input" placeholder="+998 90 618 72 28" required>
-        </div>
-
-        <div class="form-group">
-          <label for="patientService">Yo'nalishni tanlang</label>
-          <select id="patientService" class="form-select">
-            <option value="LOR 24/7 Shoshilinch">LOR 24/7 Shoshilinch</option>
-            <option value="Septoplastika (Burun to'sig'i)">Septoplastika (Burun to'sig'i)</option>
-            <option value="Gaymorit / Sinusit davolash">Gaymorit / Sinusit davolash</option>
-            <option value="Bolalar LOR / Adenoid">Bolalar LOR / Adenoid</option>
-            <option value="Tonzillit / Angina">Tonzillit / Angina</option>
-            <option value="Quloq og'rig'i / Otit">Quloq og'rig'i / Otit</option>
-            <option value="Rinoplastika (Plastika)">Rinoplastika (Plastika)</option>
-            <option value="Boshqa LOR xizmati">Boshqa LOR xizmati</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="patientNote">Shikoyatingiz (faqat matn shaklida)</label>
-          <textarea id="patientNote" class="form-textarea" placeholder="Sizni nima bezovta qilayotganini yozing..."></textarea>
-        </div>
-
-        <button type="submit" class="submit-btn">Qabulga yozilishni tasdiqlash</button>
-      </form>
-    </section>
-
-    <!-- KO'P BERILADIGAN SAVOLLAR (FAQ) -->
-    <section class="faq-container">
-      <div class="section-header">
-        <div class="section-tag">SAVOL-JAVOB</div>
-        <h2 class="section-title">Ko'p beriladigan savollar</h2>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Qabulga qanday yozilsam bo'ladi?</span>
-          <span>+</span>
-        </div>
-        <div class="faq-answer">
-          Saytdagi onlayn forma orqali, to'g'ridan-to'g'ri +998 90 618 72 28 raqamiga qo'ng'iroq qilib yoki shifokorning Telegram lichkasiga yozib navbat olishingiz mumkin.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Bolalar uchun LOR qabuli bormi?</span>
-          <span>+</span>
-        </div>
-        <div class="faq-answer">
-          Ha, klinikamizda bolalar uchun maxsus moslashtirilgan, og'riqsiz va xavotirsiz tekshiruv hamda adenoid/tonzillit muolajalari mavjud.
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">
-          <span>Xirurgik operatsiyalar qanday usulda o'tkaziladi?</span>
-          <span>+</span>
-        </div>
-        <div class="faq-answer">
-          Barcha amaliyotlar zamonaviy endoskopik usulda, tashqi kesmalarsiz va minimal jarohat bilan bajariladi. Natijada bemor tez tiklanadi.
-        </div>
-      </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer class="site-footer">
-      <p>© 2026 Dr. Ulmasbek Vahobjonovich | Grand Medikal Markazi · Navoiy | Barcha huquqlar himoyalangan.</p>
-    </footer>
-
-  </div>
-
-  <!-- FLOATING CHAT BUTTON (SAYTNING O'ZIDAGI CHAT) -->
-  <div class="chat-toggle" onclick="toggleChat()" title="Shifokorga savol berish">
-    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-    <div class="chat-badge" id="chatBadge">0</div>
-  </div>
-
-  <!-- POPUP CHAT -->
-  <div class="chat-popup" id="chatPopup">
-    <div class="chat-header">
-      <span>💬 Qabulxona bilan chat</span>
-      <button class="chat-close" onclick="toggleChat()">&times;</button>
-    </div>
-    <div class="chat-body" id="chatBody">
-      <div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Ulmasbek Vahobjonovich qabulxonasiga xush kelibsiz. Savolingizni matn ko'rinishida yozib qoldirishingiz mumkin.</div>
-    </div>
-    <div class="chat-footer">
-      <form id="chatForm">
-        <textarea id="chatInput" placeholder="Savolingizni yozing (faqat matn)..." required></textarea>
-        <div class="chat-hint">ℹ️ Bemor faqat matn yozishi mumkin.</div>
-        <button type="submit" class="submit-btn" style="margin-top:6px; padding:8px;">Yuborish</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT LOGIKA -->
-  <script>
-    const BOT_TOKEN = '9181424161:AAEP-_DprKrGiJtb_SS7-XBjFGldugWqJpc';
-
-    function toggleFaq(elem) {
-      const answer = elem.nextElementSibling;
-      const icon = elem.querySelector('span:last-child');
-      if (answer.style.display === 'block') {
-        answer.style.display = 'none';
-        icon.textContent = '+';
-      } else {
-        answer.style.display = 'block';
-        icon.textContent = '−';
-      }
-    }
-
-    let patientId = localStorage.getItem('dr_ulmas_id');
-    if (!patientId) {
-      patientId = 'LOR-' + Math.floor(100000 + Math.random() * 900000);
-      localStorage.setItem('dr_ulmas_id', patientId);
-    }
-
-    let chatHistory = JSON.parse(localStorage.getItem('dr_ulmas_chat_' + patientId)) || [];
-    let unreadCount = parseInt(localStorage.getItem('dr_ulmas_unread_' + patientId)) || 0;
-
-    function updateBadge() {
-      const badge = document.getElementById('chatBadge');
-      if (unreadCount > 0) {
-        badge.textContent = unreadCount;
-        badge.style.display = 'flex';
-      } else {
-        badge.style.display = 'none';
-      }
-    }
-    updateBadge();
-
-    function renderChat() {
-      const chatBody = document.getElementById('chatBody');
-      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Ulmasbek Vahobjonovich qabulxonasiga xush kelibsiz. Savolingizni matn ko\'rinishida yozib qoldirishingiz mumkin.</div>';
-      
-      chatHistory.forEach(msg => {
-        const div = document.createElement('div');
-        div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : 'msg-doctor'}`;
-        
-        if (msg.text) {
-          const p = document.createElement('p');
-          p.textContent = msg.text;
-          div.appendChild(p);
-        }
-        if (msg.imageUrl) {
-          const img = document.createElement('img');
-          img.src = msg.imageUrl;
-          img.alt = "Shifokor surati";
-          div.appendChild(img);
-        }
-        if (msg.videoUrl) {
-          const vid = document.createElement('video');
-          vid.src = msg.videoUrl;
-          vid.controls = true;
-          div.appendChild(vid);
-        }
-
-        chatBody.appendChild(div);
-      });
-      chatBody.scrollTop = chatBody.scrollHeight;
-    }
-
-    function toggleChat() {
-      const popup = document.getElementById('chatPopup');
-      if (popup.style.display === 'flex') {
-        popup.style.display = 'none';
-      } else {
-        popup.style.display = 'flex';
-        unreadCount = 0;
-        localStorage.setItem('dr_ulmas_unread_' + patientId, 0);
-        updateBadge();
-        renderChat();
-      }
-    }
-
-    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARNI BLOKLASH
-    const chatInput = document.getElementById('chatInput');
-    ['dragenter', 'dragover', 'drop'].forEach(evtName => {
-      chatInput.addEventListener(evtName, e => e.preventDefault());
-    });
-    chatInput.addEventListener('drop', e => {
-      e.preventDefault();
-      alert("Kechirasiz, bemor faqat matn yozishi mumkin. Rasm va video yuborish cheklangan.");
-    });
-    chatInput.addEventListener('paste', e => {
-      const items = (e.clipboardData || window.clipboardData).items;
-      for (let item of items) {
-        if (item.kind === 'file') {
-          e.preventDefault();
-          alert("Kechirasiz, siz faqat matn yozishingiz mumkin. Rasm yoki fayl yuborish mumkin emas.");
-          return;
-        }
-      }
-    });
-
-    // QABULGA YOZILISH FORMASI
-    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('patientName').value.trim();
-      const phone = document.getElementById('patientPhone').value.trim();
-      const service = document.getElementById('patientService').value;
-      const note = document.getElementById('patientNote').value.trim();
-
-      const message = `📋 *YANGI QABULGA YOZILISH!*\n\n` +
-                      `👤 *Bemor:* ${name}\n` +
-                      `📞 *Telefon:* ${phone}\n` +
-                      `🩺 *Yo'nalish:* ${service}\n` +
-                      `📝 *Izoh:* ${note || 'Kiritilmadi'}\n` +
-                      `🆔 *ID:* \`${patientId}\``;
-
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
-        .then(res => res.json())
-        .then(data => {
-          let chatIds = new Set();
-          if (data.result) {
-            data.result.forEach(u => {
-              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
-            });
-          }
-          chatIds.forEach(cId => {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: cId,
-                text: message,
-                parse_mode: 'Markdown',
-                reply_markup: {
-                  inline_keyboard: [
-                    [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
-                    [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
-                  ]
-                }
-              })
-            });
-          });
-        });
-
-      alert("Rahmat! Arizangiz qabul qilindi. Tez orada administrator siz bilan bog'lanadi.");
-      this.reset();
-    });
-
-    // SAYTDAN SAVOL YUBORISH (FAQAT MATN)
-    document.getElementById('chatForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-
-      chatHistory.push({ sender: 'user', text: text });
-      localStorage.setItem('dr_ulmas_chat_' + patientId, JSON.stringify(chatHistory));
-      renderChat();
-
-      const tgMsg = `💬 *CHAT SAVOLI (Dr. ULMAS LOR SAYTI)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
-
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
-        .then(res => res.json())
-        .then(data => {
-          let chatIds = new Set();
-          if (data.result) {
-            data.result.forEach(u => {
-              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
-            });
-          }
-          chatIds.forEach(cId => {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: cId,
-                text: tgMsg,
-                parse_mode: 'Markdown',
-                reply_markup: {
-                  inline_keyboard: [
-                    [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
-                    [{ text: "🗑 Chatni tozalash", callback_data: `clear_${patientId}` }]
-                  ]
-                }
-              })
-            });
-          });
-        });
-
-      chatInput.value = '';
-    });
-
-    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO VA BUYRUQLARNI QABUL QILISH
-    let lastUpdateId = parseInt(localStorage.getItem('dr_ulmas_last_upd_' + patientId)) || 0;
-
-    async function getTelegramFileUrl(fileId) {
-      try {
-        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
-        const data = await res.json();
-        if (data.ok && data.result.file_path) {
-          return `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-      return null;
-    }
-
-    function checkDoctorReplies() {
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.ok && data.result.length > 0) {
-            for (let update of data.result) {
-              lastUpdateId = update.update_id + 1;
-              localStorage.setItem('dr_ulmas_last_upd_' + patientId, lastUpdateId);
-
-              // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
-              if (update.callback_query) {
-                const cbData = update.callback_query.data;
-                if (cbData === `clear_${patientId}`) {
-                  chatHistory = [];
-                  localStorage.removeItem('dr_ulmas_chat_' + patientId);
-                  renderChat();
-                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      callback_query_id: update.callback_query.id,
-                      text: "Bemor chat tarixi tozalandi!"
-                    })
-                  });
-                }
-                continue;
-              }
-
-              const msg = update.message;
-              if (!msg) continue;
-
-              // 2. OPSHI PUSH HABAR (/broadcast Matn)
-              if (msg.text && msg.text.startsWith('/broadcast')) {
-                const broadText = msg.text.replace('/broadcast', '').trim();
-                if (broadText) {
-                  const banner = document.getElementById('pushBanner');
-                  document.getElementById('pushBannerText').textContent = `📢 Shifokor e'loni: ${broadText}`;
-                  banner.style.display = 'flex';
-                }
-                continue;
-              }
-
-              // 3. BUYRUQ ORQALI O'CHIRISH (/clear ID)
-              if (msg.text && msg.text.startsWith('/clear')) {
-                if (msg.text.includes(patientId)) {
-                  chatHistory = [];
-                  localStorage.removeItem('dr_ulmas_chat_' + patientId);
-                  renderChat();
-                }
-                continue;
-              }
-
-              // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO)
-              let targetIdMatches = false;
-              if (msg.reply_to_message) {
-                const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
-                if (rText.includes(patientId)) targetIdMatches = true;
-              } else if (msg.text && msg.text.includes(`ID:${patientId}`)) {
-                targetIdMatches = true;
-              }
-
-              if (targetIdMatches) {
-                let doctorMsg = { sender: 'doctor' };
-                let hasContent = false;
-
-                if (msg.text) {
-                  doctorMsg.text = msg.text.replace(`ID:${patientId}`, '').trim();
-                  hasContent = true;
-                }
-                if (msg.caption) {
-                  doctorMsg.text = msg.caption;
-                  hasContent = true;
-                }
-
-                if (msg.photo && msg.photo.length > 0) {
-                  const largestPhoto = msg.photo[msg.photo.length - 1];
-                  const url = await getTelegramFileUrl(largestPhoto.file_id);
-                  if (url) {
-                    doctorMsg.imageUrl = url;
-                    hasContent = true;
-                  }
-                }
-
-                if (msg.video) {
-                  const url = await getTelegramFileUrl(msg.video.file_id);
-                  if (url) {
-                    doctorMsg.videoUrl = url;
-                    hasContent = true;
-                  }
-                }
-
-                if (hasContent) {
-                  chatHistory.push(doctorMsg);
-                  localStorage.setItem('dr_ulmas_chat_' + patientId, JSON.stringify(chatHistory));
-
-                  const popup = document.getElementById('chatPopup');
-                  if (popup.style.display !== 'flex') {
-                    unreadCount++;
-                    localStorage.setItem('dr_ulmas_unread_' + patientId, unreadCount);
-                    updateBadge();
-                  } else {
-                    renderChat();
-                  }
-                }
-              }
-            }
-          }
-        })
-        .catch(err => console.error(err));
-    }
-
-    setInterval(checkDoctorReplies, 3500);
-  </script>
-</body>
-</html><!doctype html>
-<html lang="uz">
-<head>
-  <meta charset="utf-8">
   <title>Ginekolog vrach Estetik Ginekolog | Doktor Surayyo Vahobjonovna - Toshkentda Ginekolog</title>
   <meta name="description" content="Toshkentda malakali ginekolog va estetik ginekolog xizmatlari. Labioplastika, lazer yordamida vagina plastika, eroziya davolash va boshqa muolajalar.">
   <base href="/">
@@ -1419,7 +50,7 @@
       padding: 20px 12px 40px 12px;
     }
 
-    /* GLASSMORPHISM HERO CARD */
+    /* GLASSMOPRHISM HERO CARD */
     .hero-section {
       margin-bottom: 30px;
       position: relative;
@@ -1809,9 +440,6 @@
         <blockquote class="quote">
           <span>“</span>Shifokor — bu kasb emas, bu chaqiriq. Insonlarga yaxshilik qilish – eng katta baxt.<span>”</span>
         </blockquote>
-
-        <!-- SHIFOKOR BOTDAN KIRITGAN OCHIQ QABUL KUNLARI -->
-        <div id="liveScheduleBanner" style="display:none; margin: 15px auto 20px auto; padding: 14px 18px; border-radius: 14px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #a7f3d0; font-size: 0.93rem; line-height: 1.6; text-align: left;"></div>
       </div>
 
       <div class="card-footer-bar">
@@ -1850,7 +478,7 @@
         </div>
         <div class="procedure-content">
           <h3>Estetik ginekologiya nima?</h3>
-          <p><strong>Estetik ginekalogiya bu:</strong> Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
+          <p><strong>Estetik ginekalogiya bu:</strong>-Ayollarning intim zonasidagi tug'ma o'zgarishlar, tug'ruqdan keyingi jarohatlar, deformatsiyalar va yosh bilan bog'liq o'zgarishlarni jarrohlik hamda zamonaviy lazer SO2 yordamida tuzatish, tashqi ko'rinish va funksional salomatlikni to'liq tiklashga qaratilgan tibbiyotning eng ilg'or yo'nalishidir.</p>
           <p><strong>Afzalliklari:</strong> Ayollarda o'ziga bo'lgan ishonchni qaytarish, jinsiy hayot sifatini yaxshilash va intim hudud salomatligini mustahkamlashda muhim rol o'ynaydi.</p>
         </div>
       </section>
@@ -1982,8 +610,8 @@
         <div class="procedure-content">
           <h3>9. Sistit (Siydik pufagining yallig'lanishi)</h3>
           <p><strong>Nima uchun kelib chiqadi:</strong> Sovqotish, shaxsiy gigiyena qoidalariga rioya qilmaslik yoki infeksiyalar tushishi natijasida yuzaga keladi.</p>
-          <p><strong>Davolash usuli:</strong> Bakterial infeksiyaga qarshi zamonaviy lazer SO2 aparati yordamida sistit muamosidan butunlay xalos bo'lasiz. Og'riqsiz va qonsiz jarayon.</p>
-          <p><strong>Tiklanish vaqti:</strong> 5–7 kun ichida to'liq bartaraf bo'ladi.</p>
+          <p><strong>Davolash usuli:</strong> Bakterial infeksiyaga qarshi zamonaviy lazer SO2 aparati yordamida sistit muamosidan butunlay xalos bo`lasiz.Og`riqsiz va qonsiz jarayon.</p>
+          <p><strong>Tiklanish vaqti:</strong> 5–7 kun ichida to'liq bartaraf bo`ladi.</p>
         </div>
       </section>
 
@@ -2031,7 +659,7 @@
         </div>
         <div class="procedure-content">
           <h3>13. Tug'ruqdan keyingi yirtilishlarni tiklash (Razriv)</h3>
-          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirtilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
+          <p><strong>Nima uchun qilinadi:</strong> Tug'ruq vaqtida yuzaga kelgan chandiqlar va noto'g'ri bitgan yirilishlarni jarrohlik yo'li bilan qayta tiklash.</p>
           <p><strong>Muolaja vaqti:</strong> 45 – 60 daqiqa.</p>
           <p><strong>Tiklanish vaqti:</strong> To'liq bitish 4–6 hafta.</p>
         </div>
@@ -2076,7 +704,6 @@
   <script>
     const BOT_TOKEN = '9117090922:AAHBdLtCq7bGsSbcnNoiFT_xCQZCh4xetcc';
     const ADMIN_IDS = [6258110646, 7645769320];
-    const BOT_SERVER_URL = 'http://127.0.0.1:8080';
 
     let patientId = localStorage.getItem('ginekolog_patient_id');
     if (!patientId) {
@@ -2144,7 +771,7 @@
       };
     }
 
-    // Saytdan shifokorga savol yuborish (Push va Delete tugmalari bilan boradi)
+    // Matnli xabar yuborish
     document.getElementById('chatQuestionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       const questionInput = document.getElementById('chatQuestionText');
@@ -2157,10 +784,11 @@
 
       const processed = sanitizeForTelegram(question);
 
-      const message = `🩺 <b>YANGI KLINIK SAVOL (SAYTDAN)</b>\n\n` +
-                      `👤 <b>Bemor kodi:</b> <code>${patientId}</code>\n` +
-                      `💬 <b>Savol matni:</b> ${processed.safeText}\n\n` +
-                      `👇 <i>Javob berish uchun pastdagi tugmani bosing yoki Reply qiling.</i>`;
+      const message = `🩺 **YANGI KLINIK SAVOL**\n\n` +
+                      `👤 **Bemor kodi:** \`${patientId}\`\n` +
+                      `💬 **Savol matni:** ${processed.safeText}\n\n` +
+                      `ℹ️ *Tibbiy konsultatsiya so'rovi (Play Store xavfsiz rejimida uzatildi)*\n` +
+                      `👇 **Javob berish uchun ushbu xabarga Reply qiling.**`;
 
       ADMIN_IDS.forEach(chatId => {
         fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -2169,12 +797,13 @@
           body: JSON.stringify({
             chat_id: chatId,
             text: message,
-            parse_mode: 'HTML',
+            parse_mode: 'Markdown',
             reply_markup: {
-              inline_keyboard: [[
-                { text: "✍️ Javob qaytarish (Push)", callback_data: `pushreply_web_${patientId}` },
-                { text: "🗑 Delete", callback_data: "del_msg" }
-              ]]
+              keyboard: [
+                [{ text: "📢 Barchaga Broadcast yuborish" }, { text: "🧹 Chatni tozalash" }],
+                [{ text: "💡 Yordam & Qo'llanma" }]
+              ],
+              resize_keyboard: true
             }
           })
         }).catch(err => console.error("Xabar jo'natishda xatolik:", err));
@@ -2183,51 +812,72 @@
       questionInput.value = '';
     });
 
-    // 🔄 Shifokor yozgan javoblarni bot.py serveridan olish
+    // 🔄 Vrach yozgan javoblarni va admin buyruqlarini tekshirib turish
+    let lastUpdateId = parseInt(localStorage.getItem('ginekolog_last_update_' + patientId)) || 0;
+
     function checkForDoctorReply() {
-      fetch(`${BOT_SERVER_URL}/replies?patient_id=${encodeURIComponent(patientId)}`)
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
         .then(response => response.json())
         .then(data => {
-          if (data.replies && data.replies.length > 0) {
-            data.replies.forEach(doctorAnswer => {
-              chatHistory.push({ sender: 'doctor', text: doctorAnswer });
-              localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+          if (data.ok && data.result.length > 0) {
+            data.result.forEach(update => {
+              lastUpdateId = update.update_id + 1;
+              localStorage.setItem('ginekolog_last_update_' + patientId, lastUpdateId);
 
-              const popup = document.getElementById('chatPopup');
-              if (popup.style.display !== 'flex') {
-                unreadCount++;
-                localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
-                updateBadge();
-              } else {
-                renderChat();
+              // 1. Shifokorning javobini saytga yetkazish
+              if (update.message && update.message.reply_to_message) {
+                const replyText = update.message.reply_to_message.text;
+                if (replyText && replyText.includes(patientId)) {
+                  const doctorAnswer = update.message.text;
+                  if (doctorAnswer) {
+                    chatHistory.push({ sender: 'doctor', text: doctorAnswer });
+                    localStorage.setItem('ginekolog_chat_' + patientId, JSON.stringify(chatHistory));
+
+                    const popup = document.getElementById('chatPopup');
+                    if (popup.style.display !== 'flex') {
+                      unreadCount++;
+                      localStorage.setItem('ginekolog_unread_' + patientId, unreadCount);
+                      updateBadge();
+                    } else {
+                      renderChat();
+                    }
+                  }
+                }
+              }
+
+              // 2. Admin tugmalarini bosganda avtomatik javob qaytarish
+              if (update.message && update.message.text && ADMIN_IDS.includes(update.message.chat.id)) {
+                const cmd = update.message.text;
+                let replyInfo = "";
+
+                if (cmd === "📢 Barchaga Broadcast yuborish") {
+                  replyInfo = "📢 **Ommaviy Broadcast:**\nBarcha bemorlarga xabar yuborish uchun backend server talab qilinadi. Sayt statik bo'lgani sababli savol bergan barcha bemorlar brauzerida kesh saqlanadi.";
+                } else if (cmd === "🧹 Chatni tozalash") {
+                  replyInfo = "🧹 Telegram chatini tozalash uchun xabarlarni belgilab, o'chirish (Delete) tugmasini bosing.";
+                } else if (cmd === "💡 Yordam & Qo'llanma") {
+                  replyInfo = "💡 **Qo'llanma:**\nBemorga javob berish uchun uning savoli yozilgan xabarga 'Reply' qiling. Xabar darhol bemor ekranida aks etadi.";
+                }
+
+                if (replyInfo) {
+                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      chat_id: update.message.chat.id,
+                      text: replyInfo,
+                      parse_mode: 'Markdown'
+                    })
+                  }).catch(e => console.error(e));
+                }
               }
             });
           }
         })
-        .catch(() => {});
+        .catch(err => console.error("Javob tekshirishda xatolik:", err));
     }
 
-    // 🗓 Shifokor botdan kiritgan qabul kunlarini saytda ko'rsatish
-    function loadClinicSchedule() {
-      fetch(`${BOT_SERVER_URL}/schedule`)
-        .then(res => res.json())
-        .then(data => {
-          const banner = document.getElementById('liveScheduleBanner');
-          if (!banner) return;
-          if (data.schedule && data.schedule.length > 0) {
-            banner.innerHTML = '🗓 <b>Ochiq qabul kunlari:</b><br>' +
-              data.schedule.map(s => '✅ ' + s.text).join('<br>');
-            banner.style.display = 'block';
-          } else {
-            banner.style.display = 'none';
-          }
-        })
-        .catch(() => {});
-    }
-
+    // Har 4 sekundda yangi xabarlarni tekshirish
     setInterval(checkForDoctorReply, 4000);
-    loadClinicSchedule();
-    setInterval(loadClinicSchedule, 10000);
   </script>
 </body>
-</html> surayyo vahobjonovna ma`lumotlarini kirit xuddi o`lmas vahobjonovichday ishlasin sayti
+</html>
