@@ -13,7 +13,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import (
     ReplyKeyboardMarkup, KeyboardButton,
     InlineKeyboardMarkup, InlineKeyboardButton,
-    Update
+    ForceReply, Update
 )
 
 # ================= SOZLAMALAR =================
@@ -39,12 +39,12 @@ app.add_middleware(
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher(storage=MemoryStorage())
 
-# ================= TEZKOR XOTIRA (VERCEL UCHUN) =================
-USERS_DB = {}          # user_id -> {"name": str, "warnings": int, "banned": bool}
-APPOINTMENTS_DB = []   # list of dicts
-RATINGS_DB = []        # list of ints
-WEB_REPLIES = defaultdict(list)  # patient_id -> [text, ...]
-SCHEDULE_SLOTS = []    # list of str
+# ================= TEZKOR XOTIRA =================
+USERS_DB = {}
+APPOINTMENTS_DB = []
+RATINGS_DB = []
+WEB_REPLIES = defaultdict(list)
+SCHEDULE_SLOTS = []
 RATE_LIMIT = defaultdict(list)
 
 def is_rate_limited(key: str) -> bool:
@@ -130,8 +130,8 @@ def patient_menu():
 def admin_menu():
     return ReplyKeyboardMarkup(
         keyboard=[
-            [KeyboardButton(text="📅 Qabul kunlarini kiritish"), KeyboardButton(text="🗑 Qabul kunlarini tozalash")],
-            [KeyboardButton(text="📢 Barchaga Push (Broadcast)"), KeyboardButton(text="🧹 Chatni tozalash (Delete)")],
+            [KeyboardButton(text="📢 Push xabar yuborish"), KeyboardButton(text="📅 Qabul kunlarini kiritish")],
+            [KeyboardButton(text="🗑 Qabul kunlarini tozalash"), KeyboardButton(text="🧹 Chatni tozalash (Delete)")],
             [KeyboardButton(text="📋 Bugungi qabullar"), KeyboardButton(text="📊 Statistika")]
         ],
         resize_keyboard=True,
@@ -210,19 +210,54 @@ async def cmd_start(message: types.Message, state: FSMContext):
     if uid not in ADMIN_IDS:
         await message.answer("Tezkor amallar:", reply_markup=consult_action_keyboard())
 
+# ================= ADMIN: PUSH XABAR YUBORISH (BROADCAST) =================
+@dp.message(F.text.in_(["📢 Push xabar yuborish", "📢 Barchaga Push (Broadcast)"]))
+async def push_broadcast_start(message: types.Message, state: FSMContext):
+    if message.from_user.id not in ADMIN_IDS:
+        return
+    await state.set_state(BroadcastState.waiting_for_message)
+    await message.answer(
+        "📢 <b>Barcha bemorlarga Push-xabar yuborish:</b>\n\n"
+        "Yubormoqchi bo'lgan xabaringizni (matn, rasm yoki e'lon) yozib yuboring — barcha bemorlarga darhol yetib boradi:",
+        reply_markup=ForceReply(selective=True, input_field_placeholder="Push xabar matnini yozing..."),
+        parse_mode="HTML"
+    )
+
+@dp.message(BroadcastState.waiting_for_message)
+async def send_broadcast(message: types.Message, state: FSMContext):
+    if message.from_user.id not in ADMIN_IDS:
+        return
+    if message.text == "❌ Bekor qilish":
+        await state.clear()
+        await message.answer("Bekor qilindi.", reply_markup=admin_menu())
+        return
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📅 Qabulga yozilish", callback_data="start_booking")],
+        [InlineKeyboardButton(text="👩‍⚕️ Shifokor lichkasi (@Sr7431)", url=DOCTOR_TELEGRAM)]
+    ])
+    sent = 0
+    for uid, udata in USERS_DB.items():
+        if uid not in ADMIN_IDS and not udata.get("banned"):
+            try:
+                await message.copy_to(uid, reply_markup=kb)
+                sent += 1
+            except Exception:
+                pass
+    await message.answer(f"✅ Push-xabar <b>{sent} ta</b> bemorga yuborildi!", reply_markup=admin_menu(), parse_mode="HTML")
+    await state.clear()
+
 # ================= ADMIN: QABUL KUNLARINI KIRITISH =================
 @dp.message(F.text == "📅 Qabul kunlarini kiritish")
 async def ask_schedule(message: types.Message, state: FSMContext):
     if message.from_user.id not in ADMIN_IDS:
         return
-    cancel_kb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
+    await state.set_state(ScheduleState.waiting_for_schedule)
     await message.answer(
         "📅 <b>Yangi qabul kunlari va vaqtlarini yozing:</b>\n\n"
         "<i>Namuna:</i> <code>Dushanba, Chorshanba, Juma — 10:00 dan 16:00 gacha</code>",
-        reply_markup=cancel_kb,
+        reply_markup=ForceReply(selective=True, input_field_placeholder="Qabul kunlarini kiriting..."),
         parse_mode="HTML"
     )
-    await state.set_state(ScheduleState.waiting_for_schedule)
 
 @dp.message(ScheduleState.waiting_for_schedule)
 async def save_schedule(message: types.Message, state: FSMContext):
@@ -259,7 +294,7 @@ async def save_schedule(message: types.Message, state: FSMContext):
                 pass
 
     await message.answer(
-        f"✅ <b>Qabul kunlari saqlandi!</b>\n🌐 Saytingizda ko'rinadi.\n📲 {sent} ta bemorga yuborildi.",
+        f"✅ <b>Qabul kunlari saqlandi!</b>\n🌐 Saytingizda ko'rinadi.\n📲 {sent} ta bemorga Push qilindi.",
         reply_markup=admin_menu(),
         parse_mode="HTML"
     )
@@ -424,7 +459,7 @@ async def finish_booking(message: types.Message, state: FSMContext):
         try:
             await bot.send_message(
                 aid,
-                f"🔔 <b>YANGI QABUL!</b>\n👤 {rec['name']}\n📞 {phone}\n🩺 {rec['service']}\n📅 {rec['date']} | {rec['time']} ({rec['type']})",
+                f"🔔 <b>YANGI QABUL!</b>\n👤 {rec['name']}\n📞 {phone}\n🩺 {rec['service']}\n📅 {rec['date']} | {rec['time']} ({rec['type']})\n🆔 TG_USER_ID: {message.from_user.id}",
                 reply_markup=admin_question_buttons("tg", str(message.from_user.id)),
                 parse_mode="HTML"
             )
@@ -432,7 +467,7 @@ async def finish_booking(message: types.Message, state: FSMContext):
             pass
     await state.clear()
 
-# ================= ADMIN PUSH JAVOB VA DELETE =================
+# ================= ADMIN JAVOB QAYTARISH TUGMASI (VERCEL UCHUN 100% ISHLAYDI) =================
 @dp.callback_query(F.data == "del_msg")
 async def del_msg(callback: types.CallbackQuery):
     await callback.answer("O'chirildi 🗑")
@@ -449,24 +484,25 @@ async def start_push_reply(callback: types.CallbackQuery, state: FSMContext):
     _, t_type, t_id = callback.data.split("_", 2)
     await state.update_data(target_type=t_type, target_id=t_id)
     await state.set_state(AdminReplyState.waiting_for_reply)
-    ckb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
-    await callback.message.answer(f"✍️ <b>({t_id})</b> bemorga javob matnini yozing:", reply_markup=ckb, parse_mode="HTML")
+
+    tag = f"Bemor kodi: {t_id}" if t_type == "web" else f"TG_USER_ID: {t_id}"
+    await callback.message.answer(
+        f"✍️ <b>Javob matnini yozing</b> ({tag}):",
+        reply_markup=ForceReply(selective=True, input_field_placeholder="Javobingizni shu yerga yozing..."),
+        parse_mode="HTML"
+    )
 
 @dp.message(AdminReplyState.waiting_for_reply)
 async def send_push_reply(message: types.Message, state: FSMContext):
     if message.from_user.id not in ADMIN_IDS:
         return
-    if message.text == "❌ Bekor qilish":
-        await state.clear()
-        await message.answer("Asosiy menyu:", reply_markup=admin_menu())
-        return
     data = await state.get_data()
-    t_type, t_id = data["target_type"], data["target_id"]
+    t_type, t_id = data.get("target_type"), data.get("target_id")
     txt = clean_text(message.text or "")
     if t_type == "web":
         WEB_REPLIES[t_id].append(txt)
         await message.answer(f"✅ Javob saytdagi bemorga ({t_id}) Push qilindi!", reply_markup=admin_menu())
-    else:
+    elif t_type == "tg":
         await bot.send_message(int(t_id), f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{txt}", reply_markup=patient_menu(), parse_mode="HTML")
         await message.answer("✅ Javob bemorga yuborildi!", reply_markup=admin_menu())
     await state.clear()
@@ -502,55 +538,47 @@ async def list_appts(message: types.Message):
     txt = "📋 <b>Oxirgi qabullar:</b>\n\n" + "\n".join([f"• {a['date']} {a['time']} ({a['type']}) — {a['service']} | {a['phone']}" for a in APPOINTMENTS_DB[:15]])
     await message.answer(txt, parse_mode="HTML")
 
-@dp.message(F.text == "📢 Barchaga Push (Broadcast)")
-async def bcast_start(message: types.Message, state: FSMContext):
-    if message.from_user.id not in ADMIN_IDS:
-        return
-    ckb = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text="❌ Bekor qilish")]], resize_keyboard=True)
-    await message.answer("📢 Barcha bemorlarga yuboriladigan xabarni yozing:", reply_markup=ckb)
-    await state.set_state(BroadcastState.waiting_for_message)
-
-@dp.message(BroadcastState.waiting_for_message)
-async def send_broadcast(message: types.Message, state: FSMContext):
-    if message.text == "❌ Bekor qilish":
-        await state.clear()
-        await message.answer("Asosiy menyu:", reply_markup=admin_menu())
-        return
-    kb = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Qabulga yozilish", callback_data="start_booking")]])
-    sent = 0
-    for uid in USERS_DB:
-        try:
-            await message.copy_to(uid, reply_markup=kb)
-            sent += 1
-        except Exception:
-            pass
-    await message.answer(f"✅ {sent} ta bemorga yuborildi!", reply_markup=admin_menu())
-    await state.clear()
-
-# ================= UMUMIY SUHBAT VA REPLY =================
+# ================= UMUMIY SUHBAT VA REPLY (STATELESS ZAXIRA BILAN) =================
 @dp.message()
-async def all_messages(message: types.Message):
+async def all_messages(message: types.Message, state: FSMContext):
     uid = message.from_user.id
     if is_banned(uid):
         return
     USERS_DB.setdefault(uid, {"name": clean_text(message.from_user.full_name), "warnings": 0, "banned": False})
 
+    # Admin Reply yoki ForceReply orqali javob yozganda
     if uid in ADMIN_IDS:
         if message.reply_to_message:
             orig = message.reply_to_message.text or ""
+            # 1) Sayt bemoriga (ID-123456)
             m_web = re.search(r"ID-\d{6}", orig)
             if m_web:
-                WEB_REPLIES[m_web.group(0)].append(clean_text(message.text or ""))
-                await message.answer(f"✅ Javob saytga ({m_web.group(0)}) yuborildi!", reply_markup=admin_menu())
+                pid = m_web.group(0)
+                WEB_REPLIES[pid].append(clean_text(message.text or ""))
+                await state.clear()
+                await message.answer(f"✅ Javob saytdagi bemorga ({pid}) Push qilindi!", reply_markup=admin_menu())
                 return
+            # 2) Telegram bemoriga (TG_USER_ID: 12345)
             m_tg = re.search(r"TG_USER_ID:\s*(\d+)", orig)
             if m_tg:
-                await bot.send_message(int(m_tg.group(1)), f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{clean_text(message.text or '')}", reply_markup=patient_menu(), parse_mode="HTML")
-                await message.answer("✅ Javob bemorga ketdi!", reply_markup=admin_menu())
+                tid = int(m_tg.group(1))
+                await bot.send_message(tid, f"👩‍⚕️ <b>{DOCTOR_NAME} javobi:</b>\n\n{clean_text(message.text or '')}", reply_markup=patient_menu(), parse_mode="HTML")
+                await state.clear()
+                await message.answer("✅ Javob bemorga yetkazildi!", reply_markup=admin_menu())
                 return
+            # 3) Agar Admin "Push xabar yuborish" ForceReply ga javob yozsa
+            if "Barcha bemorlarga Push-xabar yuborish" in orig:
+                await send_broadcast(message, state)
+                return
+            # 4) Agar Admin "Yangi qabul kunlari" ForceReply ga javob yozsa
+            if "Yangi qabul kunlari va vaqtlarini yozing" in orig:
+                await save_schedule(message, state)
+                return
+
         await message.answer("👇 Pastdagi tugmalardan foydalaning:", reply_markup=admin_menu())
         return
 
+    # Bemor yozganda
     if message.text:
         if is_rate_limited(f"tg_{uid}"):
             return
