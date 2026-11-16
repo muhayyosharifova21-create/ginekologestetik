@@ -2,326 +2,360 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <title>Ginekolog Estetik Plastik Xirurg | Doktor Surayyo Vahobjonovna - Toshkent</title>
-  <meta name="description" content="Ginekolog Estetik Plastik Xirurg - Doktor Surayyo Vahobjonovna. Toshkentda malakali estetik ginekologiya, labioplastika, vaginoplastika, lazer muolajalar. Tel: +998 95 277 53 54">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Dr. Surayyo Vahobjonovna | Ginekolog Estetik Plastik Xirurg - Toshkent</title>
+  <meta name="description" content="Ginekolog Estetik Plastik Xirurg - Doktor Surayyo Vahobjonovna. Toshkentda malakali estetik ginekologiya, labioplastika, vaginoplastika, lazer SO2 muolajalar. Tel: +998 95 277 53 54">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts: Cormorant Garamond & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg-dark: #061412;
-      --bg-surface: rgba(16, 42, 38, 0.65);
-      --glass-border: rgba(212, 175, 55, 0.25);
+      --primary: #10b981;
+      --primary-hover: #059669;
       --gold: #e5c158;
       --gold-soft: #f5df99;
-      --emerald: #10b981;
-      --rose: #fb7185;
+      --dark-bg: #061412;
+      --card-bg: rgba(14, 38, 34, 0.85);
+      --glass-border: rgba(229, 193, 88, 0.25);
       --text-main: #f8fafc;
-      --text-muted: #a7f3d0;
-      --text-body: #d1fae5;
+      --text-muted: #94a3b8;
     }
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
     }
 
     body {
-      margin: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--dark-bg);
       background-image: 
-        radial-gradient(circle at 15% 10%, rgba(16, 185, 129, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 85% 20%, rgba(229, 193, 88, 0.14) 0%, transparent 45%),
-        radial-gradient(circle at 50% 90%, rgba(251, 113, 133, 0.12) 0%, transparent 50%);
+        radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.16) 0px, transparent 42%),
+        radial-gradient(circle at 90% 80%, rgba(229, 193, 88, 0.14) 0px, transparent 42%);
       background-attachment: fixed;
       color: var(--text-main);
-      min-height: 100vh;
+      line-height: 1.55;
       overflow-x: hidden;
+      word-wrap: break-word;
     }
 
-    .top-navbar {
-      position: sticky;
-      top: 0;
-      z-index: 900;
-      background: rgba(6, 20, 18, 0.85);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--glass-border);
-      padding: 12px 16px;
-    }
-
-    .nav-inner {
+    .container {
+      width: 100%;
       max-width: 1180px;
       margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      width: 100%;
+      background: rgba(6, 20, 18, 0.92);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 12px 0;
       gap: 12px;
-      flex-wrap: wrap;
     }
 
-    .brand-logo {
+    .nav-brand {
       display: flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
+      min-width: 0;
     }
 
     .brand-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: linear-gradient(135deg, var(--gold) 0%, #b48a28 100%);
       color: #061412;
       font-family: 'Cormorant Garamond', serif;
       font-weight: 700;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 15px rgba(229, 193, 88, 0.35);
-    }
-
-    .brand-text-wrap {
-      display: flex;
-      flex-direction: column;
+      flex-shrink: 0;
     }
 
     .brand-title {
-      font-size: 0.98rem;
+      font-size: 1.02rem;
       font-weight: 800;
-      letter-spacing: 0.4px;
-      color: #ffffff;
-      text-transform: uppercase;
+      letter-spacing: -0.2px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--gold-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .brand-sub {
-      font-size: 0.72rem;
-      color: var(--gold-soft);
-      letter-spacing: 1px;
-    }
-
-    .nav-phone-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .nav-contact-btn {
       background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
       color: #061412;
-      font-weight: 800;
-      font-size: 0.92rem;
-      padding: 10px 18px;
-      border-radius: 50px;
       text-decoration: none;
-      box-shadow: 0 6px 20px rgba(229, 193, 88, 0.3);
+      padding: 8px 15px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .nav-phone-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(229, 193, 88, 0.45);
+    .nav-contact-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(229, 193, 88, 0.35);
     }
 
-    .nav-phone-btn svg {
-      width: 17px;
-      height: 17px;
-      fill: currentColor;
-    }
-
-    .site-container {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 24px 14px 50px 14px;
-    }
-
+    /* HERO SECTION */
     .hero-section {
-      margin-bottom: 36px;
+      padding: 28px 0 24px 0;
     }
 
     .hero-card {
-      position: relative;
-      background: linear-gradient(145deg, rgba(16, 46, 41, 0.82) 0%, rgba(9, 26, 23, 0.92) 100%);
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
+      background: linear-gradient(145deg, rgba(16, 46, 41, 0.85) 0%, rgba(8, 24, 21, 0.95) 100%);
       border: 1px solid var(--glass-border);
-      border-radius: 28px;
-      padding: 34px 20px 26px 20px;
-      text-align: center;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-      overflow: hidden;
+      border-radius: 26px;
+      padding: 28px 20px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
     }
 
-    .hero-ring {
-      position: absolute;
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      border: 1px solid rgba(229, 193, 88, 0.15);
-      top: -140px;
-      right: -120px;
-      pointer-events: none;
-    }
-
-    .hero-tag {
-      display: inline-block;
-      font-size: 0.74rem;
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 2px;
       color: var(--gold-soft);
       background: rgba(229, 193, 88, 0.12);
       border: 1px solid rgba(229, 193, 88, 0.35);
-      padding: 6px 18px;
+      padding: 5px 14px;
       border-radius: 50px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       text-transform: uppercase;
+      letter-spacing: 0.6px;
     }
 
-    .main-title {
+    .hero-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.3rem;
+      font-size: 2rem;
+      line-height: 1.2;
       font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 10%, var(--gold-soft) 55%, var(--gold) 100%);
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 10%, var(--gold-soft) 60%, var(--gold) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin: 0 0 8px 0;
-      line-height: 1.15;
     }
 
-    .doctor-name {
-      font-size: 1.15rem;
-      color: #e2e8f0;
-      font-weight: 500;
-      margin: 0 0 18px 0;
+    .hero-desc {
+      font-size: 0.94rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+      max-width: 820px;
     }
 
-    .hero-contact-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(16, 185, 129, 0.14);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #6ee7b7;
-      padding: 10px 22px;
-      border-radius: 14px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-decoration: none;
-      margin-bottom: 22px;
-    }
-
-    .hero-contact-pill:hover {
-      background: rgba(16, 185, 129, 0.25);
-      color: #ffffff;
-    }
-
-    .quote {
+    .hero-quote {
       font-style: italic;
       color: #e2e8f0;
-      background: rgba(0, 0, 0, 0.28);
+      background: rgba(0, 0, 0, 0.25);
       border-left: 3px solid var(--gold);
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 0.96rem;
-      line-height: 1.6;
-      margin: 0 auto 24px auto;
-      max-width: 780px;
-    }
-
-    .card-footer-bar {
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .card-footer-text {
-      text-align: left;
-    }
-
-    .sub-text {
+      padding: 12px 16px;
+      border-radius: 10px;
       font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--gold-soft);
-      display: block;
+      margin-bottom: 20px;
     }
 
-    .copy-text {
-      font-size: 0.76rem;
-      color: #94a3b8;
-    }
-
-    .icon-buttons-row {
-      display: flex;
+    /* ACTION BUTTONS GRID */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
+      margin-top: 16px;
     }
 
-    .icon-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid var(--glass-border);
+    .btn-card {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      gap: 7px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      color: #ffffff;
       text-decoration: none;
-    }
-
-    .icon-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: currentColor;
-    }
-
-    .icon-btn:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
-    }
-    .icon-btn.call:hover { background: #10b981; }
-    .icon-btn.sms:hover { background: #3b82f6; }
-    .icon-btn.telegram:hover { background: #0088cc; }
-    .icon-btn.youtube:hover { background: #ff0000; }
-
-    .section-title {
-      text-align: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.9rem;
+      font-size: 0.84rem;
       font-weight: 700;
-      margin: 34px 0 26px 0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn-card:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+    }
+
+    .btn-call { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .btn-sms { background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); }
+    .btn-tg { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); }
+    .btn-yt { background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); }
+    .btn-book {
+      background: linear-gradient(135deg, var(--gold) 0%, #b48a28 100%);
+      color: #061412;
+      grid-column: span 2;
+    }
+
+    .btn-card svg {
+      width: 17px;
+      height: 17px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* STATS COUNTERS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 22px 0;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 16px 10px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 800;
       color: var(--gold-soft);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
+    /* HIGHLIGHT BANNER */
+    .highlight-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(229, 193, 88, 0.18) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 18px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      text-align: center;
+      margin: 22px 0;
+    }
+
+    .highlight-banner h3 {
+      font-size: 1.08rem;
+      color: var(--gold-soft);
+      margin-bottom: 4px;
+    }
+
+    .highlight-banner p {
+      font-size: 0.84rem;
+      color: #e2e8f0;
+    }
+
+    .banner-btn {
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 10px 22px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      transition: background 0.2s ease;
+    }
+
+    .banner-btn:hover {
+      background: var(--primary-hover);
+    }
+
+    /* SECTION HEADERS */
+    .section-header {
+      text-align: center;
+      margin: 36px 0 22px 0;
+    }
+
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1.6px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 0%, var(--gold-soft) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* VIDEO PROCEDURES STACK */
     .sections-stack {
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 18px;
     }
 
     .procedure-section {
-      background: var(--bg-surface);
-      backdrop-filter: blur(16px);
+      background: var(--card-bg);
       border: 1px solid var(--glass-border);
-      border-radius: 22px;
+      border-radius: 20px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      transition: border-color 0.2s ease, transform 0.2s ease;
     }
 
     .procedure-section:hover {
-      border-color: rgba(229, 193, 88, 0.55);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+      border-color: var(--gold);
+      transform: translateY(-2px);
     }
 
     .procedure-video {
       width: 100%;
-      height: 230px;
-      background: #000;
+      height: 220px;
+      background: #000000;
     }
 
     .procedure-video iframe {
@@ -331,143 +365,474 @@
     }
 
     .procedure-content {
-      padding: 22px;
+      padding: 20px;
       flex: 1;
     }
 
     .procedure-content h3 {
-      margin: 0 0 14px 0;
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--gold-soft);
+      margin-bottom: 10px;
       line-height: 1.35;
     }
 
     .procedure-content p {
-      margin: 0 0 10px 0;
+      font-size: 0.88rem;
       color: #e2e8f0;
-      font-size: 0.94rem;
-      line-height: 1.55;
+      margin-bottom: 8px;
+      line-height: 1.5;
     }
 
     .procedure-content p strong {
       color: #6ee7b7;
     }
 
-    .chat-widget-btn {
-      position: fixed;
-      bottom: 22px;
-      right: 22px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 13px 20px;
-      background: linear-gradient(135deg, var(--gold) 0%, #b48a28 100%);
-      color: #061412;
-      font-weight: 800;
-      font-size: 0.92rem;
-      border-radius: 50px;
-      text-decoration: none;
-      box-shadow: 0 10px 28px rgba(229, 193, 88, 0.45);
-      z-index: 1000;
-      cursor: pointer;
+    /* BIO SECTION */
+    .bio-card {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 24px 18px;
+      margin: 32px 0;
     }
 
-    .chat-widget-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 32px rgba(229, 193, 88, 0.6);
+    .bio-card h3 {
+      font-size: 1.2rem;
+      color: var(--gold-soft);
+      margin-bottom: 10px;
     }
 
-    .chat-widget-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: #061412;
+    .bio-card p {
+      color: #cbd5e1;
+      line-height: 1.6;
+      font-size: 0.9rem;
+      margin-bottom: 10px;
     }
 
-    .site-footer {
-      text-align: center;
-      padding: 24px 16px;
-      color: #94a3b8;
-      border-top: 1px solid var(--glass-border);
-      margin-top: 44px;
+    .bio-list {
+      list-style: none;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .bio-list li {
+      color: #e2e8f0;
       font-size: 0.85rem;
     }
 
-    @media (min-width: 768px) {
-      .site-container { padding: 36px 24px 60px 24px; }
-      .hero-card { padding: 54px 44px 36px 44px; border-radius: 34px; }
-      .main-title { font-size: 3.3rem; }
-      .section-title { font-size: 2.3rem; }
-      .procedure-section { flex-direction: row; align-items: stretch; }
-      .procedure-video { width: 44%; height: auto; min-height: 330px; }
-      .procedure-content { width: 56%; padding: 32px 36px; }
+    /* APPOINTMENT FORM */
+    .form-container {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(14, 38, 34, 0.92) 100%);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 24px 18px;
+      margin: 32px 0;
+    }
+
+    .form-container h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--gold-soft);
+      margin-bottom: 6px;
+      text-align: center;
+    }
+
+    .form-container p {
+      color: #cbd5e1;
+      margin-bottom: 18px;
+      font-size: 0.84rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 11px 13px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 0.88rem;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
+      color: #061412;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(229, 193, 88, 0.35);
+      transition: transform 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* FAQ */
+    .faq-container {
+      margin: 32px 0;
+    }
+
+    .faq-item {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #f8fafc;
+      user-select: none;
+    }
+
+    .faq-question span:last-child {
+      font-size: 1.2rem;
+      color: var(--gold);
+      margin-left: 8px;
+    }
+
+    .faq-answer {
+      padding: 0 16px 14px 16px;
+      color: #cbd5e1;
+      font-size: 0.84rem;
+      line-height: 1.5;
+      display: none;
+    }
+
+    /* FOOTER */
+    .site-footer {
+      text-align: center;
+      padding: 24px 0;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    /* FLOATING CHAT BUTTON */
+    .chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, var(--gold) 0%, #b48a28 100%);
+      color: #061412;
+      font-weight: 800;
+      font-size: 0.88rem;
+      border-radius: 50px;
+      box-shadow: 0 10px 26px rgba(229, 193, 88, 0.45);
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .chat-toggle svg {
+      width: 20px;
+      height: 20px;
+      fill: #061412;
+    }
+
+    .chat-badge {
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 2px 7px;
+      border-radius: 50%;
+      display: none;
+    }
+
+    /* CHAT POPUP */
+    .chat-popup {
+      position: fixed;
+      bottom: 80px;
+      right: 16px;
+      left: 16px;
+      max-width: 370px;
+      margin: 0 auto;
+      height: 440px;
+      background: #0c2420;
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: linear-gradient(135deg, #134e4a 0%, #065f46 100%);
+      color: var(--gold-soft);
+      padding: 13px 16px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chat-close {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .chat-warning {
+      background: rgba(229, 193, 88, 0.12);
+      padding: 6px 10px;
+      font-size: 0.73rem;
+      color: var(--gold-soft);
+      text-align: center;
+      border-bottom: 1px solid rgba(229, 193, 88, 0.15);
+    }
+
+    .chat-body {
+      padding: 12px;
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-footer {
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .chat-footer textarea {
+      width: 100%;
+      height: 48px;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      color: #ffffff;
+      resize: none;
+      font-family: inherit;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .msg-bubble {
+      padding: 9px 13px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      max-width: 86%;
+      line-height: 1.45;
+      word-break: break-word;
+    }
+
+    .msg-user {
+      background: #059669;
+      color: #ffffff;
+      align-self: flex-end;
+      border-bottom-right-radius: 2px;
+    }
+
+    .msg-doctor {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      align-self: flex-start;
+      border-bottom-left-radius: 2px;
+      border: 1px solid var(--glass-border);
+    }
+
+    /* TABLET & DESKTOP */
+    @media (min-width: 640px) {
+      .actions-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .btn-book {
+        grid-column: span 1;
+      }
+      .form-container {
+        padding: 32px;
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .faq-container {
+        max-width: 740px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (min-width: 900px) {
+      .hero-card {
+        padding: 40px 38px;
+      }
+      .hero-title {
+        font-size: 2.85rem;
+      }
+      .actions-grid {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .stats-row {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+      .highlight-banner {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+        padding: 22px 28px;
+      }
+      .procedure-section {
+        flex-direction: row;
+        align-items: stretch;
+      }
+      .procedure-video {
+        width: 44%;
+        height: auto;
+        min-height: 310px;
+      }
+      .procedure-content {
+        width: 56%;
+        padding: 28px 32px;
+      }
+      .chat-popup {
+        right: 26px;
+        left: auto;
+        width: 365px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <nav class="top-navbar">
-    <div class="nav-inner">
-      <a href="#" class="brand-logo">
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="nav-brand">
         <div class="brand-badge">SV</div>
-        <div class="brand-text-wrap">
-          <span class="brand-title">Ginekolog Estetik Plastik Xirurg</span>
-          <span class="brand-sub">Dr. Surayyo Vahobjonovna</span>
-        </div>
+        <span class="brand-title">Dr. Surayyo Vahobjonovna</span>
       </a>
-      <a href="tel:+998952775354" class="nav-phone-btn">
-        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        +998 95 277 53 54
+      <a href="tel:+998952775354" class="nav-contact-btn">
+        📞 +998 95 277 53 54
       </a>
     </div>
   </nav>
 
-  <div class="site-container">
+  <div class="container">
 
-    <header class="hero-section">
+    <!-- HERO SECTION -->
+    <section class="hero-section">
       <div class="hero-card">
-        <div class="hero-ring"></div>
-        
-        <div class="hero-tag">GINEKOLOG ESTETIK PLASTIK XIRURG • TOSHKENT</div>
-        <h1 class="main-title">Ginekolog Estetik Plastik Xirurg</h1>
-        <h2 class="doctor-name">Ginekolog estetik plastik xirurg Surayyo Vahobjonovna</h2>
+        <div class="hero-badge">✨ Ginekolog Estetik Plastik Xirurg · Toshkent</div>
+        <h1 class="hero-title">Ayollar salomatligi va estetik go'zallik uyg'unligi</h1>
+        <p class="hero-desc">
+          Ginekolog estetik plastik xirurg <strong>Dr. Surayyo Vahobjonovna</strong> boshchiligidagi zamonaviy estetik ginekologiya, labioplastika, vaginoplastika va lazer SO2 muolajalari — yuqori aniqlik, xavfsizlik va to'liq maxfiylik asosida.
+        </p>
 
-        <a href="tel:+998952775354" class="hero-contact-pill">
-          📞 Qabulga yozilish: +998 95 277 53 54
-        </a>
-
-        <blockquote class="quote">
+        <div class="hero-quote">
           “Shifokor — bu kasb emas, bu chaqiriq. Insonlarga yaxshilik qilish – eng katta baxt.”
-        </blockquote>
+        </div>
 
-        <div class="card-footer-bar">
-          <div class="card-footer-text">
-            <span class="sub-text">Sifatli tibbiyot – kelajak garovi ❤️</span>
-            <span class="copy-text">© 2026 Ginekolog Estetik Plastik Xirurg • Surayyo Vahobjonovna</span>
-          </div>
-          <div class="icon-buttons-row">
-            <a href="tel:+998952775354" class="icon-btn call" title="Qo'ng'iroq qilish: +998952775354">
-              <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-            </a>
-            <a href="sms:+998952775354" class="icon-btn sms" title="SMS yozish: +998952775354">
-              <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-            </a>
-            <a href="https://t.me/ginekologplastikx" target="_blank" rel="noopener" class="icon-btn telegram" title="Telegram kanal">
-              <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
-            </a>
-            <a href="https://youtube.com/@ginekologestetst?si=FMBdc_W1IxYVsmBr" target="_blank" rel="noopener" class="icon-btn youtube" title="YouTube kanal">
-              <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-            </a>
-          </div>
+        <!-- TEZKOR ALOQA TUGMALARI -->
+        <div class="actions-grid">
+          <a href="tel:+998952775354" class="btn-card btn-call">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            Qo'ng'iroq
+          </a>
+          <a href="sms:+998952775354" class="btn-card btn-sms">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            SMS Yozish
+          </a>
+          <a href="https://t.me/ginekologplastikx" target="_blank" rel="noopener" class="btn-card btn-tg">
+            <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+            Telegram Kanal
+          </a>
+          <a href="https://youtube.com/@ginekologestetst?si=FMBdc_W1IxYVsmBr" target="_blank" rel="noopener" class="btn-card btn-yt">
+            <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube Kanal
+          </a>
+          <a href="#appointment" class="btn-card btn-book">
+            📅 Qabulga yozilish
+          </a>
         </div>
       </div>
-    </header>
 
-    <main class="services-container">
-      <h2 class="section-title">GINEKOLOG ESTETIK PLASTIK XIRURGIYA MUOLAJALARI</h2>
-      
+      <!-- STATISTIKA -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number">13</div>
+          <div class="stat-label">Asosiy Muolaja Turi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">SO2</div>
+          <div class="stat-label">Zamonaviy Lazer</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Maxfiylik Kafolati</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Toshkent</div>
+          <div class="stat-label">Qabul Markazi</div>
+        </div>
+      </div>
+
+      <!-- KONSULTATSIYA BANNERI -->
+      <div class="highlight-banner">
+        <div>
+          <h3>💎 Shaxsiy va Maxfiy Konsultatsiya</h3>
+          <p>Har bir ayol uchun individual yondashuv, og'riqsiz lazer va jarrohlik yechimlari.</p>
+        </div>
+        <a href="tel:+998952775354" class="banner-btn">Hoziroq bog'laning</a>
+      </div>
+    </section>
+
+    <!-- 13 TA VIDEO MUOLAJALAR -->
+    <main>
+      <div class="section-header">
+        <div class="section-tag">VIDEO QO'LLANMA VA XIZMATLAR</div>
+        <h2 class="section-title">Ginekolog Estetik Plastik Xirurgiya Muolajalari</h2>
+      </div>
+
       <div class="sections-stack">
-        
+
         <section class="procedure-section">
           <div class="procedure-video">
             <iframe src="https://www.youtube.com/embed/u9aQ_MEy0nU?mute=1&loop=1&playlist=u9aQ_MEy0nU" title="Estetik ginekologiya nima" allowfullscreen></iframe>
@@ -651,36 +1016,152 @@
       </div>
     </main>
 
-    <div class="chat-widget-btn" onclick="toggleChat()" title="Shifokorga savol berish">
-      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-      <span>Shifokorga yozish</span>
-      <span id="chatBadge" style="display:none;background:#f43f5e;color:#fff;border-radius:50%;padding:2px 7px;font-size:12px;">0</span>
-    </div>
+    <!-- SHIFOKOR HAQIDA (BIO) -->
+    <section class="bio-card">
+      <div class="section-tag">SHIFOKOR HAQIDA</div>
+      <h3>Dr. Surayyo Vahobjonovna — Ginekolog Estetik Plastik Xirurg</h3>
+      <p>
+        Sifatli tibbiyot – kelajak garovi ❤️. Har bir bemorga alohida g'amxo'rlik, to'liq konfidensiallik va zamonaviy estetik xirurgiya hamda lazer SO2 texnologiyalari asosida xizmat ko'rsatiladi.
+      </p>
+      <ul class="bio-list">
+        <li>✅ <strong>Mutaxassislik:</strong> Ginekolog Estetik Plastik Xirurg, Lazerologiya</li>
+        <li>✅ <strong>Hudud:</strong> Toshkent shahri</li>
+        <li>✅ <strong>Aloqa telefoni:</strong> +998 95 277 53 54</li>
+        <li>✅ <strong>Telegram kanal:</strong> <a href="https://t.me/ginekologplastikx" target="_blank" style="color:var(--gold-soft); text-decoration:none;">@ginekologplastikx</a></li>
+      </ul>
+    </section>
 
-    <div id="chatPopup" style="display:none;position:fixed;bottom:85px;right:20px;width:350px;max-width:92vw;height:430px;background:#0c2420;border:1px solid rgba(212,175,55,0.35);border-radius:20px;box-shadow:0 18px 45px rgba(0,0,0,0.75);z-index:1001;flex-direction:column;overflow:hidden;">
-      <div style="background:linear-gradient(135deg,#134e4a,#065f46);color:#f5df99;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;">
-        <span>💬 Ginekolog Estetik Plastik Xirurg</span>
-        <button onclick="toggleChat()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">&times;</button>
-      </div>
-      <div style="background:rgba(229,193,88,0.12);padding:6px 10px;font-size:12px;color:#f5df99;text-align:center;">
-        🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
-      </div>
-      <div id="chatBody" style="padding:14px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;"></div>
-      <form id="chatQuestionForm" style="padding:10px;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:8px;">
-        <textarea id="chatQuestionText" placeholder="Savolingizni yozing..." required style="width:100%;height:50px;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:10px;color:#fff;resize:none;font-family:inherit;"></textarea>
-        <button type="submit" style="width:100%;background:linear-gradient(135deg,#e5c158,#cfa438);color:#061412;border:none;padding:10px;border-radius:10px;font-weight:800;cursor:pointer;">Yuborish</button>
+    <!-- QABULGA YOZILISH FORMASI -->
+    <section class="form-container" id="appointment">
+      <h2>Qabulga onlayn yozilish</h2>
+      <p>Ma'lumotlaringizni qoldiring, xabaringiz to'g'ridan-to'g'ri shifokor botiga yuboriladi va tez orada siz bilan bog'lanamiz.</p>
+
+      <form id="appointmentForm">
+        <div class="form-group">
+          <label for="patientName">Ismingiz</label>
+          <input type="text" id="patientName" class="form-input" placeholder="Ismingizni kiriting" required>
+        </div>
+
+        <div class="form-group">
+          <label for="patientPhone">Telefon raqamingiz</label>
+          <input type="tel" id="patientPhone" class="form-input" placeholder="+998 90 123 45 67" required>
+        </div>
+
+        <div class="form-group">
+          <label for="patientService">Muolaja yo'nalishini tanlang</label>
+          <select id="patientService" class="form-select">
+            <option value="Konsultatsiya va ko'rik">Konsultatsiya va ko'rik</option>
+            <option value="Labioplastika">1. Labioplastika</option>
+            <option value="Vaginoplastika">2. Vaginoplastika</option>
+            <option value="Klitoroplastika">3. Klitoroplastika</option>
+            <option value="Intim zona oqartirish">4. Intim zona oqartirish</option>
+            <option value="Intim yoshartirish va PRP">5. Intim yoshartirish va Plazmoterapiya (PRP)</option>
+            <option value="Bachadon bo'yni eroziyasi">6. Bachadon bo'yni eroziyasini davolash</option>
+            <option value="Poliplarni olish">7. Poliplarni olish</option>
+            <option value="Spiral o'rnatish">8. Spiral (Implantsperal)</option>
+            <option value="Sistitni lazer SO2 bilan davolash">9. Sistitni lazer SO2 bilan davolash</option>
+            <option value="Bachadon miyomasi">10. Bachadon miyomasi</option>
+            <option value="Tug'ruqdan keyingi tiklash (Razriv)">11. Tug'ruqdan keyingi yirtilishlarni tiklash</option>
+            <option value="Boshqa savol / muolaja">Boshqa savol / muolaja</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="patientNote">Izoh yoki shikoyatingiz (faqat matn)</label>
+          <textarea id="patientNote" class="form-textarea" placeholder="Qisqacha savol yoki izoh yozishingiz mumkin..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Qabulga yozilishni yuborish</button>
       </form>
-    </div>
+    </section>
 
+    <!-- FAQ -->
+    <section class="faq-container">
+      <div class="section-header">
+        <div class="section-tag">SAVOL-JAVOB</div>
+        <h2 class="section-title">Ko'p beriladigan savollar</h2>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Qabulga qanday yozilish mumkin?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz, saytdagi "Qabulga onlayn yozilish" formasini to'ldirishingiz yoki o'ng pastki burchakdagi chat orqali yozishingiz mumkin.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Muolajalar og'riqsiz o'tadimi?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Ha, barcha estetik jarrohlik va lazer SO2 muolajalari zamonaviy mahalliy yoki umumiy og'riqsizlantirish ostida mutlaqo og'riqsiz o'tkaziladi.
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          <span>Bemor ma'lumotlari sir saqlanadimi?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          Albatta. Har bir bemorning murojaati, tashxisi va muolajalari 100% tibbiy sir (konfidensiallik) asosida himoyalanadi.
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
     <footer class="site-footer">
-      <p><strong>Ginekolog Estetik Plastik Xirurg</strong> • Doktor Surayyo Vahobjonovna | Tel: <a href="tel:+998952775354" style="color: #e5c158; text-decoration: none;">+998 95 277 53 54</a></p>
+      <p><strong>Ginekolog Estetik Plastik Xirurg</strong> • Doktor Surayyo Vahobjonovna | Tel: <a href="tel:+998952775354" style="color: var(--gold-soft); text-decoration: none;">+998 95 277 53 54</a></p>
       <p>© 2026 Barcha huquqlar himoyalangan.</p>
     </footer>
 
   </div>
 
+  <!-- FLOATING CHAT BUTTON -->
+  <div class="chat-toggle" onclick="toggleChat()" title="Shifokorga savol berish">
+    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+    <span>Shifokorga yozish</span>
+    <span class="chat-badge" id="chatBadge">0</span>
+  </div>
+
+  <!-- POPUP CHAT -->
+  <div class="chat-popup" id="chatPopup">
+    <div class="chat-header">
+      <span>💬 Ginekolog Estetik Plastik Xirurg</span>
+      <button class="chat-close" onclick="toggleChat()">&times;</button>
+    </div>
+    <div class="chat-warning">
+      🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-footer">
+      <form id="chatQuestionForm">
+        <textarea id="chatQuestionText" placeholder="Savolingizni yozing (faqat matn)..." required></textarea>
+        <button type="submit" class="submit-btn" style="padding: 9px;">Yuborish</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CLOUDFLARE WORKER BOT LOGIKASI -->
   <script>
     const WORKER_CHAT_URL = "https://billowing-firefly-6878.muhayyosharifova21.workers.dev/web-chat";
+
+    function toggleFaq(elem) {
+      const answer = elem.nextElementSibling;
+      const icon = elem.querySelector('span:last-child');
+      if (answer.style.display === 'block') {
+        answer.style.display = 'none';
+        icon.textContent = '+';
+      } else {
+        answer.style.display = 'block';
+        icon.textContent = '−';
+      }
+    }
+
     let patientId = localStorage.getItem("gepx_patient_id");
     if (!patientId) {
       patientId = "ID-" + Math.floor(100000 + Math.random() * 900000);
@@ -695,12 +1176,10 @@
 
     function renderChat() {
       const chatBody = document.getElementById("chatBody");
-      chatBody.innerHTML = '<div style="background:rgba(255,255,255,0.09);color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;">Assalomu alaykum! Savolingizni shu yerga yozishingiz yoki +998 95 277 53 54 raqamiga qo\'ng\'iroq qilishingiz mumkin.</div>';
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni shu yerga yozishingiz yoki +998 95 277 53 54 raqamiga qo\'ng\'iroq qilishingiz mumkin.</div>';
       chatHistory.forEach(m => {
         const div = document.createElement("div");
-        div.style.cssText = m.sender === "user"
-          ? "background:#059669;color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;align-self:flex-end;"
-          : "background:rgba(255,255,255,0.12);color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;align-self:flex-start;border:1px solid rgba(212,175,55,0.3);";
+        div.className = `msg-bubble ${m.sender === "user" ? "msg-user" : "msg-doctor"}`;
         div.textContent = m.text;
         chatBody.appendChild(div);
       });
@@ -719,16 +1198,63 @@
       }
     }
 
+    // RASM VA FAYL TASHLASHNI BLOKLASH
+    const chatInput = document.getElementById("chatQuestionText");
+    ['dragenter', 'dragover', 'drop'].forEach(evtName => {
+      chatInput.addEventListener(evtName, e => e.preventDefault());
+    });
+    chatInput.addEventListener('drop', e => {
+      e.preventDefault();
+      alert("Kechirasiz, bemor faqat matn yozishi mumkin.");
+    });
+    chatInput.addEventListener('paste', e => {
+      const items = (e.clipboardData || window.clipboardData).items;
+      for (let item of items) {
+        if (item.kind === 'file') {
+          e.preventDefault();
+          alert("Kechirasiz, rasm yoki fayl yuborish taqiqlangan. Faqat matn yozing.");
+          return;
+        }
+      }
+    });
+
+    // QABULGA YOZILISH FORMASINI WORKER BOTGA YUBORISH
+    document.getElementById("appointmentForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const name = document.getElementById("patientName").value.trim();
+      const phone = document.getElementById("patientPhone").value.trim();
+      const service = document.getElementById("patientService").value;
+      const note = document.getElementById("patientNote").value.trim();
+
+      const formattedAppointment = `📋 YANGI QABULGA YOZILISH!\n👤 Ism: ${name}\n📞 Tel: ${phone}\n🩺 Yo'nalish: ${service}\n📝 Izoh: ${note || "Kiritilmadi"}`;
+
+      try {
+        await fetch(WORKER_CHAT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            action: "send",
+            patientId: patientId,
+            question: formattedAppointment
+          })
+        });
+        alert("Rahmat! Arizangiz shifokor botiga muvaffaqiyatli yuborildi. Tez orada siz bilan bog'lanamiz.");
+        this.reset();
+      } catch (err) {
+        alert("Xatolik yuz berdi. Iltimos, +998 95 277 53 54 raqamiga qo'ng'iroq qiling.");
+      }
+    });
+
+    // CHAT ORQALI SAVOL YUBORISH
     document.getElementById("chatQuestionForm").addEventListener("submit", async function(e) {
       e.preventDefault();
-      const input = document.getElementById("chatQuestionText");
-      const question = input.value.trim();
+      const question = chatInput.value.trim();
       if (!question) return;
 
       chatHistory.push({ sender: "user", text: question });
       localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
       renderChat();
-      input.value = "";
+      chatInput.value = "";
 
       try {
         await fetch(WORKER_CHAT_URL, {
@@ -739,6 +1265,7 @@
       } catch (err) {}
     });
 
+    // BOTDAN JAVOBLARNI TEKSHIRISH
     async function checkDoctorMessages() {
       try {
         const res = await fetch(WORKER_CHAT_URL, {
@@ -764,7 +1291,7 @@
     }
 
     checkDoctorMessages();
-    setInterval(checkDoctorMessages, 5000);
+    setInterval(checkDoctorMessages, 4000);
   </script>
 </body>
 </html>
