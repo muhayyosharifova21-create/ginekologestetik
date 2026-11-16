@@ -1312,7 +1312,7 @@
       }
     });
 
-    // Telegramga xabar yuborish funksiyasi (Faqat bitta xabar kelishi ta'minlandi)
+    // 100% Ishonchli Telegramga xabar yuborish funksiyasi (Faqat bitta xabar ketadi)
     async function sendToTelegram(text, phone) {
       for (const cId of ADMIN_IDS) {
         try {
@@ -1373,7 +1373,7 @@
       const text = chatInput.value.trim();
       if (!text) return;
 
-      // 1. Foydalanuvchi xabarini chatga chiqarish
+      // 1. Foydalanuvchi xabarini chatga qo'shish
       chatHistory.push({ sender: 'user', text: text });
       
       // 2. AI Avtomatik javobini qo'shish (Bemorga darhol javob qaytishi uchun)
@@ -1389,7 +1389,7 @@
       sendToTelegram(tgMsg, null);
     });
 
-    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH /START MENYUNI QABUL QILISH
+    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH HABARLARNI QABUL QILISH
     let lastUpdateId = parseInt(localStorage.getItem('surayyo_gepx_last_upd_' + patientId)) || 0;
 
     async function getTelegramFileUrl(fileId) {
@@ -1417,7 +1417,7 @@
             const msg = update.message;
             if (!msg) continue;
 
-            // Admin /start bosganda yoki menyu so'raganda tugmalarni chiqarish
+            // Admin /start bosganda doimiy menyu tugmalarini chiqarish
             if (msg.text === '/start') {
               for (const cId of ADMIN_IDS) {
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -1425,36 +1425,33 @@
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     chat_id: cId,
-                    text: `👋 Assalomu alaykum, Dr. Surayyo Vahobjonovna!\nSizning admin panel botingiz faol va ishlayapti.\n\n*Buyruqlar:*\n• Bemorlarga e'lon yuborish uchun: \`/broadcast Xabar matni\` (rasm, video yoki excel bilan birga yuborishingiz mumkin)`,
-                    parse_mode: 'Markdown'
+                    text: `👋 Assalomu alaykum, Dr. Surayyo Vahobjonovna!\nSizning admin panel botingiz faol ishlayapti.\n\n*Push E'lon yuborish uchun:*\n• Xohlagan xabar, rasm, video yoki Excel faylni yuborib, tagiga yoki xabarga \`/broadcast\` so'zini yozing.`,
+                    parse_mode: 'Markdown',
+                    reply_markup: {
+                      keyboard: [
+                        [{ text: "📢 Push E'lon Yuborish Yo'riqnomasi" }]
+                      ],
+                      resize_keyboard: true
+                    }
                   })
                 });
               }
               continue;
             }
 
-            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
-            if (update.callback_query) {
-              const cbData = update.callback_query.data;
-              if (cbData === `clear_${patientId}`) {
-                chatHistory = [];
-                localStorage.removeItem('surayyo_gepx_chat_' + patientId);
-                renderChat();
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    callback_query_id: update.callback_query.id,
-                    text: "Bemor chat tarixi tozalandi!"
-                  })
-                });
-              }
-              continue;
-            }
-
-            // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL)
+            // Agar tugma bosilsa yoki /broadcast kelsa
             let bText = msg.text || msg.caption || '';
-            if (bText.startsWith('/broadcast')) {
+            if (bText.includes('Push E\'lon') || bText.startsWith('/broadcast')) {
+              if (bText.includes('Push E\'lon')) {
+                for (const cId of ADMIN_IDS) {
+                  await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    chat_id: cId,
+                    text: "📝 E'lon yuborish uchun shunchaki matn, rasm yoki Excel fayl yuboring va oldiga/tagiga `/broadcast` so'zini yozing."
+                  });
+                }
+                continue;
+              }
+
               const broadcastContent = bText.replace('/broadcast', '').trim();
               const banner = document.getElementById('pushBanner');
               const contentDiv = document.getElementById('pushBannerContent');
@@ -1477,7 +1474,26 @@
               continue;
             }
 
-            // 3. BUYRUQ ORQALI O'CHIRISH (/clear ID)
+            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
+            if (update.callback_query) {
+              const cbData = update.callback_query.data;
+              if (cbData === `clear_${patientId}`) {
+                chatHistory = [];
+                localStorage.removeItem('surayyo_gepx_chat_' + patientId);
+                renderChat();
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    callback_query_id: update.callback_query.id,
+                    text: "Bemor chat tarixi tozalandi!"
+                  })
+                });
+              }
+              continue;
+            }
+
+            // 2. BUYRUQ ORQALI O'CHIRISH (/clear ID)
             if (msg.text && msg.text.startsWith('/clear')) {
               if (msg.text.includes(patientId)) {
                 chatHistory = [];
@@ -1487,7 +1503,7 @@
               continue;
             }
 
-            // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO, EXCEL)
+            // 3. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO, EXCEL)
             let targetIdMatches = false;
             if (msg.reply_to_message) {
               const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
@@ -1535,6 +1551,7 @@
               }
 
               if (hasContent) {
+                // Oxirgi avtomatik javobdan keyin shifokorning haqiqiy javobini qo'shish
                 chatHistory.push(doctorMsg);
                 localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
 
