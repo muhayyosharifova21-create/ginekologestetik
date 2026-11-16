@@ -1082,7 +1082,7 @@
         Sifatli tibbiyot – kelajak garovi ❤️. Har bir bemorga alohida g'amxo'rlik, to'liq konfidensiallik va zamonaviy estetik xirurgiya hamda lazer SO2 texnologiyalari asosida xizmat ko'rsatiladi.
       </p>
       <ul class="bio-list">
-        <li>✅ <strong>Mutaxassislik:</strong> Ginekolog Estetik Plastik Xirurg</li>
+        <li>✅ <strong>Mutaxassislik:</strong> Ginekolog Estetik Plastik Xirurg, Lazerologiya</li>
         <li>✅ <strong>Hudud:</strong> Toshkent shahri</li>
         <li>✅ <strong>Aloqa telefoni:</strong> +998 95 277 53 54</li>
         <li>✅ <strong>Telegram kanal:</strong> <a href="https://t.me/ginekologplastikx" target="_blank" style="color:var(--gold-soft); text-decoration:none;">@ginekologplastikx</a></li>
@@ -1204,7 +1204,7 @@
     </div>
     <div class="chat-footer">
       <form id="chatForm">
-        <textarea id="chatInput" placeholder="Savolingizni yozing (faqat matn)..." required></textarea>
+        <textarea id="chatInput" placeholder="Savolingizni yozing (masalan: labioplastika narxi yoki qabul vaqti)..." required></textarea>
         <div class="chat-hint">ℹ️ Bemor faqat matn yozishi mumkin.</div>
         <button type="submit" class="submit-btn" style="margin-top:6px; padding:8px;">Yuborish</button>
       </form>
@@ -1312,7 +1312,7 @@
       }
     });
 
-    // 100% Ishonchli Telegramga xabar yuborish funksiyasi (Faqat bitta xabar ketadi)
+    // Telegramga xabar yuborish funksiyasi
     async function sendToTelegram(text, phone) {
       for (const cId of ADMIN_IDS) {
         try {
@@ -1367,18 +1367,48 @@
       this.reset();
     });
 
-    // SAYTDAN SAVOL YUBORISH (AI AVTOMATIK JAVOB VA ADMINGA XABAR)
+    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
+    function getSmartAutoReply(userText) {
+      const text = userText.toLowerCase();
+
+      if (text.includes('salom') || text.includes('assalomu') || text.includes('alik')) {
+        return "Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Sizni qanday masala bezovta qilmoqda?";
+      } 
+      else if (text.includes('qabul') || text.includes('yozilish') || text.includes('navbat') || text.includes('vaqt')) {
+        return "Qabulga yozilish uchun saytimizdagi onlayn formani to'ldirishingiz yoki +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin. Administratorimiz tez orada siz bilan bog'lanadi.";
+      } 
+      else if (text.includes('narx') || text.includes('pul') || text.includes('qancha') || text.includes('sum')) {
+        return "Barcha muolajalar va operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. To'liq ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qiling.";
+      } 
+      else if (text.includes('labioplastika') || text.includes('lab') || text.includes('plastika')) {
+        return "Labioplastika (kichik jinsiy lablar plastikasi) lokal og'riqsizlantirish ostida 30-45 daqiqa davom etadi. Tiklanish davri 3-4 hafta. Operatsiyadan keyin 1 oy jinsiy aloqa va og'ir yuk ko'tarish cheklanadi.";
+      } 
+      else if (text.includes('vaginoplastika') || text.includes('toraytirish')) {
+        return "Vaginoplastika mushaklar tonusini va intim sezgirlikni to'liq tiklash uchun qilinadi. Amaliyot 1-1.5 soat davom etadi, to'liq tiklanish 6-8 haftani tashkil qiladi.";
+      } 
+      else if (text.includes('lazer') || text.includes('sistit') || text.includes('eroziya') || text.includes('oqartirish')) {
+        return "Zamonaviy SO2 lazer yordamida intim oqartirish, sistit va bachadon bo'yni eroziyasini davolash mutlaqo og'riqsiz, qonsiz va qisqa muddatda (15-25 daqiqa) bajariladi.";
+      } 
+      else if (text.includes('keyin') || text.includes('parvarish') || text.includes('taqiq') || text.includes('aloqa')) {
+        return "Muolajalardan keyingi parvarish bo'yicha Dr. Surayyo Vahobjonovna sizga shaxsan batafsil ko'rsatmalar beradilar. Odatda gigiyena qoidalariga rioya qilish va maxsus malhamlardan foydalanish tavsiya etiladi.";
+      } 
+      else {
+        return "Murojaatingiz uchun rahmat! Savolingiz mutaxassisimizga yuborildi. Dr. Surayyo Vahobjonovna yaqin orada shaxsan o'zlari sizga javob beradilar.";
+      }
+    }
+
+    // SAYTDAN SAVOL YUBORISH
     document.getElementById('chatForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const text = chatInput.value.trim();
       if (!text) return;
 
-      // 1. Foydalanuvchi xabarini chatga qo'shish
+      // 1. Foydalanuvchi xabarini qo'shish
       chatHistory.push({ sender: 'user', text: text });
       
-      // 2. AI Avtomatik javobini qo'shish (Bemorga darhol javob qaytishi uchun)
-      const autoReplyText = "Assalomu alaykum! Murojaatingiz uchun rahmat. Dr. Surayyo Vahobjonovna tez orada o'zlari javob berishadilar.";
-      chatHistory.push({ sender: 'doctor', text: autoReplyText });
+      // 2. Mutaxassis bot sifatida avtomatik aqlli javob qo'shish
+      const replyMessage = getSmartAutoReply(text);
+      chatHistory.push({ sender: 'doctor', text: replyMessage });
 
       localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
       renderChat();
@@ -1425,11 +1455,11 @@
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
                     chat_id: cId,
-                    text: `👋 Assalomu alaykum, Dr. Surayyo Vahobjonovna!\nSizning admin panel botingiz faol ishlayapti.\n\n*Push E'lon yuborish uchun:*\n• Xohlagan xabar, rasm, video yoki Excel faylni yuborib, tagiga yoki xabarga \`/broadcast\` so'zini yozing.`,
+                    text: `👋 Assalomu alaykum, Dr. Surayyo Vahobjonovna!\nSizning admin panel botingiz faol ishlayapti.\n\n*Push E'lon yuborish uchun:*\n• Xohlagan xabar, rasm, video yoki Excel faylni yuborib, tagiga \`/broadcast\` so'zini yozing.`,
                     parse_mode: 'Markdown',
                     reply_markup: {
                       keyboard: [
-                        [{ text: "📢 Push E'lon Yuborish Yo'riqnomasi" }]
+                        [{ text: "📢 Push E'lon Yuborish Qo'llanmasi" }]
                       ],
                       resize_keyboard: true
                     }
@@ -1446,7 +1476,7 @@
                 for (const cId of ADMIN_IDS) {
                   await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     chat_id: cId,
-                    text: "📝 E'lon yuborish uchun shunchaki matn, rasm yoki Excel fayl yuboring va oldiga/tagiga `/broadcast` so'zini yozing."
+                    text: "📝 E'lon yuborish uchun shunchaki matn, rasm, video yoki Excel fayl yuboring va xabar tagiga `/broadcast` deb yozib jo'nating."
                   });
                 }
                 continue;
@@ -1551,17 +1581,19 @@
               }
 
               if (hasContent) {
-                // Oxirgi avtomatik javobdan keyin shifokorning haqiqiy javobini qo'shish
-                chatHistory.push(doctorMsg);
-                localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
+                const lastMsg = chatHistory[chatHistory.length - 1];
+                if (!lastMsg || lastMsg.text !== doctorMsg.text) {
+                  chatHistory.push(doctorMsg);
+                  localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
 
-                const popup = document.getElementById('chatPopup');
-                if (popup.style.display !== 'flex') {
-                  unreadCount++;
-                  localStorage.setItem('surayyo_gepx_unread_' + patientId, unreadCount);
-                  updateBadge();
-                } else {
-                  renderChat();
+                  const popup = document.getElementById('chatPopup');
+                  if (popup.style.display !== 'flex') {
+                    unreadCount++;
+                    localStorage.setItem('surayyo_gepx_unread_' + patientId, unreadCount);
+                    updateBadge();
+                  } else {
+                    renderChat();
+                  }
                 }
               }
             }
