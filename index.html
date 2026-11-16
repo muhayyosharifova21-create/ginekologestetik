@@ -1200,6 +1200,7 @@
   <!-- JAVASCRIPT LOGIKA -->
   <script>
     const BOT_TOKEN = '9181424161:AAEP-_DprKrGiJtb_SS7-XBjFGldugWqJpc';
+    const ADMIN_IDS = [6258110646, 7645769320];
 
     function toggleFaq(elem) {
       const answer = elem.nextElementSibling;
@@ -1297,6 +1298,32 @@
       }
     });
 
+    // Telegramga xabar yuborish funksiyasi
+    function sendToTelegram(text, phone) {
+      ADMIN_IDS.forEach(cId => {
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: cId,
+            text: text,
+            parse_mode: 'Markdown',
+            reply_markup: phone ? {
+              inline_keyboard: [
+                [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
+                [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
+              ]
+            } : {
+              inline_keyboard: [
+                [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
+                [{ text: "🗑 Chatni tozalash", callback_data: `clear_${patientId}` }]
+              ]
+            }
+          })
+        });
+      });
+    }
+
     // QABULGA YOZILISH FORMASI
     document.getElementById('appointmentForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -1312,33 +1339,7 @@
                       `📝 *Izoh:* ${note || 'Kiritilmadi'}\n` +
                       `🆔 *ID:* \`${patientId}\``;
 
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
-        .then(res => res.json())
-        .then(data => {
-          let chatIds = new Set();
-          if (data.result) {
-            data.result.forEach(u => {
-              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
-            });
-          }
-          chatIds.forEach(cId => {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: cId,
-                text: message,
-                parse_mode: 'Markdown',
-                reply_markup: {
-                  inline_keyboard: [
-                    [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
-                    [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
-                  ]
-                }
-              })
-            });
-          });
-        });
+      sendToTelegram(message, phone);
 
       alert("Rahmat! Arizangiz qabul qilindi. Tez orada administrator siz bilan bog'lanadi.");
       this.reset();
@@ -1356,33 +1357,7 @@
 
       const tgMsg = `💬 *CHAT SAVOLI (Dr. Surayyo Ginekolog Sayti)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
 
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
-        .then(res => res.json())
-        .then(data => {
-          let chatIds = new Set();
-          if (data.result) {
-            data.result.forEach(u => {
-              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
-            });
-          }
-          chatIds.forEach(cId => {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                chat_id: cId,
-                text: tgMsg,
-                parse_mode: 'Markdown',
-                reply_markup: {
-                  inline_keyboard: [
-                    [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
-                    [{ text: "🗑 Chatni tozalash", callback_data: `clear_${patientId}` }]
-                  ]
-                }
-              })
-            });
-          });
-        });
+      sendToTelegram(tgMsg, null);
 
       chatInput.value = '';
     });
