@@ -1092,7 +1092,7 @@
     <!-- QABULGA YOZILISH FORMASI -->
     <section class="form-container" id="appointment">
       <h2>Qabulga onlayn yozilish</h2>
-      <p>Ma'lumotlaringizni qoldiring, administrator tez orada siz bilan bog'lanib qulay vaqtni belgilaydi.</p>
+      <p>Ma'lumotlaringiz va qulay vaqtingizni qoldiring, administrator tez orada siz bilan bog'lanadi.</p>
 
       <form id="appointmentForm">
         <div class="form-group">
@@ -1103,6 +1103,11 @@
         <div class="form-group">
           <label for="patientPhone">Telefon raqamingiz</label>
           <input type="tel" id="patientPhone" class="form-input" placeholder="+998 90 123 45 67" required>
+        </div>
+
+        <div class="form-group">
+          <label for="patientTime">Qabul vaqti (Sana va soat)</label>
+          <input type="datetime-local" id="patientTime" class="form-input" required>
         </div>
 
         <div class="form-group">
@@ -1287,7 +1292,7 @@
       }
     }
 
-    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARni BLOKLASH
+    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARNI BLOKLASH
     const chatInput = document.getElementById('chatInput');
     ['dragenter', 'dragover', 'drop'].forEach(evtName => {
       chatInput.addEventListener(evtName, e => e.preventDefault());
@@ -1338,12 +1343,16 @@
       e.preventDefault();
       const name = document.getElementById('patientName').value.trim();
       const phone = document.getElementById('patientPhone').value.trim();
+      const time = document.getElementById('patientTime').value;
       const service = document.getElementById('patientService').value;
       const note = document.getElementById('patientNote').value.trim();
+
+      const formattedTime = time ? time.replace('T', ' ') : 'Kiritilmadi';
 
       const message = `📋 *YANGI QABULGA YOZILISH (Dr. Surayyo)*\n\n` +
                       `👤 *Bemor:* ${name}\n` +
                       `📞 *Telefon:* ${phone}\n` +
+                      `📅 *Qabul vaqti:* ${formattedTime}\n` +
                       `🩺 *Yo'nalish:* ${service}\n` +
                       `📝 *Izoh:* ${note || 'Kiritilmadi'}\n` +
                       `🆔 *ID:* \`${patientId}\``;
@@ -1418,7 +1427,7 @@
               const msg = update.message;
               if (!msg) continue;
 
-              // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL)
+              // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL) - VRACH TO'G'RIDAN-TO'G'RI BOTDAN YUBORADI
               let bText = msg.text || msg.caption || '';
               if (bText.startsWith('/broadcast')) {
                 const broadcastContent = bText.replace('/broadcast', '').trim();
