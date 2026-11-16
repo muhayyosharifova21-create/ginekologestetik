@@ -1006,7 +1006,7 @@
         Sifatli tibbiyot – kelajak garovi ❤️. Har bir bemorga alohida g'amxo'rlik, to'liq konfidensiallik va zamonaviy estetik xirurgiya hamda lazer SO2 texnologiyalari asosida xizmat ko'rsatiladi.
       </p>
       <ul class="bio-list">
-        <li>✅ <strong>Mutaxassislik:</strong> Ginekolog Estetik Plastik Xirurg</li>
+        <li>✅ <strong>Mutaxassislik:</strong> Ginekolog Estetik Plastik Xirurg, Lazerologiya</li>
         <li>✅ <strong>Hudud:</strong> Toshkent shahri</li>
         <li>✅ <strong>Aloqa telefoni:</strong> +998 95 277 53 54</li>
         <li>✅ <strong>Telegram kanal:</strong> <a href="https://t.me/ginekologplastikx" target="_blank" style="color:var(--gold-soft); text-decoration:none;">@ginekologplastikx</a></li>
@@ -1075,7 +1075,7 @@
       🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
     </div>
     <div class="chat-body" id="chatBody">
-      <div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so'rashingiz mumkin.</div>
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so'rashingiz mumkin.<br><br>📞 Tel: +998 95 277 53 54<br>💬 Telegram: <a href="https://t.me/Sr7431" target="_blank" style="color:#f5df99;">@Sr7431</a></div>
     </div>
     <div class="chat-footer">
       <form id="chatForm">
@@ -1123,9 +1123,11 @@
     }
     updateBadge();
 
+    const docSignature = "<br><br>📞 Tel: +998 95 277 53 54<br>💬 Telegram: <a href='https://t.me/Sr7431' target='_blank' style='color:#f5df99;'>@Sr7431</a>";
+
     function renderChat() {
       const chatBody = document.getElementById('chatBody');
-      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so\'rashingiz mumkin.</div>';
+      chatBody.innerHTML = `<div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so'rashingiz mumkin.${docSignature}</div>`;
       
       chatHistory.forEach(msg => {
         const div = document.createElement('div');
@@ -1212,60 +1214,60 @@
       }
     }
 
-    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
+    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI (To'liq va batafsil)
     function getSmartAutoReply(userText) {
       const text = userText.toLowerCase();
 
       if (text.includes('salom') || text.includes('assalomu') || text.includes('alik')) {
-        return "Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Sizni qanday masala bezovta qilmoqda?";
+        return "Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Sizni qanday masala bezovta qilmoqda?" + docSignature;
       } 
       else if (text.includes('qabul') || text.includes('yozilish') || text.includes('navbat') || text.includes('vaqt') || text.includes('qayerda')) {
-        return "Qabulimiz Toshkent shahrida joylashgan. Qabulga yozilish yoki bo'sh vaqtlarni aniqlash uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin. Administratorimiz sizga qulay vaqtni tanlab beradilar.";
+        return "Qabulimiz Toshkent shahrida joylashgan. Qabulga yozilish yoki bo'sh vaqtlarni aniqlash uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin. Administratorimiz sizga qulay vaqtni tanlab beradilar." + docSignature;
       } 
       else if (text.includes('narx') || text.includes('pul') || text.includes('qancha') || text.includes('sum')) {
-        return "Barcha muolajalar va estetik operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. Batafsil ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingizni so'raymiz.";
+        return "Barcha muolajalar va estetik operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. Batafsil ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingizni so'raymiz." + docSignature;
       } 
       else if (text.includes('labioplastika') || text.includes('jinsiy lab') || text.includes('lab')) {
-        return "Labioplastika (kichik jinsiy lablar plastikasi) — tug'ma assimetriya yoki ortiqcha to'qimalarni korreksiya qilish uchun qilinadi.\n\n⏱ Davomiyligi: Mahalliy og'riqsizlantirish ostida 30–45 daqiqa.\n⏳ Tiklanish davri: 3–4 hafta.\n🚫 Cheklovlar: 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi.\n🧴 Parvarish: Antiseptik ishlov berilib, shifokor tavsiya etgan malhamlar surtiladi.";
+        return "Labioplastika (kichik jinsiy lablar plastikasi) — tug'ma assimetriya yoki ortiqcha to'qimalarni korreksiya qilish uchun qilinadi.\n\n⏱ Davomiyligi: Mahalliy og'riqsizlantirish ostida 30–45 daqiqa.\n⏳ Tiklanish davri: 3–4 hafta.\n🚫 Cheklovlar: 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi.\n🧴 Parvarish: Antiseptik ishlov berilib, shifokor tavsiya etgan malhamlar surtiladi." + docSignature;
       } 
       else if (text.includes('vaginoplastika') || text.includes('toraytirish')) {
-        return "Vaginoplastika — tug'ruqdan keyingi o'zgarishlarni bartaraf etish, vagina devorlarini toraytirish va intim sezgirlikni to'liq tiklash amaliyotidir.\n\n⏱ Davomiyligi: 1 – 1.5 soat (spinal yoki umumiy og'riqsizlantirish ostida).\n⏳ Tiklanish davri: 6–8 hafta.\n🚫 Cheklovlar: 2 oy davomida jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi.";
+        return "Vaginoplastika — tug'ruqdan keyingi o'zgarishlarni bartaraf etish, vagina devorlarini toraytirish va intim sezgirlikni to'liq tiklash amaliyotidir.\n\n⏱ Davomiyligi: 1 – 1.5 soat (spinal yoki umumiy og'riqsizlantirish ostida).\n⏳ Tiklanish davri: 6–8 hafta.\n🚫 Cheklovlar: 2 oy davomida jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi." + docSignature;
       } 
       else if (text.includes('klitor') || text.includes('klitoroplastika')) {
-        return "Klitoroplastika — klitor atrofidagi ortiqcha to'qimalarni olib tashlash, sezgirlikni oshirish va estetik ko'rinishni yaxshilash uchun bajariladi.\n\n⏱ Muolaja vaqti: 30–40 daqiqa.\n⏳ Tiklanish: 3 hafta ichida to'liq tuzaladi.";
+        return "Klitoroplastika — klitor atrofidagi ortiqcha to'qimalarni olib tashlash, sezgirlikni oshirish va estetik ko'rinishni yaxshilash uchun bajariladi.\n\n⏱ Muolaja vaqti: 30–40 daqiqa.\n⏳ Tiklanish: 3 hafta ichida to'liq tuzaladi." + docSignature;
       } 
       else if (text.includes('oqartirish') || text.includes('pigmentatsiya') || text.includes('qorayish')) {
-        return "Intim zona pigmentatsiyasini yo'qotish (oqartirish) zamonaviy lazer SO2 yordamida amalga oshiriladi.\n\n⏱ Davomiyligi: 20–30 daqiqa (kursi 3–4 ta muolaja).\n⏳ Tiklanish: Terining yangilanishi 5–7 kun davom etadi.";
+        return "Intim zona pigmentatsiyasini yo'qotish (oqartirish) zamonaviy lazer SO2 yordamida amalga oshiriladi.\n\n⏱ Davomiyligi: 20–30 daqiqa (kursi 3–4 ta muolaja).\n⏳ Tiklanish: Terining yangilanishi 5–7 kun davom etadi." + docSignature;
       } 
       else if (text.includes('prp') || text.includes('yoshartirish') || text.includes('plazmo')) {
-        return "Intim yoshartirish va Plazmoterapiya (PRP) — bemorning o'z qonidan olingan plasma yordamida to'qimalarni yoshartirish, qurish va qichishishni yo'qotish uchun qo'llaniladi. Reabilitatsiya deyarli talab etilmaydi.";
+        return "Intim yoshartirish va Plazmoterapiya (PRP) — bemorning o'z qonidan olingan plasma yordamida to'qimalarni yoshartirish, qurish va qichishishni yo'qotish uchun qo'llaniladi. Reabilitatsiya deyarli talab etilmaydi." + docSignature;
       } 
       else if (text.includes('eroziya') || text.includes('bachadon bo\'yni')) {
-        return "Bachadon bo'yni eroziyasini davolash zamonaviy lazer yoki radioto'lqin usulida og'riqsiz bajariladi.\n\n⏱ Muolaja vaqti: 15–20 daqiqa.\n⏳ Bitish vaqti: 3–4 hafta (shu muddatda jinsiy aloqa taqiqlanadi).";
+        return "Bachadon bo'yni eroziyasini davolash zamonaviy lazer yoki radioto'lqin usulida og'riqsiz bajariladi.\n\n⏱ Muolaja vaqti: 15–20 daqiqa.\n⏳ Bitish vaqti: 3–4 hafta (shu muddatda jinsiy aloqa taqiqlanadi)." + docSignature;
       } 
       else if (text.includes('polip')) {
-        return "Bachadon bo'yni va devori poliplarini olish amaliyoti xavfsiz va tez bajariladi (15–30 daqiqa). 2 hafta davomida jinsiy aloqada bo'lmaslik tavsiya etiladi.";
+        return "Bachadon bo'yni va devori poliplarini olish amaliyoti xavfsiz va tez bajariladi (15–30 daqiqa). 2 hafta davomida jinsiy aloqada bo'lmaslik tavsiya etiladi." + docSignature;
       } 
       else if (text.includes('spiral') || text.includes('implantsperal') || text.includes('kontratseptsiya')) {
-        return "Spiral (Implantsperal) homiladorlikning oldini olish uchun malakali shifokor tomonidan 5–10 daqiqada o'rnatiladi. 7-10 kun davomida og'ir yuk ko'tarish taqiqlanadi.";
+        return "Spiral (Implantsperal) homiladorlikning oldini olish uchun malakali shifokor tomonidan 5–10 daqiqada o'rnatiladi. 7-10 kun davomida og'ir yuk ko'tarish taqiqlanadi." + docSignature;
       } 
       else if (text.includes('sistit') || text.includes('siydik')) {
-        return "Sistit (siydik pufagining yallig'lanishi) zamonaviy lazer SO2 aparati yordamida qonsiz va og'riqsiz davolanadi. 5–7 kun ichida to'liq bartaraf etiladi.";
+        return "Sistit (siydik pufagining yallig'lanishi) zamonaviy lazer SO2 aparati yordamida qonsiz va og'riqsiz davolanadi. 5–7 kun ichida to'liq bartaraf etiladi." + docSignature;
       } 
       else if (text.includes('miyoma')) {
-        return "Bachadon miyomasi gormonal o'zgarishlar sabab yuzaga keladigan o'sma bo'lib, dori-darmonlar yoki kichik invaziv jarrohlik yo'li bilan davolanadi (tiklanish 3–4 hafta).";
+        return "Bachadon miyomasi gormonal o'zgarishlar sabab yuzaga keladigan o'sma bo'lib, dori-darmonlar yoki kichik invaziv jarrohlik yo'li bilan davolanadi (tiklanish 3–4 hafta)." + docSignature;
       } 
       else if (text.includes('ajralma') || text.includes('videlina') || text.includes('infeksiya')) {
-        return "Intim zonalardagi ajralmalar va mikroflora muammolarini bartaraf etish uchun shifokor ko'rigidan o'tib, aniq tashxis qo'ydirish zarur.";
+        return "Intim zonalardagi ajralmalar va mikroflora muammolarini bartaraf etish uchun shifokor ko'rigidan o'tib, aniq tashxis qo'ydirish zarur." + docSignature;
       } 
       else if (text.includes('razriv') || text.includes('yirtilish') || text.includes('tug\'ruq')) {
-        return "Tug'ruqdan keyingi yirtilishlarni tiklash amaliyoti 45–60 daqiqa davom etadi. To'liq bitish muddati 4–6 haftani tashkil qiladi.";
+        return "Tug'ruqdan keyingi yirtilishlarni tiklash amaliyoti 45–60 daqiqa davom etadi. To'liq bitish muddati 4–6 haftani tashkil qiladi." + docSignature;
       } 
       else if (text.includes('keyin') || text.includes('parvarish') || text.includes('taqiq') || text.includes('aloqa')) {
-        return "Muolajalardan keyingi umumiy qoidalar: shifokor tavsiya etgan malhamlar (Levomekol, Bepanten Plus) surtiladi, 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar qat'iy taqiqlanadi.";
+        return "Muolajalardan keyingi umumiy qoidalar: shifokor tavsiya etgan malhamlar (Levomekol, Bepanten Plus) surtiladi, 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar qat'iy taqiqlanadi." + docSignature;
       } 
       else {
-        return "Murojaatingiz uchun rahmat! Savolingiz mutaxassisimizga yuborildi. Dr. Surayyo Vahobjonovna yaqin orada shaxsan o'zlari sizga javob beradilar. Shuningdek, +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin.";
+        return "Murojaatingiz uchun rahmat! Savolingiz mutaxassisimizga yuborildi. Dr. Surayyo Vahobjonovna yaqin orada shaxsan o'zlari sizga javob beradilar." + docSignature;
       }
     }
 
@@ -1372,7 +1374,7 @@
               continue;
             }
 
-            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
+            // 1. CHATni TOZALASH TUGMASI (CALLBACK QUERY)
             if (update.callback_query) {
               const cbData = update.callback_query.data;
               if (cbData === `clear_${patientId}`) {
