@@ -60,8 +60,8 @@
       display: none;
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       color: #ffffff;
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 14px 18px;
+      border-radius: 14px;
       margin: 16px auto;
       max-width: 1180px;
       box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
@@ -79,11 +79,20 @@
       font-size: 1.1rem;
       cursor: pointer;
       border-radius: 50%;
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .push-banner img, .push-banner video {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 8px;
+      margin-top: 8px;
+      display: block;
     }
 
     /* NAVBAR */
@@ -787,7 +796,7 @@
 
   <!-- PUSH HABAR BANNERI -->
   <div class="push-banner" id="pushBanner">
-    <span id="pushBannerText"></span>
+    <div id="pushBannerContent"></div>
     <button onclick="document.getElementById('pushBanner').style.display='none'">&times;</button>
   </div>
 
@@ -1179,7 +1188,7 @@
   <!-- POPUP CHAT -->
   <div class="chat-popup" id="chatPopup">
     <div class="chat-header">
-      <span>💬 Qabulxona bilan chat</span>
+      <span>💬 Dr. Surayyo Vahobjonovna</span>
       <button class="chat-close" onclick="toggleChat()">&times;</button>
     </div>
     <div class="chat-warning">
@@ -1278,7 +1287,7 @@
       }
     }
 
-    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARNI BLOKLASH
+    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARni BLOKLASH
     const chatInput = document.getElementById('chatInput');
     ['dragenter', 'dragover', 'drop'].forEach(evtName => {
       chatInput.addEventListener(evtName, e => e.preventDefault());
@@ -1316,7 +1325,7 @@
             } : {
               inline_keyboard: [
                 [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
-                [{ text: "🗑 Chatni tozalash", callback_data: `clear_${patientId}` }]
+                [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
               ]
             }
           })
@@ -1362,7 +1371,7 @@
       chatInput.value = '';
     });
 
-    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO VA BUYRUQLARNI QABUL QILISH
+    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH HABARLARNI QABUL QILISH
     let lastUpdateId = parseInt(localStorage.getItem('surayyo_gepx_last_upd_' + patientId)) || 0;
 
     async function getTelegramFileUrl(fileId) {
@@ -1409,14 +1418,28 @@
               const msg = update.message;
               if (!msg) continue;
 
-              // 2. OPSHI PUSH HABAR (/broadcast Matn)
-              if (msg.text && msg.text.startsWith('/broadcast')) {
-                const broadText = msg.text.replace('/broadcast', '').trim();
-                if (broadText) {
-                  const banner = document.getElementById('pushBanner');
-                  document.getElementById('pushBannerText').textContent = `📢 Shifokor e'loni: ${broadText}`;
-                  banner.style.display = 'flex';
+              // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL)
+              let bText = msg.text || msg.caption || '';
+              if (bText.startsWith('/broadcast')) {
+                const broadcastContent = bText.replace('/broadcast', '').trim();
+                const banner = document.getElementById('pushBanner');
+                const contentDiv = document.getElementById('pushBannerContent');
+                
+                let htmlContent = `📢 <strong>Shifokor e'loni:</strong> ${broadcastContent}`;
+
+                if (msg.photo && msg.photo.length > 0) {
+                  const photoUrl = await getTelegramFileUrl(msg.photo[msg.photo.length - 1].file_id);
+                  if (photoUrl) htmlContent += `<img src="${photoUrl}" alt="Push rasm">`;
+                } else if (msg.video) {
+                  const videoUrl = await getTelegramFileUrl(msg.video.file_id);
+                  if (videoUrl) htmlContent += `<video src="${videoUrl}" controls></video>`;
+                } else if (msg.document) {
+                  const docUrl = await getTelegramFileUrl(msg.document.file_id);
+                  if (docUrl) htmlContent += `<br><a href="${docUrl}" target="_blank" style="color:var(--gold-soft); font-weight:bold;">📎 Faylni yuklab olish (${msg.document.file_name || 'Hujjat'})</a>`;
                 }
+
+                contentDiv.innerHTML = htmlContent;
+                banner.style.display = 'flex';
                 continue;
               }
 
@@ -1430,7 +1453,7 @@
                 continue;
               }
 
-              // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO)
+              // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO, EXCEL)
               let targetIdMatches = false;
               if (msg.reply_to_message) {
                 const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
@@ -1465,6 +1488,14 @@
                   const url = await getTelegramFileUrl(msg.video.file_id);
                   if (url) {
                     doctorMsg.videoUrl = url;
+                    hasContent = true;
+                  }
+                }
+
+                if (msg.document) {
+                  const url = await getTelegramFileUrl(msg.document.file_id);
+                  if (url) {
+                    doctorMsg.text = (doctorMsg.text || '') + `\n📎 <a href="${url}" target="_blank">${msg.document.file_name || 'Hujjat / Excel'}</a>`;
                     hasContent = true;
                   }
                 }
