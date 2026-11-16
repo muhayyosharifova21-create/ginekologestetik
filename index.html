@@ -463,76 +463,6 @@
       font-size: 0.85rem;
     }
 
-    /* APPOINTMENT FORM */
-    .form-container {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(14, 38, 34, 0.92) 100%);
-      border: 1px solid var(--glass-border);
-      border-radius: 22px;
-      padding: 24px 18px;
-      margin: 32px 0;
-    }
-
-    .form-container h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      color: var(--gold-soft);
-      margin-bottom: 6px;
-      text-align: center;
-    }
-
-    .form-container p {
-      color: #cbd5e1;
-      margin-bottom: 18px;
-      font-size: 0.84rem;
-      text-align: center;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #e2e8f0;
-    }
-
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      padding: 11px 13px;
-      background: rgba(0, 0, 0, 0.45);
-      border: 1px solid var(--glass-border);
-      border-radius: 10px;
-      color: #ffffff;
-      font-family: inherit;
-      font-size: 0.88rem;
-    }
-
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .submit-btn {
-      width: 100%;
-      background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
-      color: #061412;
-      border: none;
-      padding: 12px;
-      border-radius: 10px;
-      font-weight: 800;
-      font-size: 0.92rem;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(229, 193, 88, 0.35);
-      transition: transform 0.2s ease;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-1px);
-    }
-
     /* FAQ */
     .faq-container {
       margin: 32px 0;
@@ -738,12 +668,6 @@
       .btn-book {
         grid-column: span 1;
       }
-      .form-container {
-        padding: 32px;
-        max-width: 640px;
-        margin-left: auto;
-        margin-right: auto;
-      }
       .faq-container {
         max-width: 740px;
         margin-left: auto;
@@ -846,8 +770,8 @@
             <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             YouTube Kanal
           </a>
-          <a href="#appointment" class="btn-card btn-book">
-            📅 Qabulga yozilish
+          <a href="#chatPopup" onclick="toggleChat()" class="btn-card btn-book">
+            💬 Onlayn Savol-Javob
           </a>
         </div>
       </div>
@@ -1089,55 +1013,6 @@
       </ul>
     </section>
 
-    <!-- QABULGA YOZILISH FORMASI -->
-    <section class="form-container" id="appointment">
-      <h2>Qabulga onlayn yozilish</h2>
-      <p>Ma'lumotlaringiz va qulay vaqtingizni qoldiring, administrator tez orada siz bilan bog'lanadi.</p>
-
-      <form id="appointmentForm">
-        <div class="form-group">
-          <label for="patientName">Ismingiz</label>
-          <input type="text" id="patientName" class="form-input" placeholder="Ismingizni kiriting" required>
-        </div>
-
-        <div class="form-group">
-          <label for="patientPhone">Telefon raqamingiz</label>
-          <input type="tel" id="patientPhone" class="form-input" placeholder="+998 90 123 45 67" required>
-        </div>
-
-        <div class="form-group">
-          <label for="patientTime">Qabul vaqti (Sana va soat)</label>
-          <input type="datetime-local" id="patientTime" class="form-input" required>
-        </div>
-
-        <div class="form-group">
-          <label for="patientService">Muolaja yo'nalishini tanlang</label>
-          <select id="patientService" class="form-select">
-            <option value="Konsultatsiya va ko'rik">Konsultatsiya va ko'rik</option>
-            <option value="Labioplastika">1. Labioplastika</option>
-            <option value="Vaginoplastika">2. Vaginoplastika</option>
-            <option value="Klitoroplastika">3. Klitoroplastika</option>
-            <option value="Intim zona oqartirish">4. Intim zona oqartirish</option>
-            <option value="Intim yoshartirish va PRP">5. Intim yoshartirish va Plazmoterapiya (PRP)</option>
-            <option value="Bachadon bo'yni eroziyasi">6. Bachadon bo'yni eroziyasini davolash</option>
-            <option value="Poliplarni olish">7. Poliplarni olish</option>
-            <option value="Spiral o'rnatish">8. Spiral (Implantsperal)</option>
-            <option value="Sistitni lazer SO2 bilan davolash">9. Sistitni lazer SO2 bilan davolash</option>
-            <option value="Bachadon miyomasi">10. Bachadon miyomasi</option>
-            <option value="Tug'ruqdan keyingi tiklash (Razriv)">11. Tug'ruqdan keyingi yirtilishlarni tiklash</option>
-            <option value="Boshqa savol / muolaja">Boshqa savol / muolaja</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="patientNote">Izoh yoki shikoyatingiz (faqat matn)</label>
-          <textarea id="patientNote" class="form-textarea" placeholder="Qisqacha savol yoki izoh yozishingiz mumkin..."></textarea>
-        </div>
-
-        <button type="submit" class="submit-btn">Qabulga yozilishni tasdiqlash</button>
-      </form>
-    </section>
-
     <!-- FAQ -->
     <section class="faq-container">
       <div class="section-header">
@@ -1151,7 +1026,7 @@
           <span>+</span>
         </div>
         <div class="faq-answer">
-          +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz, saytdagi onlayn forma orqali yoki o'ng pastki burchakdagi chat orqali yozishingiz mumkin.
+          +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz yoki o'ng pastki burchakdagi chat orqali Dr. Surayyo Vahobjonovnaga bevosita murojaat qilishingiz mumkin.
         </div>
       </div>
 
@@ -1200,11 +1075,11 @@
       🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
     </div>
     <div class="chat-body" id="chatBody">
-      <div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni matn ko'rinishida yozib qoldirishingiz mumkin.</div>
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so'rashingiz mumkin.</div>
     </div>
     <div class="chat-footer">
       <form id="chatForm">
-        <textarea id="chatInput" placeholder="Savolingizni yozing (masalan: labioplastika narxi yoki qabul vaqti)..." required></textarea>
+        <textarea id="chatInput" placeholder="Savolingizni yozing (masalan: labioplastika, qabul vaqti)..." required></textarea>
         <div class="chat-hint">ℹ️ Bemor faqat matn yozishi mumkin.</div>
         <button type="submit" class="submit-btn" style="margin-top:6px; padding:8px;">Yuborish</button>
       </form>
@@ -1250,7 +1125,7 @@
 
     function renderChat() {
       const chatBody = document.getElementById('chatBody');
-      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni matn ko\'rinishida yozib qoldirishingiz mumkin.</div>';
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so\'rashingiz mumkin.</div>';
       
       chatHistory.forEach(msg => {
         const div = document.createElement('div');
@@ -1258,7 +1133,7 @@
         
         if (msg.text) {
           const p = document.createElement('p');
-          p.textContent = msg.text;
+          p.innerHTML = msg.text.replace(/\n/g, '<br>');
           div.appendChild(p);
         }
         if (msg.imageUrl) {
@@ -1313,7 +1188,7 @@
     });
 
     // Telegramga xabar yuborish funksiyasi
-    async function sendToTelegram(text, phone) {
+    async function sendToTelegram(text) {
       for (const cId of ADMIN_IDS) {
         try {
           await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -1323,12 +1198,7 @@
               chat_id: cId,
               text: text,
               parse_mode: 'Markdown',
-              reply_markup: phone ? {
-                inline_keyboard: [
-                  [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
-                  [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
-                ]
-              } : {
+              reply_markup: {
                 inline_keyboard: [
                   [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
                   [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
@@ -1342,31 +1212,6 @@
       }
     }
 
-    // QABULGA YOZILISH FORMASI
-    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const name = document.getElementById('patientName').value.trim();
-      const phone = document.getElementById('patientPhone').value.trim();
-      const time = document.getElementById('patientTime').value;
-      const service = document.getElementById('patientService').value;
-      const note = document.getElementById('patientNote').value.trim();
-
-      const formattedTime = time ? time.replace('T', ' ') : 'Kiritilmadi';
-
-      const message = `📋 *YANGI QABULGA YOZILISH (Dr. Surayyo)*\n\n` +
-                      `👤 *Bemor:* ${name}\n` +
-                      `📞 *Telefon:* ${phone}\n` +
-                      `📅 *Qabul vaqti:* ${formattedTime}\n` +
-                      `🩺 *Yo'nalish:* ${service}\n` +
-                      `📝 *Izoh:* ${note || 'Kiritilmadi'}\n` +
-                      `🆔 *ID:* \`${patientId}\``;
-
-      sendToTelegram(message, phone);
-
-      alert("Rahmat! Arizangiz qabul qilindi. Tez orada administrator siz bilan bog'lanadi.");
-      this.reset();
-    });
-
     // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
     function getSmartAutoReply(userText) {
       const text = userText.toLowerCase();
@@ -1374,39 +1219,66 @@
       if (text.includes('salom') || text.includes('assalomu') || text.includes('alik')) {
         return "Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Sizni qanday masala bezovta qilmoqda?";
       } 
-      else if (text.includes('qabul') || text.includes('yozilish') || text.includes('navbat') || text.includes('vaqt')) {
-        return "Qabulga yozilish uchun saytimizdagi onlayn formani to'ldirishingiz yoki +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin. Administratorimiz tez orada siz bilan bog'lanadi.";
+      else if (text.includes('qabul') || text.includes('yozilish') || text.includes('navbat') || text.includes('vaqt') || text.includes('qayerda')) {
+        return "Qabulimiz Toshkent shahrida joylashgan. Qabulga yozilish yoki bo'sh vaqtlarni aniqlash uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz mumkin. Administratorimiz sizga qulay vaqtni tanlab beradilar.";
       } 
       else if (text.includes('narx') || text.includes('pul') || text.includes('qancha') || text.includes('sum')) {
-        return "Barcha muolajalar va operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. To'liq ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qiling.";
+        return "Barcha muolajalar va estetik operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. Batafsil ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingizni so'raymiz.";
       } 
-      else if (text.includes('labioplastika') || text.includes('lab') || text.includes('plastika')) {
-        return "Labioplastika (kichik jinsiy lablar plastikasi) lokal og'riqsizlantirish ostida 30-45 daqiqa davom etadi. Tiklanish davri 3-4 hafta. Operatsiyadan keyin 1 oy jinsiy aloqa va og'ir yuk ko'tarish cheklanadi.";
+      else if (text.includes('labioplastika') || text.includes('jinsiy lab') || text.includes('lab')) {
+        return "Labioplastika (kichik jinsiy lablar plastikasi) — tug'ma assimetriya yoki ortiqcha to'qimalarni korreksiya qilish uchun qilinadi. Mahalliy og'riqsizlantirish ostida 30-45 daqiqa davom etadi. Tiklanish davri 3-4 hafta.";
       } 
       else if (text.includes('vaginoplastika') || text.includes('toraytirish')) {
-        return "Vaginoplastika mushaklar tonusini va intim sezgirlikni to'liq tiklash uchun qilinadi. Amaliyot 1-1.5 soat davom etadi, to'liq tiklanish 6-8 haftani tashkil qiladi.";
+        return "Vaginoplastika — tug'ruqdan keyingi o'zgarishlarni bartaraf etish, vagina devorlarini toraytirish va intim sezgirlikni to'liq tiklash amaliyotidir. To'liq tiklanish 6-8 hafta davom etadi.";
       } 
-      else if (text.includes('lazer') || text.includes('sistit') || text.includes('eroziya') || text.includes('oqartirish')) {
-        return "Zamonaviy SO2 lazer yordamida intim oqartirish, sistit va bachadon bo'yni eroziyasini davolash mutlaqo og'riqsiz, qonsiz va qisqa muddatda (15-25 daqiqa) bajariladi.";
+      else if (text.includes('klitor') || text.includes('klitoroplastika')) {
+        return "Klitoroplastika klitor atrofidagi ortiqcha to'qimalarni olib tashlash va estetik hamda funksional holatni yaxshilash uchun bajariladi. Amaliyot 30-40 daqiqa davom etadi.";
+      } 
+      else if (text.includes('oqartirish') || text.includes('pigmentatsiya') || text.includes('qorayish')) {
+        return "Intim zona pigmentatsiyasini yo'qotish (oqartirish) zamonaviy lazer SO2 yordamida amalga oshiriladi. Kurs 3-4 ta muolajadan iborat bo'lib, juda samarali va xavfsizdir.";
+      } 
+      else if (text.includes('prp') || text.includes('yoshartirish') || text.includes('plazmo')) {
+        return "Intim yoshartirish va Plazmoterapiya (PRP) bemorning o'z qonidan olingan plasma yordamida to'qimalarni tiklash, namlikni qaytarish va sezgirlikni oshirish uchun qo'llaniladi.";
+      } 
+      else if (text.includes('eroziya') || text.includes('bachadon bo\'yni')) {
+        return "Bachadon bo'yni eroziyasini davolash zamonaviy lazer yoki radioto'lqin usulida og'riqsiz bajariladi. Muolaja vaqti 15-20 daqiqa, bitish davri 3-4 hafta.";
+      } 
+      else if (text.includes('polip')) {
+        return "Bachadon bo'yni va devori poliplarini olish amaliyoti xavfsiz va tez bajariladi. Muolajadan keyin 2 hafta jinsiy aloqadan saqlanish tavsiya etiladi.";
+      } 
+      else if (text.includes('spiral') || text.includes('implantsperal') || text.includes('kontratseptsiya')) {
+        return "Spiral (kontratseptiv vosita) malakali shifokor tomonidan 5-10 daqiqa ichida og'riqsiz o'rnatiladi. 7-10 kun davomida og'ir yuk ko'tarish taqiqlanadi.";
+      } 
+      else if (text.includes('sistit') || text.includes('siydik')) {
+        return "Sistit (siydik pufagining yallig'lanishi) zamonaviy lazer SO2 yordamida tez va samarali davolanadi. 5-7 kun ichida butunlay xalos bo'lasiz.";
+      } 
+      else if (text.includes('miyoma')) {
+        return "Bachadon miyomasi gormonal o'zgarishlar sabab yuzaga keladigan xavfsiz o'sma bo'lib, dori-darmon yoki kichik invaziv usulda davolanadi.";
+      } 
+      else if (text.includes('ajralma') || text.includes('videlina') || text.includes('infeksiya')) {
+        return "Intim zonalardagi ajralmalar va mikroflora buzilishlarini davolash uchun shifokor ko'rigidan o'tib, kerakli tahlillarni topshirish lozim.";
+      } 
+      else if (text.includes('razriv') || text.includes('yirtilish') || text.includes('tug\'ruq')) {
+        return "Tug'ruqdan keyingi yirtilishlar va chandiqlarni jarrohlik yo'li bilan qayta tiklash amaliyoti 45-60 daqiqa davom etadi.";
       } 
       else if (text.includes('keyin') || text.includes('parvarish') || text.includes('taqiq') || text.includes('aloqa')) {
-        return "Muolajalardan keyingi parvarish bo'yicha Dr. Surayyo Vahobjonovna sizga shaxsan batafsil ko'rsatmalar beradilar. Odatda gigiyena qoidalariga rioya qilish va maxsus malhamlardan foydalanish tavsiya etiladi.";
+        return "Muolajadan keyin odatda 3-4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi. Antiseptik ishlov berish va shifokor tavsiya etgan malhamlardan foydalanish zarur.";
       } 
       else {
-        return "Murojaatingiz uchun rahmat! Savolingiz mutaxassisimizga yuborildi. Dr. Surayyo Vahobjonovna yaqin orada shaxsan o'zlari sizga javob beradilar.";
+        return "Murojaatingiz uchun rahmat! Savolingiz mutaxassisimizga yuborildi. Dr. Surayyo Vahobjonovna yaqin orada shaxsan o'zlari sizga javob beradilar. Shuningdek, +998 95 277 53 54 raqamiga qo'ng'iroq qilib ham batafsil ma'lumot olishingiz mumkin.";
       }
     }
 
-    // SAYTDAN SAVOL YUBORISH
+    // SAYTDAN SAVOL YUBORISH (AI AVTOMATIK JAVOB VA ADMINGA XABAR)
     document.getElementById('chatForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const text = chatInput.value.trim();
       if (!text) return;
 
-      // 1. Foydalanuvchi xabarini qo'shish
+      // 1. Bemorning savolini qo'shish
       chatHistory.push({ sender: 'user', text: text });
       
-      // 2. Mutaxassis bot sifatida avtomatik aqlli javob qo'shish
+      // 2. Botning avtomatik professional javobini qo'shish (Faqat 1 marta)
       const replyMessage = getSmartAutoReply(text);
       chatHistory.push({ sender: 'doctor', text: replyMessage });
 
@@ -1416,7 +1288,7 @@
 
       // 3. Adminga xabar jo'natish
       const tgMsg = `💬 *CHAT SAVOLI (Dr. Surayyo Ginekolog Sayti)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
-      sendToTelegram(tgMsg, null);
+      sendToTelegram(tgMsg);
     });
 
     // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH HABARLARNI QABUL QILISH
