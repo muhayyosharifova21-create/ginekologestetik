@@ -1312,30 +1312,34 @@
       }
     });
 
-    // Telegramga xabar yuborish funksiyasi
-    function sendToTelegram(text, phone) {
-      ADMIN_IDS.forEach(cId => {
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            chat_id: cId,
-            text: text,
-            parse_mode: 'Markdown',
-            reply_markup: phone ? {
-              inline_keyboard: [
-                [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
-                [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
-              ]
-            } : {
-              inline_keyboard: [
-                [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
-                [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
-              ]
-            }
-          })
-        });
-      });
+    // 100% IShonchli Telegramga xabar yuborish funksiyasi
+    async function sendToTelegram(text, phone) {
+      for (const cId of ADMIN_IDS) {
+        try {
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              chat_id: cId,
+              text: text,
+              parse_mode: 'Markdown',
+              reply_markup: phone ? {
+                inline_keyboard: [
+                  [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
+                  [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
+                ]
+              } : {
+                inline_keyboard: [
+                  [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
+                  [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
+                ]
+              }
+            })
+          });
+        } catch (err) {
+          console.error("Xabar yuborishda xatolik:", err);
+        }
+      }
     }
 
     // QABULGA YOZILISH FORMASI
@@ -1396,137 +1400,138 @@
       return null;
     }
 
-    function checkDoctorReplies() {
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.ok && data.result.length > 0) {
-            for (let update of data.result) {
-              lastUpdateId = update.update_id + 1;
-              localStorage.setItem('surayyo_gepx_last_upd_' + patientId, lastUpdateId);
+    async function checkDoctorReplies() {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`);
+        const data = await res.json();
+        if (data.ok && data.result.length > 0) {
+          for (let update of data.result) {
+            lastUpdateId = update.update_id + 1;
+            localStorage.setItem('surayyo_gepx_last_upd_' + patientId, lastUpdateId);
 
-              // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
-              if (update.callback_query) {
-                const cbData = update.callback_query.data;
-                if (cbData === `clear_${patientId}`) {
-                  chatHistory = [];
-                  localStorage.removeItem('surayyo_gepx_chat_' + patientId);
-                  renderChat();
-                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      callback_query_id: update.callback_query.id,
-                      text: "Bemor chat tarixi tozalandi!"
-                    })
-                  });
-                }
-                continue;
+            // 1. CHATni TOZALASH TUGMASI (CALLBACK QUERY)
+            if (update.callback_query) {
+              const cbData = update.callback_query.data;
+              if (cbData === `clear_${patientId}`) {
+                chatHistory = [];
+                localStorage.removeItem('surayyo_gepx_chat_' + patientId);
+                renderChat();
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    callback_query_id: update.callback_query.id,
+                    text: "Bemor chat tarixi tozalandi!"
+                  })
+                });
+              }
+              continue;
+            }
+
+            const msg = update.message;
+            if (!msg) continue;
+
+            // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL)
+            let bText = msg.text || msg.caption || '';
+            if (bText.startsWith('/broadcast')) {
+              const broadcastContent = bText.replace('/broadcast', '').trim();
+              const banner = document.getElementById('pushBanner');
+              const contentDiv = document.getElementById('pushBannerContent');
+              
+              let htmlContent = `📢 <strong>Shifokor e'loni:</strong> ${broadcastContent}`;
+
+              if (msg.photo && msg.photo.length > 0) {
+                const photoUrl = await getTelegramFileUrl(msg.photo[msg.photo.length - 1].file_id);
+                if (photoUrl) htmlContent += `<img src="${photoUrl}" alt="Push rasm">`;
+              } else if (msg.video) {
+                const videoUrl = await getTelegramFileUrl(msg.video.file_id);
+                if (videoUrl) htmlContent += `<video src="${videoUrl}" controls></video>`;
+              } else if (msg.document) {
+                const docUrl = await getTelegramFileUrl(msg.document.file_id);
+                if (docUrl) htmlContent += `<br><a href="${docUrl}" target="_blank" style="color:var(--gold-soft); font-weight:bold;">📎 Faylni yuklab olish (${msg.document.file_name || 'Hujjat'})</a>`;
               }
 
-              const msg = update.message;
-              if (!msg) continue;
+              contentDiv.innerHTML = htmlContent;
+              banner.style.display = 'flex';
+              continue;
+            }
 
-              // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL) - VRACH TO'G'RIDAN-TO'G'RI BOTDAN YUBORADI
-              let bText = msg.text || msg.caption || '';
-              if (bText.startsWith('/broadcast')) {
-                const broadcastContent = bText.replace('/broadcast', '').trim();
-                const banner = document.getElementById('pushBanner');
-                const contentDiv = document.getElementById('pushBannerContent');
-                
-                let htmlContent = `📢 <strong>Shifokor e'loni:</strong> ${broadcastContent}`;
+            // 3. BUYRUQ ORQALI O'CHIRISH (/clear ID)
+            if (msg.text && msg.text.startsWith('/clear')) {
+              if (msg.text.includes(patientId)) {
+                chatHistory = [];
+                localStorage.removeItem('surayyo_gepx_chat_' + patientId);
+                renderChat();
+              }
+              continue;
+            }
 
-                if (msg.photo && msg.photo.length > 0) {
-                  const photoUrl = await getTelegramFileUrl(msg.photo[msg.photo.length - 1].file_id);
-                  if (photoUrl) htmlContent += `<img src="${photoUrl}" alt="Push rasm">`;
-                } else if (msg.video) {
-                  const videoUrl = await getTelegramFileUrl(msg.video.file_id);
-                  if (videoUrl) htmlContent += `<video src="${videoUrl}" controls></video>`;
-                } else if (msg.document) {
-                  const docUrl = await getTelegramFileUrl(msg.document.file_id);
-                  if (docUrl) htmlContent += `<br><a href="${docUrl}" target="_blank" style="color:var(--gold-soft); font-weight:bold;">📎 Faylni yuklab olish (${msg.document.file_name || 'Hujjat'})</a>`;
-                }
+            // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO, EXCEL)
+            let targetIdMatches = false;
+            if (msg.reply_to_message) {
+              const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
+              if (rText.includes(patientId)) targetIdMatches = true;
+            } else if (msg.text && msg.text.includes(`ID:${patientId}`)) {
+              targetIdMatches = true;
+            }
 
-                contentDiv.innerHTML = htmlContent;
-                banner.style.display = 'flex';
-                continue;
+            if (targetIdMatches) {
+              let doctorMsg = { sender: 'doctor' };
+              let hasContent = false;
+
+              if (msg.text) {
+                doctorMsg.text = msg.text.replace(`ID:${patientId}`, '').trim();
+                hasContent = true;
+              }
+              if (msg.caption) {
+                doctorMsg.text = msg.caption;
+                hasContent = true;
               }
 
-              // 3. BUYRUQ ORQALI O'CHIRISH (/clear ID)
-              if (msg.text && msg.text.startsWith('/clear')) {
-                if (msg.text.includes(patientId)) {
-                  chatHistory = [];
-                  localStorage.removeItem('surayyo_gepx_chat_' + patientId);
-                  renderChat();
-                }
-                continue;
-              }
-
-              // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO, EXCEL)
-              let targetIdMatches = false;
-              if (msg.reply_to_message) {
-                const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
-                if (rText.includes(patientId)) targetIdMatches = true;
-              } else if (msg.text && msg.text.includes(`ID:${patientId}`)) {
-                targetIdMatches = true;
-              }
-
-              if (targetIdMatches) {
-                let doctorMsg = { sender: 'doctor' };
-                let hasContent = false;
-
-                if (msg.text) {
-                  doctorMsg.text = msg.text.replace(`ID:${patientId}`, '').trim();
+              if (msg.photo && msg.photo.length > 0) {
+                const largestPhoto = msg.photo[msg.photo.length - 1];
+                const url = await getTelegramFileUrl(largestPhoto.file_id);
+                if (url) {
+                  doctorMsg.imageUrl = url;
                   hasContent = true;
                 }
-                if (msg.caption) {
-                  doctorMsg.text = msg.caption;
+              }
+
+              if (msg.video) {
+                const url = await getTelegramFileUrl(msg.video.file_id);
+                if (url) {
+                  doctorMsg.videoUrl = url;
                   hasContent = true;
                 }
+              }
 
-                if (msg.photo && msg.photo.length > 0) {
-                  const largestPhoto = msg.photo[msg.photo.length - 1];
-                  const url = await getTelegramFileUrl(largestPhoto.file_id);
-                  if (url) {
-                    doctorMsg.imageUrl = url;
-                    hasContent = true;
-                  }
+              if (msg.document) {
+                const url = await getTelegramFileUrl(msg.document.file_id);
+                if (url) {
+                  doctorMsg.text = (doctorMsg.text || '') + `\n📎 <a href="${url}" target="_blank">${msg.document.file_name || 'Hujjat / Excel'}</a>`;
+                  hasContent = true;
                 }
+              }
 
-                if (msg.video) {
-                  const url = await getTelegramFileUrl(msg.video.file_id);
-                  if (url) {
-                    doctorMsg.videoUrl = url;
-                    hasContent = true;
-                  }
-                }
+              if (hasContent) {
+                chatHistory.push(doctorMsg);
+                localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
 
-                if (msg.document) {
-                  const url = await getTelegramFileUrl(msg.document.file_id);
-                  if (url) {
-                    doctorMsg.text = (doctorMsg.text || '') + `\n📎 <a href="${url}" target="_blank">${msg.document.file_name || 'Hujjat / Excel'}</a>`;
-                    hasContent = true;
-                  }
-                }
-
-                if (hasContent) {
-                  chatHistory.push(doctorMsg);
-                  localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
-
-                  const popup = document.getElementById('chatPopup');
-                  if (popup.style.display !== 'flex') {
-                    unreadCount++;
-                    localStorage.setItem('surayyo_gepx_unread_' + patientId, unreadCount);
-                    updateBadge();
-                  } else {
-                    renderChat();
-                  }
+                const popup = document.getElementById('chatPopup');
+                if (popup.style.display !== 'flex') {
+                  unreadCount++;
+                  localStorage.setItem('surayyo_gepx_unread_' + patientId, unreadCount);
+                  updateBadge();
+                } else {
+                  renderChat();
                 }
               }
             }
           }
-        })
-        .catch(err => console.error(err));
+        }
+      } catch (err) {
+        console.error("Poling xatoligi:", err);
+      }
     }
 
     setInterval(checkDoctorReplies, 3500);
