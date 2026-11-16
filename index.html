@@ -1312,7 +1312,7 @@
       }
     });
 
-    // 100% IShonchli Telegramga xabar yuborish funksiyasi
+    // Telegramga xabar yuborish funksiyasi (Faqat bitta xabar kelishi ta'minlandi)
     async function sendToTelegram(text, phone) {
       for (const cId of ADMIN_IDS) {
         try {
@@ -1367,24 +1367,29 @@
       this.reset();
     });
 
-    // SAYTDAN SAVOL YUBORISH (FAQAT MATN)
-    document.getElementById('chatForm').addEventListener('submit', function(e) {
+    // SAYTDAN SAVOL YUBORISH (AI AVTOMATIK JAVOB VA ADMINGA XABAR)
+    document.getElementById('chatForm').addEventListener('submit', async function(e) {
       e.preventDefault();
       const text = chatInput.value.trim();
       if (!text) return;
 
+      // 1. Foydalanuvchi xabarini chatga chiqarish
       chatHistory.push({ sender: 'user', text: text });
+      
+      // 2. AI Avtomatik javobini qo'shish (Bemorga darhol javob qaytishi uchun)
+      const autoReplyText = "Assalomu alaykum! Murojaatingiz uchun rahmat. Dr. Surayyo Vahobjonovna tez orada o'zlari javob berishadilar.";
+      chatHistory.push({ sender: 'doctor', text: autoReplyText });
+
       localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
       renderChat();
-
-      const tgMsg = `💬 *CHAT SAVOLI (Dr. Surayyo Ginekolog Sayti)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
-
-      sendToTelegram(tgMsg, null);
-
       chatInput.value = '';
+
+      // 3. Adminga xabar jo'natish
+      const tgMsg = `💬 *CHAT SAVOLI (Dr. Surayyo Ginekolog Sayti)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
+      sendToTelegram(tgMsg, null);
     });
 
-    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH HABARLARNI QABUL QILISH
+    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO, EXCEL VA PUSH /START MENYUNI QABUL QILISH
     let lastUpdateId = parseInt(localStorage.getItem('surayyo_gepx_last_upd_' + patientId)) || 0;
 
     async function getTelegramFileUrl(fileId) {
@@ -1409,7 +1414,26 @@
             lastUpdateId = update.update_id + 1;
             localStorage.setItem('surayyo_gepx_last_upd_' + patientId, lastUpdateId);
 
-            // 1. CHATni TOZALASH TUGMASI (CALLBACK QUERY)
+            const msg = update.message;
+            if (!msg) continue;
+
+            // Admin /start bosganda yoki menyu so'raganda tugmalarni chiqarish
+            if (msg.text === '/start') {
+              for (const cId of ADMIN_IDS) {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    chat_id: cId,
+                    text: `👋 Assalomu alaykum, Dr. Surayyo Vahobjonovna!\nSizning admin panel botingiz faol va ishlayapti.\n\n*Buyruqlar:*\n• Bemorlarga e'lon yuborish uchun: \`/broadcast Xabar matni\` (rasm, video yoki excel bilan birga yuborishingiz mumkin)`,
+                    parse_mode: 'Markdown'
+                  })
+                });
+              }
+              continue;
+            }
+
+            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
             if (update.callback_query) {
               const cbData = update.callback_query.data;
               if (cbData === `clear_${patientId}`) {
@@ -1427,9 +1451,6 @@
               }
               continue;
             }
-
-            const msg = update.message;
-            if (!msg) continue;
 
             // 2. PUSH HABAR (/broadcast MATN, RASM, VIDEO, EXCEL)
             let bText = msg.text || msg.caption || '';
