@@ -360,7 +360,7 @@
       color: #6ee7b7;
     }
 
-    /* FLOATING TELEGRAM BOT BUTTON */
+    /* FLOATING CHAT BUTTON */
     .chat-widget-btn {
       position: fixed;
       bottom: 22px;
@@ -377,6 +377,7 @@
       text-decoration: none;
       box-shadow: 0 10px 28px rgba(229, 193, 88, 0.45);
       z-index: 1000;
+      cursor: pointer;
     }
 
     .chat-widget-btn:hover {
@@ -675,13 +676,31 @@
       </div>
     </main>
 
-    <!-- XAVFSIZ TELEGRAM BOT TUGMASI -->
-    <a href="https://t.me/DrSurayyoMed_bot" target="_blank" rel="noopener" class="chat-widget-btn" title="Shifokorga savol berish">
-      <svg viewBox="0 0 24 24"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+    <!-- SAYT ICHIDAGI XAVFSIZ CHAT (TOKENSIZ) -->
+    <div class="chat-widget-btn" onclick="toggleChat()" title="Shifokorga savol berish">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
       <span>Shifokorga yozish</span>
-    </a>
+      <span id="chatBadge" style="display:none;background:#f43f5e;color:#fff;border-radius:50%;padding:2px 7px;font-size:12px;">0</span>
+    </div>
 
-    <!-- FOOTER -->
+    <div id="chatPopup" style="display:none;position:fixed;bottom:85px;right:20px;width:350px;max-width:92vw;height:430px;background:#0c2420;border:1px solid rgba(212,175,55,0.35);border-radius:20px;box-shadow:0 18px 45px rgba(0,0,0,0.75);z-index:1001;flex-direction:column;overflow:hidden;">
+      <div style="background:linear-gradient(135deg,#134e4a,#065f46);color:#f5df99;padding:14px 16px;font-weight:700;display:flex;justify-content:space-between;align-items:center;">
+        <span>💬 Ginekolog Estetik Plastik Xirurg</span>
+        <button onclick="toggleChat()" style="background:none;border:none;color:#fff;font-size:22px;cursor:pointer;">&times;</button>
+      </div>
+      <div style="background:rgba(229,193,88,0.12);padding:6px 10px;font-size:12px;color:#f5df99;text-align:center;">
+        🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
+      </div>
+      <div id="chatBody" style="padding:14px;flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;"></div>
+      <form id="chatQuestionForm" style="padding:10px;background:rgba(0,0,0,0.3);display:flex;flex-direction:column;gap:8px;">
+        <textarea id="chatQuestionText" placeholder="Savolingizni yozing..." required style="width:100%;height:50px;padding:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(212,175,55,0.3);border-radius:10px;color:#fff;resize:none;font-family:inherit;"></textarea>
+        <div style="display:flex;gap:8px;">
+          <button type="submit" style="flex:1;background:linear-gradient(135deg,#e5c158,#cfa438);color:#061412;border:none;padding:10px;border-radius:10px;font-weight:800;cursor:pointer;">Yuborish</button>
+          <a href="https://t.me/DrSurayyoMed_bot" target="_blank" rel="noopener" style="background:#0088cc;color:#fff;padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;display:flex;align-items:center;">Telegram</a>
+        </div>
+      </form>
+    </div>
+
     <footer class="site-footer">
       <p><strong>Ginekolog Estetik Plastik Xirurg</strong> • Doktor Surayyo Vahobjonovna | Tel: <a href="tel:+998952775354" style="color: #e5c158; text-decoration: none;">+998 95 277 53 54</a></p>
       <p>© 2026 Barcha huquqlar himoyalangan.</p>
@@ -689,5 +708,88 @@
 
   </div>
 
+  <script>
+    const WORKER_CHAT_URL = "https://billowing-firefly-6878.muhayyosharifova21.workers.dev/web-chat";
+    let patientId = localStorage.getItem("gepx_patient_id");
+    if (!patientId) {
+      patientId = "ID-" + Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem("gepx_patient_id", patientId);
+    }
+
+    let chatHistory = JSON.parse(localStorage.getItem("gepx_chat_" + patientId)) || [];
+    let unreadCount = 0;
+
+    function renderChat() {
+      const chatBody = document.getElementById("chatBody");
+      chatBody.innerHTML = '<div style="background:rgba(255,255,255,0.09);color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;">Assalomu alaykum! Savolingizni shu yerga yozishingiz yoki +998 95 277 53 54 raqamiga qo\'ng\'iroq qilishingiz mumkin.</div>';
+      chatHistory.forEach(m => {
+        const div = document.createElement("div");
+        div.style.cssText = m.sender === "user"
+          ? "background:#059669;color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;align-self:flex-end;"
+          : "background:rgba(255,255,255,0.12);color:#fff;padding:9px 13px;border-radius:13px;font-size:14px;max-width:85%;align-self:flex-start;border:1px solid rgba(212,175,55,0.3);";
+        div.textContent = m.text;
+        chatBody.appendChild(div);
+      });
+      chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function toggleChat() {
+      const popup = document.getElementById("chatPopup");
+      if (popup.style.display === "flex") {
+        popup.style.display = "none";
+      } else {
+        popup.style.display = "flex";
+        unreadCount = 0;
+        document.getElementById("chatBadge").style.display = "none";
+        renderChat();
+      }
+    }
+
+    document.getElementById("chatQuestionForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const input = document.getElementById("chatQuestionText");
+      const question = input.value.trim();
+      if (!question) return;
+
+      chatHistory.push({ sender: "user", text: question });
+      localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
+      renderChat();
+      input.value = "";
+
+      try {
+        await fetch(WORKER_CHAT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "send", patientId, question })
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    setInterval(async () => {
+      try {
+        const res = await fetch(WORKER_CHAT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "poll", patientId })
+        });
+        const data = await res.json();
+        if (data.ok && data.replies && data.replies.length > 0) {
+          data.replies.forEach(ans => chatHistory.push({ sender: "doctor", text: ans }));
+          localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
+          const popup = document.getElementById("chatPopup");
+          if (popup.style.display === "flex") {
+            renderChat();
+          } else {
+            unreadCount += data.replies.length;
+            const badge = document.getElementById("chatBadge");
+            badge.textContent = unreadCount;
+            badge.style.display = "inline-block";
+          }
+        }
+      } catch (e) {}
+    }, 5000);
+  </script>
 </body>
 </html>
