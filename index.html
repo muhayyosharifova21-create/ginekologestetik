@@ -560,7 +560,7 @@
       left: 16px;
       max-width: 370px;
       margin: 0 auto;
-      height: 440px;
+      height: 470px;
       background: #0c2420;
       border: 1px solid var(--glass-border);
       border-radius: 20px;
@@ -600,6 +600,43 @@
       border-bottom: 1px solid rgba(229, 193, 88, 0.15);
     }
 
+    /* TEZKOR SAVOL TUGMALARI (CHIPS) */
+    .quick-chips {
+      padding: 8px 10px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.2);
+      border-bottom: 1px solid rgba(229, 193, 88, 0.15);
+      white-space: nowrap;
+    }
+
+    .quick-chips::-webkit-scrollbar {
+      height: 3px;
+    }
+
+    .quick-chips::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 4px;
+    }
+
+    .chip {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #6ee7b7;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+
     .chat-body {
       padding: 12px;
       flex: 1;
@@ -617,7 +654,7 @@
 
     .chat-footer textarea {
       width: 100%;
-      height: 48px;
+      height: 45px;
       padding: 8px 10px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--glass-border);
@@ -626,14 +663,14 @@
       resize: none;
       font-family: inherit;
       font-size: 0.85rem;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .msg-bubble {
       padding: 9px 13px;
       border-radius: 12px;
       font-size: 0.85rem;
-      max-width: 86%;
+      max-width: 88%;
       line-height: 1.45;
       word-break: break-word;
     }
@@ -711,7 +748,7 @@
       .chat-popup {
         right: 26px;
         left: auto;
-        width: 365px;
+        width: 375px;
       }
     }
   </style>
@@ -1074,12 +1111,24 @@
     <div class="chat-warning">
       🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
     </div>
+
+    <!-- BEMORLAR UCHUN TEZKOR TUGMALAR (CHIPS) -->
+    <div class="quick-chips">
+      <button class="chip" onclick="sendChip('Labioplastika')">✨ Labioplastika</button>
+      <button class="chip" onclick="sendChip('Vaginoplastika')">🌸 Vaginoplastika</button>
+      <button class="chip" onclick="sendChip('Qabul vaqti')">📅 Qabul vaqti</button>
+      <button class="chip" onclick="sendChip('Narxlar')">💎 Narxlar</button>
+      <button class="chip" onclick="sendChip('Intim oqartirish')">🌿 Oqartirish</button>
+      <button class="chip" onclick="sendChip('Eroziya')">🩺 Eroziya</button>
+      <button class="chip" onclick="sendChip('Sistit')">💧 Sistit</button>
+    </div>
+
     <div class="chat-body" id="chatBody">
       <div class="msg-bubble msg-doctor">Assalomu alaykum! Ginekolog estetik plastik xirurg Dr. Surayyo Vahobjonovman. Sizni qanday savol yoki muolaja qiziqtiryapti? Bemalol so'rashingiz mumkin.<br><br>📞 Tel: +998 95 277 53 54<br>💬 Telegram: <a href="https://t.me/Sr7431" target="_blank" style="color:#f5df99;">@Sr7431</a></div>
     </div>
     <div class="chat-footer">
       <form id="chatForm">
-        <textarea id="chatInput" placeholder="Savolingizni yozing (masalan: labioplastika, qabul vaqti)..." required></textarea>
+        <textarea id="chatInput" placeholder="Savolingizni yozing..." required></textarea>
         <div class="chat-hint">ℹ️ Bemor faqat matn yozishi mumkin.</div>
         <button type="submit" class="submit-btn" style="margin-top:6px; padding:8px;">Yuborish</button>
       </form>
@@ -1169,6 +1218,12 @@
       }
     }
 
+    // Tezkor tugma bosilganda avtomatik xabar yuborish
+    function sendChip(topic) {
+      chatInput.value = topic;
+      document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    }
+
     // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARNI BLOKLASH
     const chatInput = document.getElementById('chatInput');
     ['dragenter', 'dragover', 'drop'].forEach(evtName => {
@@ -1214,7 +1269,7 @@
       }
     }
 
-    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI (To'liq va batafsil)
+    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
     function getSmartAutoReply(userText) {
       const text = userText.toLowerCase();
 
@@ -1374,7 +1429,7 @@
               continue;
             }
 
-            // 1. CHATni TOZALASH TUGMASI (CALLBACK QUERY)
+            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
             if (update.callback_query) {
               const cbData = update.callback_query.data;
               if (cbData === `clear_${patientId}`) {
