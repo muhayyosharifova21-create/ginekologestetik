@@ -55,6 +55,37 @@
       padding: 0 16px;
     }
 
+    /* PUSH HABAR BANNERI */
+    .push-banner {
+      display: none;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin: 16px auto;
+      max-width: 1180px;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .push-banner button {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* NAVBAR */
     .navbar {
       width: 100%;
@@ -547,40 +578,45 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 18px;
+      width: 52px;
+      height: 52px;
       background: linear-gradient(135deg, var(--gold) 0%, #b48a28 100%);
-      color: #061412;
-      font-weight: 800;
-      font-size: 0.88rem;
-      border-radius: 50px;
-      box-shadow: 0 10px 26px rgba(229, 193, 88, 0.45);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(229, 193, 88, 0.45);
       cursor: pointer;
       z-index: 1000;
     }
 
     .chat-toggle svg {
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
       fill: #061412;
     }
 
     .chat-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
       background: #ef4444;
       color: #ffffff;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: bold;
-      padding: 2px 7px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       display: none;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #061412;
     }
 
     /* CHAT POPUP */
     .chat-popup {
       position: fixed;
-      bottom: 80px;
+      bottom: 82px;
       right: 16px;
       left: 16px;
       max-width: 370px;
@@ -678,6 +714,13 @@
       border: 1px solid var(--glass-border);
     }
 
+    .msg-doctor img, .msg-doctor video {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 6px;
+      display: block;
+    }
+
     /* TABLET & DESKTOP */
     @media (min-width: 640px) {
       .actions-grid {
@@ -741,6 +784,12 @@
   </style>
 </head>
 <body>
+
+  <!-- PUSH HABAR BANNERI -->
+  <div class="push-banner" id="pushBanner">
+    <span id="pushBannerText"></span>
+    <button onclick="document.getElementById('pushBanner').style.display='none'">&times;</button>
+  </div>
 
   <!-- NAVBAR -->
   <nav class="navbar">
@@ -1034,7 +1083,7 @@
     <!-- QABULGA YOZILISH FORMASI -->
     <section class="form-container" id="appointment">
       <h2>Qabulga onlayn yozilish</h2>
-      <p>Ma'lumotlaringizni qoldiring, xabaringiz to'g'ridan-to'g'ri shifokor botiga yuboriladi va tez orada siz bilan bog'lanamiz.</p>
+      <p>Ma'lumotlaringizni qoldiring, administrator tez orada siz bilan bog'lanib qulay vaqtni belgilaydi.</p>
 
       <form id="appointmentForm">
         <div class="form-group">
@@ -1071,7 +1120,7 @@
           <textarea id="patientNote" class="form-textarea" placeholder="Qisqacha savol yoki izoh yozishingiz mumkin..."></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Qabulga yozilishni yuborish</button>
+        <button type="submit" class="submit-btn">Qabulga yozilishni tasdiqlash</button>
       </form>
     </section>
 
@@ -1088,7 +1137,7 @@
           <span>+</span>
         </div>
         <div class="faq-answer">
-          +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz, saytdagi "Qabulga onlayn yozilish" formasini to'ldirishingiz yoki o'ng pastki burchakdagi chat orqali yozishingiz mumkin.
+          +998 95 277 53 54 raqamiga qo'ng'iroq qilishingiz, saytdagi onlayn forma orqali yoki o'ng pastki burchakdagi chat orqali yozishingiz mumkin.
         </div>
       </div>
 
@@ -1124,31 +1173,33 @@
   <!-- FLOATING CHAT BUTTON -->
   <div class="chat-toggle" onclick="toggleChat()" title="Shifokorga savol berish">
     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
-    <span>Shifokorga yozish</span>
-    <span class="chat-badge" id="chatBadge">0</span>
+    <div class="chat-badge" id="chatBadge">0</div>
   </div>
 
   <!-- POPUP CHAT -->
   <div class="chat-popup" id="chatPopup">
     <div class="chat-header">
-      <span>💬 Ginekolog Estetik Plastik Xirurg</span>
+      <span>💬 Qabulxona bilan chat</span>
       <button class="chat-close" onclick="toggleChat()">&times;</button>
     </div>
     <div class="chat-warning">
       🚫 Xavfsizlik: Rasm va video (18+) yuborish taqiqlangan. Faqat matn yozing.
     </div>
-    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-body" id="chatBody">
+      <div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni matn ko'rinishida yozib qoldirishingiz mumkin.</div>
+    </div>
     <div class="chat-footer">
-      <form id="chatQuestionForm">
-        <textarea id="chatQuestionText" placeholder="Savolingizni yozing (faqat matn)..." required></textarea>
-        <button type="submit" class="submit-btn" style="padding: 9px;">Yuborish</button>
+      <form id="chatForm">
+        <textarea id="chatInput" placeholder="Savolingizni yozing (faqat matn)..." required></textarea>
+        <div class="chat-hint">ℹ️ Bemor faqat matn yozishi mumkin.</div>
+        <button type="submit" class="submit-btn" style="margin-top:6px; padding:8px;">Yuborish</button>
       </form>
     </div>
   </div>
 
-  <!-- CLOUDFLARE WORKER BOT LOGIKASI -->
+  <!-- JAVASCRIPT LOGIKA -->
   <script>
-    const WORKER_CHAT_URL = "https://billowing-firefly-6878.muhayyosharifova21.workers.dev/web-chat";
+    const BOT_TOKEN = '9181424161:AAEP-_DprKrGiJtb_SS7-XBjFGldugWqJpc';
 
     function toggleFaq(elem) {
       const answer = elem.nextElementSibling;
@@ -1162,136 +1213,308 @@
       }
     }
 
-    let patientId = localStorage.getItem("gepx_patient_id");
+    let patientId = localStorage.getItem('surayyo_gepx_id');
     if (!patientId) {
-      patientId = "ID-" + Math.floor(100000 + Math.random() * 900000);
-      localStorage.setItem("gepx_patient_id", patientId);
+      patientId = 'GEPX-' + Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('surayyo_gepx_id', patientId);
     }
 
-    let chatHistory = (JSON.parse(localStorage.getItem("gepx_chat_" + patientId)) || [])
-      .filter(m => !String(m.text).includes("BOT_TOKEN") && !String(m.text).includes("Xatolik:"));
-    localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
+    let chatHistory = JSON.parse(localStorage.getItem('surayyo_gepx_chat_' + patientId)) || [];
+    let unreadCount = parseInt(localStorage.getItem('surayyo_gepx_unread_' + patientId)) || 0;
 
-    let unreadCount = 0;
+    function updateBadge() {
+      const badge = document.getElementById('chatBadge');
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'flex';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+    updateBadge();
 
     function renderChat() {
-      const chatBody = document.getElementById("chatBody");
-      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni shu yerga yozishingiz yoki +998 95 277 53 54 raqamiga qo\'ng\'iroq qilishingiz mumkin.</div>';
-      chatHistory.forEach(m => {
-        const div = document.createElement("div");
-        div.className = `msg-bubble ${m.sender === "user" ? "msg-user" : "msg-doctor"}`;
-        div.textContent = m.text;
+      const chatBody = document.getElementById('chatBody');
+      chatBody.innerHTML = '<div class="msg-bubble msg-doctor">Assalomu alaykum! Dr. Surayyo Vahobjonovna qabulxonasiga xush kelibsiz. Savolingizni matn ko\'rinishida yozib qoldirishingiz mumkin.</div>';
+      
+      chatHistory.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : 'msg-doctor'}`;
+        
+        if (msg.text) {
+          const p = document.createElement('p');
+          p.textContent = msg.text;
+          div.appendChild(p);
+        }
+        if (msg.imageUrl) {
+          const img = document.createElement('img');
+          img.src = msg.imageUrl;
+          img.alt = "Shifokor surati";
+          div.appendChild(img);
+        }
+        if (msg.videoUrl) {
+          const vid = document.createElement('video');
+          vid.src = msg.videoUrl;
+          vid.controls = true;
+          div.appendChild(vid);
+        }
+
         chatBody.appendChild(div);
       });
       chatBody.scrollTop = chatBody.scrollHeight;
     }
 
     function toggleChat() {
-      const popup = document.getElementById("chatPopup");
-      if (popup.style.display === "flex") {
-        popup.style.display = "none";
+      const popup = document.getElementById('chatPopup');
+      if (popup.style.display === 'flex') {
+        popup.style.display = 'none';
       } else {
-        popup.style.display = "flex";
+        popup.style.display = 'flex';
         unreadCount = 0;
-        document.getElementById("chatBadge").style.display = "none";
+        localStorage.setItem('surayyo_gepx_unread_' + patientId, 0);
+        updateBadge();
         renderChat();
       }
     }
 
-    // RASM VA FAYL TASHLASHNI BLOKLASH
-    const chatInput = document.getElementById("chatQuestionText");
+    // BEMORGA RASM/VIDEO TASHLOVCHI BARCHA HODISALARNI BLOKLASH
+    const chatInput = document.getElementById('chatInput');
     ['dragenter', 'dragover', 'drop'].forEach(evtName => {
       chatInput.addEventListener(evtName, e => e.preventDefault());
     });
     chatInput.addEventListener('drop', e => {
       e.preventDefault();
-      alert("Kechirasiz, bemor faqat matn yozishi mumkin.");
+      alert("Kechirasiz, bemor faqat matn yozishi mumkin. Rasm va video yuborish cheklangan.");
     });
     chatInput.addEventListener('paste', e => {
       const items = (e.clipboardData || window.clipboardData).items;
       for (let item of items) {
         if (item.kind === 'file') {
           e.preventDefault();
-          alert("Kechirasiz, rasm yoki fayl yuborish taqiqlangan. Faqat matn yozing.");
+          alert("Kechirasiz, siz faqat matn yozishingiz mumkin. Rasm yoki fayl yuborish mumkin emas.");
           return;
         }
       }
     });
 
-    // QABULGA YOZILISH FORMASINI WORKER BOTGA YUBORISH
-    document.getElementById("appointmentForm").addEventListener("submit", async function(e) {
+    // QABULGA YOZILISH FORMASI
+    document.getElementById('appointmentForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById("patientName").value.trim();
-      const phone = document.getElementById("patientPhone").value.trim();
-      const service = document.getElementById("patientService").value;
-      const note = document.getElementById("patientNote").value.trim();
+      const name = document.getElementById('patientName').value.trim();
+      const phone = document.getElementById('patientPhone').value.trim();
+      const service = document.getElementById('patientService').value;
+      const note = document.getElementById('patientNote').value.trim();
 
-      const formattedAppointment = `📋 YANGI QABULGA YOZILISH!\n👤 Ism: ${name}\n📞 Tel: ${phone}\n🩺 Yo'nalish: ${service}\n📝 Izoh: ${note || "Kiritilmadi"}`;
+      const message = `📋 *YANGI QABULGA YOZILISH (Dr. Surayyo)*\n\n` +
+                      `👤 *Bemor:* ${name}\n` +
+                      `📞 *Telefon:* ${phone}\n` +
+                      `🩺 *Yo'nalish:* ${service}\n` +
+                      `📝 *Izoh:* ${note || 'Kiritilmadi'}\n` +
+                      `🆔 *ID:* \`${patientId}\``;
 
-      try {
-        await fetch(WORKER_CHAT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            action: "send",
-            patientId: patientId,
-            question: formattedAppointment
-          })
-        });
-        alert("Rahmat! Arizangiz shifokor botiga muvaffaqiyatli yuborildi. Tez orada siz bilan bog'lanamiz.");
-        this.reset();
-      } catch (err) {
-        alert("Xatolik yuz berdi. Iltimos, +998 95 277 53 54 raqamiga qo'ng'iroq qiling.");
-      }
-    });
-
-    // CHAT ORQALI SAVOL YUBORISH
-    document.getElementById("chatQuestionForm").addEventListener("submit", async function(e) {
-      e.preventDefault();
-      const question = chatInput.value.trim();
-      if (!question) return;
-
-      chatHistory.push({ sender: "user", text: question });
-      localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
-      renderChat();
-      chatInput.value = "";
-
-      try {
-        await fetch(WORKER_CHAT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "send", patientId, question })
-        });
-      } catch (err) {}
-    });
-
-    // BOTDAN JAVOBLARNI TEKSHIRISH
-    async function checkDoctorMessages() {
-      try {
-        const res = await fetch(WORKER_CHAT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ action: "poll", patientId })
-        });
-        const data = await res.json();
-        if (data.ok && data.replies && data.replies.length > 0) {
-          data.replies.forEach(ans => chatHistory.push({ sender: "doctor", text: ans }));
-          localStorage.setItem("gepx_chat_" + patientId, JSON.stringify(chatHistory));
-          const popup = document.getElementById("chatPopup");
-          if (popup.style.display === "flex") {
-            renderChat();
-          } else {
-            unreadCount += data.replies.length;
-            const badge = document.getElementById("chatBadge");
-            badge.textContent = unreadCount;
-            badge.style.display = "inline-block";
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
+        .then(res => res.json())
+        .then(data => {
+          let chatIds = new Set();
+          if (data.result) {
+            data.result.forEach(u => {
+              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
+            });
           }
+          chatIds.forEach(cId => {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: cId,
+                text: message,
+                parse_mode: 'Markdown',
+                reply_markup: {
+                  inline_keyboard: [
+                    [{ text: "📞 Telefon qilish", url: `tel:${phone}` }],
+                    [{ text: "🗑 Tarixni tozalash", callback_data: `clear_${patientId}` }]
+                  ]
+                }
+              })
+            });
+          });
+        });
+
+      alert("Rahmat! Arizangiz qabul qilindi. Tez orada administrator siz bilan bog'lanadi.");
+      this.reset();
+    });
+
+    // SAYTDAN SAVOL YUBORISH (FAQAT MATN)
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      chatHistory.push({ sender: 'user', text: text });
+      localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
+      renderChat();
+
+      const tgMsg = `💬 *CHAT SAVOLI (Dr. Surayyo Ginekolog Sayti)*\n\n🆔 *ID:* \`${patientId}\`\n❓ *Bemor savoli:* ${text}\n\n👇 _Javob uchun xabarga Reply qiling:_`;
+
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`)
+        .then(res => res.json())
+        .then(data => {
+          let chatIds = new Set();
+          if (data.result) {
+            data.result.forEach(u => {
+              if (u.message && u.message.chat) chatIds.add(u.message.chat.id);
+            });
+          }
+          chatIds.forEach(cId => {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: cId,
+                text: tgMsg,
+                parse_mode: 'Markdown',
+                reply_markup: {
+                  inline_keyboard: [
+                    [{ text: "✍️ Javob yozish (Reply)", switch_inline_query_current_chat: `ID:${patientId} ` }],
+                    [{ text: "🗑 Chatni tozalash", callback_data: `clear_${patientId}` }]
+                  ]
+                }
+              })
+            });
+          });
+        });
+
+      chatInput.value = '';
+    });
+
+    // TELEGRAMDAN KELGAN XABAR, RASM, VIDEO VA BUYRUQLARNI QABUL QILISH
+    let lastUpdateId = parseInt(localStorage.getItem('surayyo_gepx_last_upd_' + patientId)) || 0;
+
+    async function getTelegramFileUrl(fileId) {
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${fileId}`);
+        const data = await res.json();
+        if (data.ok && data.result.file_path) {
+          return `https://api.telegram.org/file/bot${BOT_TOKEN}/${data.result.file_path}`;
         }
-      } catch (e) {}
+      } catch (e) {
+        console.error(e);
+      }
+      return null;
     }
 
-    checkDoctorMessages();
-    setInterval(checkDoctorMessages, 4000);
+    function checkDoctorReplies() {
+      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?offset=${lastUpdateId}&timeout=5`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.ok && data.result.length > 0) {
+            for (let update of data.result) {
+              lastUpdateId = update.update_id + 1;
+              localStorage.setItem('surayyo_gepx_last_upd_' + patientId, lastUpdateId);
+
+              // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
+              if (update.callback_query) {
+                const cbData = update.callback_query.data;
+                if (cbData === `clear_${patientId}`) {
+                  chatHistory = [];
+                  localStorage.removeItem('surayyo_gepx_chat_' + patientId);
+                  renderChat();
+                  fetch(`https://api.telegram.org/bot${BOT_TOKEN}/answerCallbackQuery`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      callback_query_id: update.callback_query.id,
+                      text: "Bemor chat tarixi tozalandi!"
+                    })
+                  });
+                }
+                continue;
+              }
+
+              const msg = update.message;
+              if (!msg) continue;
+
+              // 2. OPSHI PUSH HABAR (/broadcast Matn)
+              if (msg.text && msg.text.startsWith('/broadcast')) {
+                const broadText = msg.text.replace('/broadcast', '').trim();
+                if (broadText) {
+                  const banner = document.getElementById('pushBanner');
+                  document.getElementById('pushBannerText').textContent = `📢 Shifokor e'loni: ${broadText}`;
+                  banner.style.display = 'flex';
+                }
+                continue;
+              }
+
+              // 3. BUYRUQ ORQALI O'CHIRISH (/clear ID)
+              if (msg.text && msg.text.startsWith('/clear')) {
+                if (msg.text.includes(patientId)) {
+                  chatHistory = [];
+                  localStorage.removeItem('surayyo_gepx_chat_' + patientId);
+                  renderChat();
+                }
+                continue;
+              }
+
+              // 4. VRACH REPLY QILGAN JAVOBLAR (MATN, RASM, VIDEO)
+              let targetIdMatches = false;
+              if (msg.reply_to_message) {
+                const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
+                if (rText.includes(patientId)) targetIdMatches = true;
+              } else if (msg.text && msg.text.includes(`ID:${patientId}`)) {
+                targetIdMatches = true;
+              }
+
+              if (targetIdMatches) {
+                let doctorMsg = { sender: 'doctor' };
+                let hasContent = false;
+
+                if (msg.text) {
+                  doctorMsg.text = msg.text.replace(`ID:${patientId}`, '').trim();
+                  hasContent = true;
+                }
+                if (msg.caption) {
+                  doctorMsg.text = msg.caption;
+                  hasContent = true;
+                }
+
+                if (msg.photo && msg.photo.length > 0) {
+                  const largestPhoto = msg.photo[msg.photo.length - 1];
+                  const url = await getTelegramFileUrl(largestPhoto.file_id);
+                  if (url) {
+                    doctorMsg.imageUrl = url;
+                    hasContent = true;
+                  }
+                }
+
+                if (msg.video) {
+                  const url = await getTelegramFileUrl(msg.video.file_id);
+                  if (url) {
+                    doctorMsg.videoUrl = url;
+                    hasContent = true;
+                  }
+                }
+
+                if (hasContent) {
+                  chatHistory.push(doctorMsg);
+                  localStorage.setItem('surayyo_gepx_chat_' + patientId, JSON.stringify(chatHistory));
+
+                  const popup = document.getElementById('chatPopup');
+                  if (popup.style.display !== 'flex') {
+                    unreadCount++;
+                    localStorage.setItem('surayyo_gepx_unread_' + patientId, unreadCount);
+                    updateBadge();
+                  } else {
+                    renderChat();
+                  }
+                }
+              }
+            }
+          }
+        })
+        .catch(err => console.error(err));
+    }
+
+    setInterval(checkDoctorReplies, 3500);
   </script>
 </body>
 </html>
