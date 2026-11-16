@@ -46,6 +46,12 @@
       line-height: 1.55;
       overflow-x: hidden;
       word-wrap: break-word;
+      top: 0px !important;
+    }
+
+    /* GOOGLE TRANSLATE TOP PANELINI YASHIRISH */
+    .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .VIpgJd-ZVi9od-ORHb-OEVmcd {
+      display: none !important;
     }
 
     .container {
@@ -98,7 +104,7 @@
     /* NAVBAR */
     .navbar {
       width: 100%;
-      background: rgba(6, 20, 18, 0.92);
+      background: rgba(6, 20, 18, 0.94);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
       border-bottom: 1px solid var(--glass-border);
@@ -111,8 +117,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 0;
-      gap: 12px;
+      padding: 10px 0;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .nav-brand {
@@ -139,7 +146,7 @@
     }
 
     .brand-title {
-      font-size: 1.02rem;
+      font-size: 1rem;
       font-weight: 800;
       letter-spacing: -0.2px;
       background: linear-gradient(135deg, #ffffff 0%, var(--gold-soft) 100%);
@@ -150,13 +157,58 @@
       text-overflow: ellipsis;
     }
 
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+    }
+
+    /* TIL ALMASHTIRISH PANELI (IKONKA + UZ/RU/EN) */
+    .lang-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(229, 193, 88, 0.1);
+      border: 1px solid rgba(229, 193, 88, 0.35);
+      padding: 4px 6px;
+      border-radius: 50px;
+    }
+
+    .lang-globe {
+      width: 15px;
+      height: 15px;
+      fill: var(--gold);
+      margin-left: 3px;
+      margin-right: 1px;
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      padding: 4px 7px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn:hover, .lang-btn.active {
+      background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
+      color: #061412;
+    }
+
     .nav-contact-btn {
       background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
       color: #061412;
       text-decoration: none;
-      padding: 8px 15px;
+      padding: 8px 13px;
       border-radius: 50px;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 800;
       white-space: nowrap;
       flex-shrink: 0;
@@ -629,6 +681,24 @@
       margin-bottom: 6px;
     }
 
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      color: #ffffff;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .chat-hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
     .msg-bubble {
       padding: 9px 13px;
       border-radius: 12px;
@@ -728,14 +798,30 @@
   <nav class="navbar">
     <div class="container navbar-inner">
       <a href="#" class="nav-brand">
-        <div class="brand-badge">SV</div>
-        <span class="brand-title">Dr. Surayyo Vahobjonovna</span>
+        <div class="brand-badge notranslate">SV</div>
+        <span class="brand-title notranslate">Dr. Surayyo Vahobjonovna</span>
       </a>
-      <a href="tel:+998952775354" class="nav-contact-btn">
-        📞 +998 95 277 53 54
-      </a>
+
+      <div class="nav-actions">
+        <!-- TIL TANLASH IKONKASI VA TUGMALARI (UZ / RU / EN) -->
+        <div class="lang-bar notranslate" title="Tilni tanlang / Выберите язык / Select language">
+          <svg class="lang-globe" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          <button type="button" class="lang-btn" id="btn-uz" onclick="changeLang('uz')">UZ</button>
+          <button type="button" class="lang-btn" id="btn-ru" onclick="changeLang('ru')">RU</button>
+          <button type="button" class="lang-btn" id="btn-en" onclick="changeLang('en')">EN</button>
+        </div>
+
+        <a href="tel:+998952775354" class="nav-contact-btn notranslate">
+          📞 +998 95 277 53 54
+        </a>
+      </div>
     </div>
   </nav>
+
+  <!-- YASHIRIN GOOGLE TRANSLATE ELEMENTI -->
+  <div id="google_translate_element" style="display:none;"></div>
 
   <div class="container">
 
@@ -1086,6 +1172,44 @@
       </form>
     </div>
   </div>
+
+  <!-- GOOGLE TRANSLATE SKRIPTI -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'uz',
+        includedLanguages: 'uz,ru,en',
+        autoDisplay: false
+      }, 'google_translate_element');
+    }
+
+    function changeLang(lang) {
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-' + lang);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (lang === 'uz') {
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname + ";";
+        location.reload();
+        return;
+      }
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = lang;
+        select.dispatchEvent(new Event('change'));
+      }
+    }
+
+    // Sahifa yuklanganda faol til tugmasini belgilash
+    window.addEventListener('DOMContentLoaded', () => {
+      const match = document.cookie.match(/googtrans=\/uz\/(ru|en)/);
+      const currentLang = match ? match[1] : 'uz';
+      const activeBtn = document.getElementById('btn-' + currentLang);
+      if (activeBtn) activeBtn.classList.add('active');
+    });
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <!-- JAVASCRIPT LOGIKA -->
   <script>
