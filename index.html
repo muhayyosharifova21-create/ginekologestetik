@@ -50,7 +50,7 @@
     }
 
     /* GOOGLE TRANSLATE TOP PANELINI YASHIRISH */
-    .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .VIpgJd-ZVi9od-ORHb-OEVmcd {
+    .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .VIpgJd-ZVi9od-ORHb-OEVmcd, skiptranslate > iframe {
       display: none !important;
     }
 
@@ -1173,7 +1173,7 @@
     </div>
   </div>
 
-  <!-- GOOGLE TRANSLATE SKRIPTI -->
+  <!-- GOOGLE TRANSLATE SKRIPTI (UZ / RU / EN TO'LIQ ISHLAYDIGAN) -->
   <script>
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
@@ -1183,30 +1183,55 @@
       }, 'google_translate_element');
     }
 
-    function changeLang(lang) {
+    function clearGoogleCookies() {
+      const host = location.hostname;
+      const parts = host.split('.');
+      const domains = ['', host, '.' + host];
+      if (parts.length > 2) {
+        domains.push('.' + parts.slice(-2).join('.'));
+      }
+      domains.forEach(d => {
+        const domainStr = d ? `; domain=${d}` : '';
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/${domainStr}`;
+      });
+    }
+
+    function setActiveLangBtn(lang) {
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       const activeBtn = document.getElementById('btn-' + lang);
       if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function changeLang(lang) {
+      setActiveLangBtn(lang);
 
       if (lang === 'uz') {
-        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" + location.hostname + ";";
-        location.reload();
+        clearGoogleCookies();
+        const select = document.querySelector('.goog-te-combo');
+        if (select) {
+          select.value = 'uz';
+          select.dispatchEvent(new Event('change'));
+        }
+        setTimeout(() => {
+          location.reload();
+        }, 150);
         return;
       }
+
+      document.cookie = `googtrans=/uz/${lang}; path=/`;
       const select = document.querySelector('.goog-te-combo');
       if (select) {
         select.value = lang;
         select.dispatchEvent(new Event('change'));
+      } else {
+        location.reload();
       }
     }
 
-    // Sahifa yuklanganda faol til tugmasini belgilash
     window.addEventListener('DOMContentLoaded', () => {
       const match = document.cookie.match(/googtrans=\/uz\/(ru|en)/);
       const currentLang = match ? match[1] : 'uz';
-      const activeBtn = document.getElementById('btn-' + currentLang);
-      if (activeBtn) activeBtn.classList.add('active');
+      setActiveLangBtn(currentLang);
     });
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
