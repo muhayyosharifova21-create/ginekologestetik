@@ -47,11 +47,21 @@
       overflow-x: hidden;
       word-wrap: break-word;
       top: 0px !important;
+      position: static !important;
     }
 
-    /* GOOGLE TRANSLATE TOP PANELINI YASHIRISH */
-    .goog-te-banner-frame.skiptranslate, .goog-te-gadget-icon, .VIpgJd-ZVi9od-ORHb-OEVmcd, skiptranslate > iframe {
+    /* GOOGLE TRANSLATE TOP PANEL VA SAKRASHLARNI TO'LIQ YASHIRISH */
+    .goog-te-banner-frame.skiptranslate,
+    .goog-te-gadget-icon,
+    .VIpgJd-ZVi9od-ORHb-OEVmcd,
+    .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+    body > .skiptranslate {
       display: none !important;
+    }
+    
+    font {
+      background-color: transparent !important;
+      box-shadow: none !important;
     }
 
     .container {
@@ -173,6 +183,7 @@
       border: 1px solid rgba(229, 193, 88, 0.35);
       padding: 4px 6px;
       border-radius: 50px;
+      height: 34px;
     }
 
     .lang-globe {
@@ -188,16 +199,26 @@
       background: transparent;
       border: none;
       color: #e2e8f0;
-      padding: 4px 7px;
+      padding: 4px 8px;
       border-radius: 50px;
       cursor: pointer;
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.3px;
-      transition: all 0.2s ease;
+      line-height: 1;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    .lang-btn:hover, .lang-btn.active {
+    .lang-btn:hover {
+      background: rgba(229, 193, 88, 0.25);
+      color: #ffffff;
+    }
+
+    .lang-btn.active {
       background: linear-gradient(135deg, var(--gold) 0%, #cfa438 100%);
       color: #061412;
     }
@@ -804,16 +825,16 @@
 
       <div class="nav-actions">
         <!-- TIL TANLASH IKONKASI VA TUGMALARI (UZ / RU / EN) -->
-        <div class="lang-bar notranslate" title="Tilni tanlang / Выберите язык / Select language">
+        <div class="lang-bar notranslate" translate="no" title="Tilni tanlang / Выберите язык / Select language">
           <svg class="lang-globe" viewBox="0 0 24 24">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
           </svg>
-          <button type="button" class="lang-btn" id="btn-uz" onclick="changeLang('uz')">UZ</button>
-          <button type="button" class="lang-btn" id="btn-ru" onclick="changeLang('ru')">RU</button>
-          <button type="button" class="lang-btn" id="btn-en" onclick="changeLang('en')">EN</button>
+          <button type="button" class="lang-btn active" id="btn-uz" onclick="switchLanguage('uz')">UZ</button>
+          <button type="button" class="lang-btn" id="btn-ru" onclick="switchLanguage('ru')">RU</button>
+          <button type="button" class="lang-btn" id="btn-en" onclick="switchLanguage('en')">EN</button>
         </div>
 
-        <a href="tel:+998952775354" class="nav-contact-btn notranslate">
+        <a href="tel:+998952775354" class="nav-contact-btn notranslate" translate="no">
           📞 +998 95 277 53 54
         </a>
       </div>
@@ -1173,66 +1194,92 @@
     </div>
   </div>
 
-  <!-- GOOGLE TRANSLATE SKRIPTI (UZ / RU / EN TO'LIQ ISHLAYDIGAN) -->
+  <!-- MUKAMMAL GOOGLE TRANSLATE SKRIPTI (QIMIRLAMAYDIGAN VA QAT'IY TILDA TURADIGAN) -->
   <script>
+    const LANG_STORAGE_KEY = 'surayyo_selected_lang';
+
+    function setGoogleCookie(lang) {
+      const host = window.location.hostname;
+      const parts = host.split('.');
+      const domains = ['', host, '.' + host];
+      if (parts.length > 2) {
+        domains.push('.' + parts.slice(-2).join('.'));
+      }
+
+      if (lang === 'uz') {
+        domains.forEach(d => {
+          const domainAttr = d ? `; domain=${d}` : '';
+          document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/${domainAttr}`;
+        });
+      } else {
+        const val = `/uz/${lang}`;
+        document.cookie = `googtrans=${val}; path=/`;
+        if (host && host !== 'localhost') {
+          document.cookie = `googtrans=${val}; domain=${host}; path=/`;
+        }
+      }
+    }
+
+    function updateLangUI(lang) {
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-' + lang);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function applyGoogleTranslate(lang, attempts = 0) {
+      const select = document.querySelector('.goog-te-combo');
+      if (select) {
+        if (lang === 'uz') {
+          // Asl o'zbek tiliga qaytarish (sahifani reload qilmasdan)
+          if (select.value !== '' && select.value !== 'uz') {
+            select.value = 'uz';
+            select.dispatchEvent(new Event('change'));
+          }
+          // Google Translate iframe ichidagi "Show original" tugmasini bosish (agar mavjud bo'lsa)
+          const bannerIframe = document.querySelector('iframe.goog-te-banner-frame');
+          if (bannerIframe && bannerIframe.contentDocument) {
+            const restoreBtn = bannerIframe.contentDocument.querySelector('#\\:1\\.restore');
+            if (restoreBtn) restoreBtn.click();
+          }
+        } else {
+          if (select.value !== lang) {
+            select.value = lang;
+            select.dispatchEvent(new Event('change'));
+          }
+        }
+      } else if (attempts < 25) {
+        setTimeout(() => applyGoogleTranslate(lang, attempts + 1), 200);
+      }
+    }
+
+    function switchLanguage(lang) {
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+      setGoogleCookie(lang);
+      updateLangUI(lang);
+      applyGoogleTranslate(lang);
+    }
+
+    // Sahifa ochilganda avval tanlangan tilni tiklash (brauzer tiliga qarab o'zgarib ketmasligi uchun)
+    (function initSavedLanguage() {
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY) || 'uz';
+      setGoogleCookie(savedLang);
+      window.addEventListener('DOMContentLoaded', () => {
+        updateLangUI(savedLang);
+      });
+    })();
+
     function googleTranslateElementInit() {
       new google.translate.TranslateElement({
         pageLanguage: 'uz',
         includedLanguages: 'uz,ru,en',
         autoDisplay: false
       }, 'google_translate_element');
+
+      const savedLang = localStorage.getItem(LANG_STORAGE_KEY) || 'uz';
+      setTimeout(() => {
+        applyGoogleTranslate(savedLang);
+      }, 300);
     }
-
-    function clearGoogleCookies() {
-      const host = location.hostname;
-      const parts = host.split('.');
-      const domains = ['', host, '.' + host];
-      if (parts.length > 2) {
-        domains.push('.' + parts.slice(-2).join('.'));
-      }
-      domains.forEach(d => {
-        const domainStr = d ? `; domain=${d}` : '';
-        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/${domainStr}`;
-      });
-    }
-
-    function setActiveLangBtn(lang) {
-      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById('btn-' + lang);
-      if (activeBtn) activeBtn.classList.add('active');
-    }
-
-    function changeLang(lang) {
-      setActiveLangBtn(lang);
-
-      if (lang === 'uz') {
-        clearGoogleCookies();
-        const select = document.querySelector('.goog-te-combo');
-        if (select) {
-          select.value = 'uz';
-          select.dispatchEvent(new Event('change'));
-        }
-        setTimeout(() => {
-          location.reload();
-        }, 150);
-        return;
-      }
-
-      document.cookie = `googtrans=/uz/${lang}; path=/`;
-      const select = document.querySelector('.goog-te-combo');
-      if (select) {
-        select.value = lang;
-        select.dispatchEvent(new Event('change'));
-      } else {
-        location.reload();
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const match = document.cookie.match(/googtrans=\/uz\/(ru|en)/);
-      const currentLang = match ? match[1] : 'uz';
-      setActiveLangBtn(currentLang);
-    });
   </script>
   <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
@@ -1364,7 +1411,7 @@
       }
     }
 
-    // 🧠 GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
+    // GINEKOLOG MUTAXASSIS SIFATIDA AVTOMATIK JAVOB BERUVCHI AI
     function getSmartAutoReply(userText) {
       const text = userText.toLowerCase();
 
@@ -1378,7 +1425,7 @@
         return "Barcha muolajalar va estetik operatsiyalar narxi shaxsiy ko'rik va konsultatsiya davomida belgilanadi. Batafsil ma'lumot olish uchun +998 95 277 53 54 raqamiga qo'ng'iroq qilishingizni so'raymiz." + docSignature;
       } 
       else if (text.includes('labioplastika') || text.includes('jinsiy lab') || text.includes('lab')) {
-        return "Labioplastika (kichik jinsiy lablar plastikasi) — tug'ma assimetriya yoki ortiqcha to'qimalarni korreksiya qilish uchun qilinadi.\n\n⏱ Davomiyligi: Mahalliy og'riqsizlantirish ostida 30–45 daqiqa.\n⏳ Tiklanish davri: 3–4 hafta.\n🚫 Cheklovlar: 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi.\n🧴 Parvarish: Antiseptik ishlov berilib, shifokor tavsiya etgan malhamlar surtiladi." + docSignature;
+        return "Labioplastika (kichik jinsiy lablar plastikasi) — tug'ma assimetriya yoki ortiqcha to'qimalarni korreksiya qilish uchun qilinadi.\n\n⏱ Davomiyligi: Mahalliy og'riqsizlantirish ostida 30–45 daqiqa.\n⏳ Tiklanish davri: 3–4 hafta.\n🚫 Cheklovlar: 3–4 hafta davomida jinsiy aloqa va og'ir jismoniy mashqlar taqiqlanadi.\n🧴 Parvarish: Antiseptik eritmalar bilan ishlov beriladi, shifokor tavsiya etgan malhamlar surtiladi." + docSignature;
       } 
       else if (text.includes('vaginoplastika') || text.includes('toraytirish')) {
         return "Vaginoplastika — tug'ruqdan keyingi o'zgarishlarni bartaraf etish, vagina devorlarini toraytirish va intim sezgirlikni to'liq tiklash amaliyotidir.\n\n⏱ Davomiyligi: 1 – 1.5 soat (spinal yoki umumiy og'riqsizlantirish ostida).\n⏳ Tiklanish davri: 6–8 hafta.\n🚫 Cheklovlar: 2 oy davomida jinsiy hayot va og'ir yuk ko'tarish taqiqlanadi." + docSignature;
@@ -1468,7 +1515,6 @@
             const msg = update.message;
             if (!msg) continue;
 
-            // Admin /start bosganda tugmalar va push e'lon yuborish yo'riqnomasi chiqishi
             if (msg.text === '/start') {
               for (const cId of ADMIN_IDS) {
                 await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -1524,7 +1570,6 @@
               continue;
             }
 
-            // 1. CHATNI TOZALASH TUGMASI (CALLBACK QUERY)
             if (update.callback_query) {
               const cbData = update.callback_query.data;
               if (cbData === `clear_${patientId}`) {
@@ -1543,7 +1588,6 @@
               continue;
             }
 
-            // 2. VRACH REPLY QILGAN JAVOBLAR
             let targetIdMatches = false;
             if (msg.reply_to_message) {
               const rText = msg.reply_to_message.text || msg.reply_to_message.caption || '';
